@@ -1,0 +1,10 @@
+{
+  "watch": [
+    "dist/"
+  ],
+  "stdout": true,
+  "ext": "js json",
+  "env": {
+    "NODE_ENV": "development"
+  }
+}
