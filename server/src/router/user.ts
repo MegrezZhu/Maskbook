@@ -1,10 +1,9 @@
 import * as Router from 'koa-router';
-
-import userRouter from './user';
+import { userController } from '../controller/index';
 
 const router = new Router();
 
 router
-  .use('/api', userRouter.routes());
+  .post('/join', userController.regist);
 
 export default router;

@@ -1,11 +1,11 @@
 import { IsDate, IsDefined } from 'class-validator';
 import { Column, Entity, Index, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import Post from './Post';
-import User from './User';
+import { Post } from './Post';
+import { User } from './User';
 
 @Entity()
 @Index('unique-like', ['user', 'post'], { unique: true })
-class Like {
+export class Like {
   @PrimaryGeneratedColumn({ name: 'l_id' })
   public id: number;
 
@@ -24,5 +24,3 @@ class Like {
   @IsDate()
   public date: Date;
 }
-
-export default Like;

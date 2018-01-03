@@ -1,9 +1,9 @@
 import { IsDate, IsDefined, IsNumber, IsOptional, IsString, Min } from 'class-validator';
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import User from './User';
+import { User } from './User';
 
 @Entity()
-class Post {
+export class Post {
   @PrimaryGeneratedColumn({ name: 'p_id' })
   public id: number;
 
@@ -25,7 +25,7 @@ class Post {
   @OneToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'u_id' })
   @IsDefined()
-  public by: User;
+  public author: User;
 
   @Column({ nullable: false })
   @IsDefined()
@@ -33,5 +33,3 @@ class Post {
   @Min(0)
   public price: number;
 }
-
-export default Post;
