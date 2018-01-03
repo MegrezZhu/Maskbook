@@ -28,7 +28,7 @@ declare module 'MODULE-NAME';
 ### 用户相关
 #### 注册
 ```
-POST /join
+POST /api/join
 body {
   username: string (required)
   password: string (required)
@@ -48,7 +48,7 @@ body {
 
 #### 登录
 ```
-POST /session
+POST /api/session
 body {
   username: string (required)
   password: string (required)
@@ -59,7 +59,7 @@ body {
 
 #### 修改信息
 ```
-PATCH /user
+PUT /api/user
 提交需要修改的字段即可
 body {
   nickname: string
@@ -78,7 +78,7 @@ body {
 
 #### 获取信息
 ```
-GET /user
+GET /api/user
 
 200
 {
@@ -93,7 +93,7 @@ GET /user
 ### 消息相关
 #### 发布
 ```
-POST /posts
+POST /api/posts
 body {
   content: string
   image: string (required)
@@ -115,7 +115,7 @@ body {
 
 #### 删除
 ```
-DELETE /posts/:id
+DELETE /api/posts/:id
 path {
   id: number (required)
 }
@@ -125,7 +125,7 @@ path {
 
 #### 获取列表
 ```
-GET /posts
+GET /api/posts
 query {
   filter: all, unlocked, mine (default all)
   before: date （default now)
@@ -154,7 +154,7 @@ query {
 
 #### 获取某人的发布
 ```
-GET /:username/posts
+GET /api/:username/posts
 path {
   username: string (required)
 }
@@ -182,7 +182,7 @@ path {
 
 #### 获取详情
 ```
-GET /posts/:id
+GET /api/posts/:id
 path {
   id: number (required)
 }
@@ -209,7 +209,7 @@ path {
 ### 点赞相关
 #### 点赞
 ```
-POST /posts/:id/like
+POST /api/posts/:id/like
 path {
   id: number (required)
 }
@@ -219,7 +219,7 @@ path {
 
 #### 取消点赞
 ```
-DELETE /posts/:id/lick
+DELETE /api/posts/:id/lick
 path {
   id: number (required)
 }
@@ -230,7 +230,7 @@ path {
 ### 抛瓦相关
 #### 解锁
 ```
-POST /posts/:id/unlock
+POST /api/posts/:id/unlock
 path {
   id: number (required)
 }
