@@ -34,6 +34,12 @@ export async function login (ctx: IRouterContext) {
   }
 }
 
+// not caring about if one is actually logged in
+export async function logout (ctx: IRouterContext) {
+  ctx.session = null;
+  ctx.status = 200;
+}
+
 export async function edit (ctx: ILoggedInContext) {
   const { nickname, password }: { nickname: string, password: string } = ctx.request.body;
 
@@ -46,5 +52,9 @@ export async function edit (ctx: ILoggedInContext) {
   }
 
   await userService.edit(ctx.user);
+  ctx.body = pick(ctx.user, ['id', 'username', 'nickname', 'avatar', 'power']);
+}
+
+export async function getSelf (ctx: ILoggedInContext) {
   ctx.body = pick(ctx.user, ['id', 'username', 'nickname', 'avatar', 'power']);
 }
