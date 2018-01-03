@@ -14,3 +14,226 @@ declare module 'MODULE-NAME';
   * TSLint
     * enable autofix: `"tslint.autoFixOnSave": true`
     * to avoid conflicts with editor's autofix `"editor.formatOnSave": true`, add both `"typescript.format.insertSpaceBeforeFunctionParenthesis": true` & `"typescript.format.insertSpaceAfterConstructor": true`
+
+## API
+### 实体
+400时返回错误信息JSON
+```
+{
+  errno: number
+  message: string
+}
+```
+
+### 用户相关
+#### 注册
+```
+POST /join
+body {
+  username: string (required)
+  password: string (required)
+  nickname: string
+  avatar: string
+}
+
+200
+{
+  id: number
+  username: string
+  nickname: string
+  avatar: string
+  power: number
+}
+```
+
+#### 登录
+```
+POST /session
+body {
+  username: string (required)
+  password: string (required)
+}
+
+200
+```
+
+#### 修改信息
+```
+PATCH /user
+提交需要修改的字段即可
+body {
+  nickname: string
+  avatar: string
+}
+
+200
+{
+  id: number
+  username: string
+  nickname: string
+  avatar: string
+  power: number
+}
+```
+
+#### 获取信息
+```
+GET /user
+
+200
+{
+  id: number
+  username: string
+  nickname: string
+  avatar: string
+  power: number
+}
+```
+
+### 消息相关
+#### 发布
+```
+POST /posts
+body {
+  content: string
+  image: string (required)
+  parameter: number (required)
+  price: number (required)
+}
+
+200
+{
+  id: number
+  author: string
+  content: string
+  image: string
+  parameter: number
+  price: number
+  date: date
+}
+```
+
+#### 删除
+```
+DELETE /posts/:id
+path {
+  id: number (required)
+}
+
+200
+```
+
+#### 获取列表
+```
+GET /posts
+query {
+  filter: all, unlocked, mine (default all)
+  before: date （default now)
+}
+
+200
+[
+  {
+    id: number
+    author: {
+      id: number
+      username: string
+      nickname: string
+      avatar: string
+    }
+    content: string
+    image: string
+    parameter: number
+    price: number
+    date: date
+    unlock: boolean
+    like: boolean
+  }
+]
+```
+
+#### 获取某人的发布
+```
+GET /:username/posts
+path {
+  username: string (required)
+}
+
+200
+[
+  {
+    id: number
+    author: {
+      id: number
+      username: string
+      nickname: string
+      avatar: string
+    }
+    content: string
+    image: string
+    parameter: number
+    price: number
+    date: date
+    unlock: boolean
+    like: boolean
+  }
+]
+```
+
+#### 获取详情
+```
+GET /posts/:id
+path {
+  id: number (required)
+}
+
+200
+{
+  id: number
+  author: {
+    id: number
+    username: string
+    nickname: string
+    avatar: string
+  }
+  content: string
+  image: string
+  parameter: number
+  price: number
+  date: date
+  unlock: boolean
+  like: boolean
+}
+```
+
+### 点赞相关
+#### 点赞
+```
+POST /posts/:id/like
+path {
+  id: number (required)
+}
+
+200
+```
+
+#### 取消点赞
+```
+DELETE /posts/:id/lick
+path {
+  id: number (required)
+}
+
+200
+```
+
+### 抛瓦相关
+#### 解锁
+```
+POST /posts/:id/unlock
+path {
+  id: number (required)
+}
+
+200
+```
