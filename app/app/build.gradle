@@ -26,8 +26,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     compile 'com.rengwuxian.materialedittext:library:2.1.4'
-    compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.10'
-    compile 'com.rengwuxian.materialedittext:library:2.1.4'
     compile 'com.github.navasmdc:MaterialDesign:1.5@aar'
-//    compile 'com.github.florent37:materialtextfield:1.0.7'
 }
