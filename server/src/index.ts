@@ -12,6 +12,7 @@ import { repo } from './model/index';
 import router from './router';
 
 import './@types/TypePatch';
+import { autoLogin, errorHandler } from './lib/middlewares';
 
 (async () => {
   await repo.init(); // init connection with database
@@ -28,26 +29,8 @@ import './@types/TypePatch';
   app
     .use(koaSession(session, app))
     .use(bodyparser())
-    .use(async (ctx, next) => {
-      // error handling
-      try {
-        await next();
-      } catch (err) {
-        if (err.expose) {
-          ctx.status = 400;
-          ctx.body = {
-            errno: err.errno,
-            message: err.message || 'Unknown Error'
-          };
-        } else {
-          ctx.status = 500;
-          if (isDev) {
-            ctx.body = err.stack;
-          }
-          logger.error(err);
-        }
-      }
-    })
+    .use(errorHandler)
+    .use(autoLogin)
     .use(router.routes());
 
   const port = process.env.PORT || 7001;
