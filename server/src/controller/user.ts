@@ -2,6 +2,7 @@ import { validate } from 'class-validator';
 import { IRouterContext } from 'koa-router';
 import { assertError } from '../lib/assert';
 import ErrorCode from '../lib/ErrorCode';
+import { stringify } from '../lib/stringifyValidateError';
 import { IUser, User } from '../model/entity/User';
 import { userService } from '../service/index';
 
@@ -10,8 +11,7 @@ export async function regist (ctx: IRouterContext) {
 
   const [validateErr] = await validate(user);
   if (validateErr) {
-    console.log(validateErr);
-    assertError('invalid argument', ErrorCode.Invalid_Arguments);
+    assertError(stringify(validateErr), ErrorCode.Invalid_Arguments);
   }
 
   await userService.regist(user);
