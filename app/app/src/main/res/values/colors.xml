@@ -4,5 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorTextDefault">#333</color>
+    <color name="colorTextWhite">#fff</color>
+    <color name="colorTextHint">#C6C7D3</color>
     <color name="colorFloatingLabel">#666</color>
 </resources>
