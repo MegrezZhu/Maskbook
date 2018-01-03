@@ -1,6 +1,5 @@
-import { join, relative } from 'path';
+import { join, relative, resolve } from 'path';
 import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions';
-import { resolve } from 'url';
 
 export const serverRoot = join(__dirname, '..');
 
@@ -15,7 +14,7 @@ export const mongoConfig = {
 };
 
 // the paths are supposed to be relative to cwd
-const modelPath = relative(process.cwd(), resolve(__dirname, 'model'));
+const modelPath = relative(process.cwd(), resolve(__dirname, './model'));
 
 export const typeormConfig: MysqlConnectionOptions = {
   type: 'mysql',
