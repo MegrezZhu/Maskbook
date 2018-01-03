@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
     tools:context="com.zyuco.maskbook.MainActivity">
 
     <!--<pl.droidsonroids.gif.GifImageButton-->
@@ -47,17 +46,25 @@
         <!--app:layout_constraintLeft_toLeftOf="parent"-->
         <!--app:layout_constraintTop_toBottomOf="@+id/username"/>-->
 
+    <!--<ImageView-->
+        <!--android:id="@+id/logo"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--app:layout_constraintRight_toRightOf="parent"/>-->
+
     <com.github.florent37.materialtextfield.MaterialTextField
         android:id="@+id/username"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
+        app:layout_goneMarginTop="30dp"
         app:mtf_labelColor="@color/colorFloatingLabel"
         app:mtf_image="@mipmap/ic_perm_identity_black_24dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/logo"
     >
 
         <EditText
@@ -78,6 +85,7 @@
         android:layout_marginTop="10dp"
         app:mtf_labelColor="@color/colorFloatingLabel"
         app:mtf_image="@mipmap/ic_lock_black_24dp"
+        app:mtf_openKeyboardOnFocus="false"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/username"
@@ -87,6 +95,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Password"
+            android:inputType="textPassword"
             android:textColor="@color/colorTextDefault"
             android:textSize="16sp" />
 
