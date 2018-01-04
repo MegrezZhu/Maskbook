@@ -5,25 +5,26 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-public class SignupActivity extends AppCompatActivity {
-    com.gc.materialdesign.views.ButtonFlat buttonSignin;
+public class LoginActivity extends AppCompatActivity {
+    com.gc.materialdesign.views.ButtonFlat buttonSignup;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup);
+        setContentView(R.layout.activity_login);
 
         initListener();
     }
 
-    private void initListener() {
-        buttonSignin = findViewById(R.id.signin);
 
-        buttonSignin.setOnClickListener(new View.OnClickListener() {
+    private void initListener() {
+        buttonSignup = findViewById(R.id.signup);
+
+        buttonSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+                Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
                 startActivity(intent);
-                SignupActivity.this.finish();
+                LoginActivity.this.finish();
             }
         });
     }
