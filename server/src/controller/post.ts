@@ -44,6 +44,45 @@ export async function removePost (ctx: ILoggedInContext) {
   ctx.status = 200;
 }
 
+export async function getPost (ctx: ILoggedInContext) {
+  let { pid }: { pid: number } = ctx.params;
+  pid = Number(pid);
+  assert(!isNaN(pid), 'invalid post id.', ErrorCode.Invalid_Arguments);
+
+  const post = await postService.getOne(pid);
+  if (!post) {
+    assertError('post not exists.', ErrorCode.Not_Found);
+  } else {
+    ctx.body = formatPost(post);
+  }
+}
+
+type GetPostType = 'all' | 'unlocked' | 'mine';
+
+export async function getPosts (ctx: ILoggedInContext) {
+  let { limit, before, filter }: { limit: number; before: Date; filter: GetPostType } = ctx.query;
+  limit = Number(limit) || 30;
+  before = new Date(before);
+  filter = filter || 'all';
+  if (isNaN(before.getFullYear())) { // invalid date
+    before = new Date();
+  }
+
+  switch (filter) {
+    case 'all':
+      ctx.body = (await postService.getAllPost(limit, before)).map(formatPost);
+      break;
+    case 'unlocked':
+      ctx.body = (await postService.getAllUnlocked(ctx.user.id, limit, before)).map(formatPost);
+      break;
+    case 'mine':
+      ctx.body = (await postService.getOnesPost(ctx.user.id, limit, before)).map(formatPost);
+      break;
+    default:
+      assertError(`invalid filter '${filter}'`, ErrorCode.Invalid_Arguments);
+  }
+}
+
 export async function getOnesPosts (ctx: ILoggedInContext) {
   const { uid }: { uid: number } = ctx.params;
   assert(!isNaN(uid), 'invalid uid', ErrorCode.Invalid_Arguments);
@@ -55,7 +94,7 @@ export async function getOnesPosts (ctx: ILoggedInContext) {
     before = new Date();
   }
 
-  ctx.body = await postService.getOnesPost(uid, limit, before);
+  ctx.body = (await postService.getOnesPost(uid, limit, before)).map(formatPost);
 }
 
 function formatPost (post: Post): any {

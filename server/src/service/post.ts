@@ -2,6 +2,7 @@ import { chain } from 'lodash';
 import { assert } from '../lib/assert';
 import ErrorCode from '../lib/ErrorCode';
 import { Post } from '../model/entity/Post';
+import { Purchase } from '../model/entity/Purchase';
 import { User } from '../model/entity/User';
 import { repo } from '../model/index';
 
@@ -17,11 +18,45 @@ export async function removePost (user: User, pid: number) {
   }
 }
 
-export async function getOnesPost (uid: number, limit: number, before: Date): Promise<Post[]> {
-  before.setMinutes(before.getMinutes() + before.getTimezoneOffset()); // walkaround typeorm timezone error
+export async function getOne (pid: number): Promise<Post | null> {
+  const post = await repo.post.findOneById(pid, { relations: ['author'] }) || null;
+  return post;
+}
+
+export async function getAllUnlocked (uid: number, limit: number, before: Date): Promise<Post[]> {
   const res = await repo.post.createQueryBuilder('post')
-    .where('post.u_id = :uid and post.date <= :before', { uid, before })
+    .innerJoinAndSelect(Purchase, 'purchase', 'purchase.u_id = :uid and purchase.p_id = post.p_id', { uid })
+    .innerJoinAndSelect('post.author', 'user')
+    .where('post.date <= :before', { before: fixDate(before) })
+    .orderBy('post.date', 'DESC')
     .limit(limit)
     .getMany();
-  return chain(res).sortBy('date').reverse().value();
+  return res;
+}
+
+export async function getAllPost (limit: number, before: Date): Promise<Post[]> {
+  const res = await repo.post.createQueryBuilder('post')
+    .innerJoinAndSelect('post.author', 'user')
+    .where('post.date <= :before', { before: fixDate(before) })
+    .orderBy('post.date', 'DESC')
+    .limit(limit)
+    .getMany();
+  return res;
+}
+
+export async function getOnesPost (uid: number, limit: number, before: Date): Promise<Post[]> {
+  const res = await repo.post.createQueryBuilder('post')
+    .innerJoinAndSelect('post.author', 'user')
+    .where('post.u_id = :uid and post.date <= :before', { uid, before: fixDate(before) })
+    .orderBy('post.date', 'DESC')
+    .limit(limit)
+    .getMany();
+  return res;
+}
+
+// walkaround typeorm timezone error
+function fixDate (date: Date): Date {
+  const fixed = new Date(date);
+  fixed.setMinutes(fixed.getMinutes() + fixed.getTimezoneOffset());
+  return fixed;
 }
