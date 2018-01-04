@@ -8,4 +8,7 @@
     <color name="colorTextWhite">#fff</color>
     <color name="colorTextHint">#C6C7D3</color>
     <color name="colorFloatingLabel">#666</color>
+
+    <color name="colorDrawer">#fff</color>
+    <color name="colorDrawerDivider">#ccc</color>
 </resources>

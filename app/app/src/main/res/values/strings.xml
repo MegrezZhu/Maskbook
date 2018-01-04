@@ -8,7 +8,7 @@
     <string name="button_signup">Sign up</string>
     <string name="text_donot_have_a_account">Do not have a account? </string>
     <string name="text_already_have_a_account">Do not have a account? </string>
-    <string name="menuitem_home">Home</string>
+    <string name="menuitem_profile">Profile</string>
     <string name="menuitem_logout">Logout</string>
-    <string name="menuitem_lock">Lock</string>
+    <string name="menuitem_unlock">Unlock</string>
 </resources>
