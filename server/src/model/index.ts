@@ -1,4 +1,6 @@
 import { createConnection } from 'typeorm';
+import { Connection } from 'typeorm/connection/Connection';
+import { EntityManager } from 'typeorm/entity-manager/EntityManager';
 import { Repository } from 'typeorm/repository/Repository';
 import { typeormConfig } from '../config';
 import { Like } from './entity/Like';
@@ -12,13 +14,19 @@ class Repostories {
   public like: Repository<Like>;
   public purchase: Repository<Purchase>;
 
-  public async init () {
-    const conn = await createConnection(typeormConfig);
+  private conn: Connection;
 
-    this.user = conn.getRepository(User);
-    this.post = conn.getRepository(Post);
-    this.like = conn.getRepository(Like);
-    this.purchase = conn.getRepository(Purchase);
+  public async init () {
+    this.conn = await createConnection(typeormConfig);
+
+    this.user = this.conn.getRepository(User);
+    this.post = this.conn.getRepository(Post);
+    this.like = this.conn.getRepository(Like);
+    this.purchase = this.conn.getRepository(Purchase);
+  }
+
+  public async transaction (task: (manager: EntityManager) => Promise<any>) {
+    return this.conn.transaction(task);
   }
 }
 

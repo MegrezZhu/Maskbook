@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 
 import com.google.gson.Gson;
-import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.zyuco.maskbook.model.ErrorResponse;
 import com.zyuco.maskbook.model.User;
 import com.zyuco.maskbook.service.APIServiceFactor;

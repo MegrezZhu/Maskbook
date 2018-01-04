@@ -10,8 +10,8 @@ export class User {
     user.username = iUser.username;
     user.password = iUser.password;
     user.nickname = iUser.nickname;
-    user.avatar = iUser.avatar;
-    user.power = iUser.power;
+    user.avatar = iUser.avatar || user.avatar;
+    user.power = iUser.power || user.power;
 
     return user;
   }
@@ -42,13 +42,14 @@ export class User {
   @Column({ default: 'no-avatar', nullable: false })
   @IsDefined()
   @IsString()
-  public avatar: string; // url
+  public avatar: string = 'default-avatar-url';
 
   @Column({ default: 0, nullable: false })
   @IsDefined()
   @IsNumber()
   @Min(0)
-  public power: number;
+  public power: number = 0;
 }
 
+// tslint:disable-next-line
 export interface IUser extends User { }
