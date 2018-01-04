@@ -1,4 +1,5 @@
 import { validate } from 'class-validator';
+import { pick } from 'lodash';
 import { relative } from 'path';
 import { imageRootDir } from '../config';
 import { assert, assertError } from '../lib/assert';
@@ -30,6 +31,36 @@ export async function newPost (ctx: ILoggedInContext) {
   }
 
   await postService.newPost(post);
-
+  ctx.body = formatPost(post);
   ctx.status = 200;
+}
+
+export async function removePost (ctx: ILoggedInContext) {
+  const { pid }: { pid: number } = ctx.params;
+
+  assert(!isNaN(pid), 'invalid post id', pid);
+
+  await postService.removePost(ctx.user, pid);
+  ctx.status = 200;
+}
+
+export async function getOnesPosts (ctx: ILoggedInContext) {
+  const { uid }: { uid: number } = ctx.params;
+  assert(!isNaN(uid), 'invalid uid', ErrorCode.Invalid_Arguments);
+
+  let { limit, before }: { limit: number; before: Date } = ctx.query;
+  limit = Number(limit) || 30;
+  before = new Date(before);
+  if (isNaN(before.getFullYear())) { // invalid date
+    before = new Date();
+  }
+
+  ctx.body = await postService.getOnesPost(uid, limit, before);
+}
+
+function formatPost (post: Post): any {
+  return {
+    ...post,
+    author: pick(post.author, ['id', 'nickname', 'username', 'avatar'])
+  };
 }

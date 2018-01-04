@@ -1,5 +1,5 @@
 import { IsDate, IsDefined, IsNumber, IsOptional, IsString, Min } from 'class-validator';
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, Index, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from './User';
 
 @Entity()
@@ -17,7 +17,8 @@ export class Post {
   @IsNumber()
   public parameter: number; // parameter for image blurring
 
-  @Column({ nullable: false, type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
+  @Index('post-date')
+  @CreateDateColumn()
   @IsOptional()
   @IsDate()
   public date: Date;
@@ -33,7 +34,7 @@ export class Post {
   @Min(0)
   public price: number;
 
-  @Column()
+  @Column({ default: '' })
   @IsOptional()
   @IsString()
   public content: string;

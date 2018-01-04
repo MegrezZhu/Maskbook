@@ -9,7 +9,7 @@ export const avatarImageDir = resolve(imageRootDir, './avatar');
 
 export const isDev = process.env.NODE_ENV !== 'production';
 
-export const mongoConfig = {
+export const mysqlConfig = {
   host: 'localhost',
   port: 3306,
   username: 'root',
@@ -22,7 +22,7 @@ const modelPath = resolve(__dirname, './model');
 
 export const typeormConfig: MysqlConnectionOptions = {
   type: 'mysql',
-  ...mongoConfig,
+  ...mysqlConfig,
   synchronize: true,
   logging: false,
   entities: [

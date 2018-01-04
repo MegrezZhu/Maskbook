@@ -5,6 +5,7 @@ import * as fs from 'fs-extra';
 import * as Koa from 'koa';
 import bodyparser = require('koa-bodyparser');
 import morgan = require('koa-morgan');
+import { IRouterContext } from 'koa-router';
 import koaSession = require('koa-session');
 
 import { avatarImageDir, isDev, postImageDir, session } from './config';
@@ -32,7 +33,17 @@ import { autoLogin, errorHandler } from './lib/middlewares';
 
   app.keys = session.cookieKey;
   app
-    .use(koaSession(session, app))
+    .use(koaSession(session, app));
+
+  if (isDev) {
+    // mock login state
+    app.use(async (ctx: IRouterContext, next: () => Promise<any>) => {
+      ctx.session.uid = 16;
+      await next();
+    });
+  }
+
+  app
     .use(bodyparser())
     .use(errorHandler)
     .use(autoLogin)

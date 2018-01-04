@@ -5,6 +5,7 @@ enum ErrorCode {
   Login_Failed = 4,
   Login_Required = 5,
   Missing_Files = 6,
+  No_Permission = 7,
   Unknown = 1000
 }
 
