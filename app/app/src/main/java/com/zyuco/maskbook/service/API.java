@@ -8,7 +8,7 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class APIServiceFactor {
+public class API {
     private static final int DEFAULT_TIMEOUT = 5;
     private static APIService instance = null;
 
