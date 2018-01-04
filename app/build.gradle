@@ -6,6 +6,7 @@ buildscript {
         google()
         jcenter()
         mavenCentral()
+        maven { url "http://lib.gcssloop.com/repository/gcssloop-central/" }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.1'
@@ -21,6 +22,7 @@ allprojects {
         google()
         jcenter()
         mavenCentral()
+        maven { url "http://lib.gcssloop.com/repository/gcssloop-central/" }
     }
 }
 
