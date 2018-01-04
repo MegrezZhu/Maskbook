@@ -1,12 +1,13 @@
 import 'reflect-metadata';
 import 'source-map-support/register';
 
+import * as fs from 'fs-extra';
 import * as Koa from 'koa';
 import bodyparser = require('koa-bodyparser');
 import morgan = require('koa-morgan');
 import koaSession = require('koa-session');
 
-import { isDev, session } from './config';
+import { avatarImageDir, isDev, postImageDir, session } from './config';
 import logger from './lib/logger';
 import { repo } from './model/index';
 import router from './router';
@@ -15,7 +16,11 @@ import './@types/TypePatch';
 import { autoLogin, errorHandler } from './lib/middlewares';
 
 (async () => {
-  await repo.init(); // init connection with database
+  await Promise.all([
+    repo.init(), // init connection with database
+    fs.ensureDir(postImageDir),
+    fs.ensureDir(avatarImageDir)
+  ]);
 
   logger.info('successfully connected to database.');
 

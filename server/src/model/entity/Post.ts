@@ -32,4 +32,9 @@ export class Post {
   @IsNumber()
   @Min(0)
   public price: number;
+
+  @Column()
+  @IsOptional()
+  @IsString()
+  public content: string;
 }

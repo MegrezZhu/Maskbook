@@ -1,10 +1,16 @@
+import busboy = require('koa-busboy');
 import { IMiddleware, IRouterContext } from 'koa-router';
-import { isDev } from '../config';
+import uuid = require('uuid/v4');
+import { avatarImageDir, isDev, postImageDir } from '../config';
 import { User } from '../model/entity/User';
 import { repo } from '../model/index';
 import { assertError } from './assert';
 import ErrorCode from './ErrorCode';
 import logger from './logger';
+
+function genFilename (ext = '') {
+  return `${uuid()}${ext ? '.' : ''}${ext}`;
+}
 
 export interface ILoggedInContext extends IRouterContext {
   user: User; // add not null infomation
@@ -51,3 +57,13 @@ export async function autoLogin (ctx: IRouterContext, next: () => Promise<any>) 
   }
   await next();
 }
+
+export const postImageUploader = busboy({
+  dest: postImageDir,
+  fnDestFilename: genFilename.bind(null, 'jpg')
+});
+
+export const avatarImageUploader = busboy({
+  dest: avatarImageDir,
+  fnDestFilename: genFilename.bind(null, 'jpg')
+});
