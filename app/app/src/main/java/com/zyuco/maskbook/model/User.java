@@ -1,17 +1,18 @@
 package com.zyuco.maskbook.model;
 
 public class User {
-    private int id;
+    private Integer id;
     private String username;
+    private String password;
     private String nickname;
     private String avatar;
-    private int power;
+    private Integer power;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -21,6 +22,14 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getNickname() {
@@ -39,11 +48,11 @@ public class User {
         this.avatar = avatar;
     }
 
-    public int getPower() {
+    public Integer getPower() {
         return power;
     }
 
-    public void setPower(int power) {
+    public void setPower(Integer power) {
         this.power = power;
     }
 }

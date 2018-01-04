@@ -7,6 +7,28 @@
     android:layout_height="match_parent"
     tools:context="com.zyuco.maskbook.MainActivity">
 
+    <Button
+        android:id="@+id/regist"
+        android:text="注册"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/login"
+        android:text="登录"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/regist"
+        />
+
+    <Button
+        android:id="@+id/post"
+        android:text="发布"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/login"
+        />
+
     <com.gc.materialdesign.views.ButtonRectangle
         android:id="@+id/signup"
         android:layout_width="0dp"

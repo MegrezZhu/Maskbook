@@ -21,6 +21,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven { url "https://jitpack.io" }
         mavenCentral()
         maven { url "http://lib.gcssloop.com/repository/gcssloop-central/" }
     }
