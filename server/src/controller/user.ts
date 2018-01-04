@@ -1,6 +1,6 @@
 import { validate } from 'class-validator';
 import { IRouterContext } from 'koa-router';
-import { pick } from 'lodash';
+import { omit, pick } from 'lodash';
 import { assert, assertError } from '../lib/assert';
 import ErrorCode from '../lib/ErrorCode';
 import { ILoggedInContext } from '../lib/middlewares';
@@ -30,7 +30,7 @@ export async function login (ctx: IRouterContext) {
     assertError('incorrect username or password', ErrorCode.Login_Failed);
   } else {
     ctx.session.uid = user.id;
-    ctx.status = 200;
+    ctx.body = omit(user, ['password']);
   }
 }
 

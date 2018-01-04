@@ -5,10 +5,12 @@ import * as fs from 'fs-extra';
 import * as Koa from 'koa';
 import bodyparser = require('koa-bodyparser');
 import morgan = require('koa-morgan');
+import mount = require('koa-mount');
 import { IRouterContext } from 'koa-router';
 import koaSession = require('koa-session');
+import koaStatic = require('koa-static');
 
-import { avatarImageDir, isDev, postImageDir, session } from './config';
+import { avatarImageDir, isDev, postImageDir, publicDir, session } from './config';
 import logger from './lib/logger';
 import { repo } from './model/index';
 import router from './router';
@@ -33,6 +35,7 @@ import { autoLogin, errorHandler } from './lib/middlewares';
 
   app.keys = session.cookieKey;
   app
+    .use(mount('/public', koaStatic(publicDir)))
     .use(koaSession(session, app));
 
   if (isDev) {

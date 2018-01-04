@@ -55,6 +55,13 @@ body {
 }
 
 200
+{
+  id: number
+  username: string
+  nickname: string
+  avatar: string
+  power: number
+}
 ```
 
 #### 修改信息
@@ -160,10 +167,9 @@ query {
 
 #### 获取某人的发布
 ```
-GET /api/users/:userid/posts
-path {
+GET /api/users/:id/posts
+query {
   limit: number (default 30)
-  username: string (required)
   before: date (default now)
 }
 

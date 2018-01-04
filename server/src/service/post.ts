@@ -1,4 +1,3 @@
-import { chain } from 'lodash';
 import { assert } from '../lib/assert';
 import ErrorCode from '../lib/ErrorCode';
 import { Post } from '../model/entity/Post';

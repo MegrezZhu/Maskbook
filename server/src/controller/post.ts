@@ -1,7 +1,7 @@
 import { validate } from 'class-validator';
 import { pick } from 'lodash';
 import { relative } from 'path';
-import { imageRootDir } from '../config';
+import { publicDir } from '../config';
 import { assert, assertError } from '../lib/assert';
 import ErrorCode from '../lib/ErrorCode';
 import { ILoggedInContext } from '../lib/middlewares';
@@ -19,7 +19,7 @@ export async function newPost (ctx: ILoggedInContext) {
   assert(!isNaN(parameter), 'paremeter required', ErrorCode.Invalid_Arguments);
 
   const post = new Post();
-  post.image = `/${relative(imageRootDir, file.path as string).replace('\\', '/')}`;
+  post.image = `/public/${relative(publicDir, file.path as string).replace(/\\/g, '/')}`;
   post.content = content;
   post.parameter = parameter;
   post.price = price;

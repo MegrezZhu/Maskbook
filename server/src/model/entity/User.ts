@@ -42,7 +42,7 @@ export class User {
   @Column({ default: 'no-avatar', nullable: false })
   @IsDefined()
   @IsString()
-  public avatar: string = 'default-avatar-url';
+  public avatar: string = '/public/images/default-avatar.png';
 
   @Column({ default: 0, nullable: false })
   @IsDefined()
