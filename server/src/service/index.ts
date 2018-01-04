@@ -1,5 +1,7 @@
-import * as exampleService from './example';
+import * as postService from './post';
+import * as userService from './user';
 
 export {
-  exampleService
+  userService,
+  postService
 };

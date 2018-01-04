@@ -1,12 +1,15 @@
-import { join, relative } from 'path';
+import { join, resolve } from 'path';
 import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions';
-import { resolve } from 'url';
 
 export const serverRoot = join(__dirname, '..');
+export const publicDir = resolve(serverRoot, './public');
+export const imageRootDir = resolve(publicDir, './images');
+export const postImageDir = resolve(imageRootDir, './post');
+export const avatarImageDir = resolve(imageRootDir, './avatar');
 
 export const isDev = process.env.NODE_ENV !== 'production';
 
-export const mongoConfig = {
+export const mysqlConfig = {
   host: 'localhost',
   port: 3306,
   username: 'root',
@@ -15,11 +18,11 @@ export const mongoConfig = {
 };
 
 // the paths are supposed to be relative to cwd
-const modelPath = relative(process.cwd(), resolve(__dirname, 'model'));
+const modelPath = resolve(__dirname, './model');
 
 export const typeormConfig: MysqlConnectionOptions = {
   type: 'mysql',
-  ...mongoConfig,
+  ...mysqlConfig,
   synchronize: true,
   logging: false,
   entities: [

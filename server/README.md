@@ -55,6 +55,13 @@ body {
 }
 
 200
+{
+  id: number
+  username: string
+  nickname: string
+  avatar: string
+  power: number
+}
 ```
 
 #### 修改信息
@@ -104,7 +111,12 @@ body {
 200
 {
   id: number
-  author: string
+  author: {
+    id: number
+    username: string
+    nickname: string
+    avatar: string
+  }
   content: string
   image: string
   parameter: number
@@ -127,6 +139,7 @@ path {
 ```
 GET /api/posts
 query {
+  limit: number (default 30)
   filter: all, unlocked, mine (default all)
   before: date （default now)
 }
@@ -154,9 +167,10 @@ query {
 
 #### 获取某人的发布
 ```
-GET /api/:username/posts
-path {
-  username: string (required)
+GET /api/users/:id/posts
+query {
+  limit: number (default 30)
+  before: date (default now)
 }
 
 200

@@ -1,14 +1,32 @@
 import { createConnection } from 'typeorm';
+import { Connection } from 'typeorm/connection/Connection';
+import { EntityManager } from 'typeorm/entity-manager/EntityManager';
 import { Repository } from 'typeorm/repository/Repository';
-import User from './entity/User';
+import { typeormConfig } from '../config';
+import { Like } from './entity/Like';
+import { Post } from './entity/Post';
+import { Purchase } from './entity/Purchase';
+import { User } from './entity/User';
 
 class Repostories {
   public user: Repository<User>;
+  public post: Repository<Post>;
+  public like: Repository<Like>;
+  public purchase: Repository<Purchase>;
+
+  private conn: Connection;
 
   public async init () {
-    const conn = await createConnection();
+    this.conn = await createConnection(typeormConfig);
 
-    this.user = conn.getRepository(User);
+    this.user = this.conn.getRepository(User);
+    this.post = this.conn.getRepository(Post);
+    this.like = this.conn.getRepository(Like);
+    this.purchase = this.conn.getRepository(Purchase);
+  }
+
+  public async transaction (task: (manager: EntityManager) => Promise<any>) {
+    return this.conn.transaction(task);
   }
 }
 
