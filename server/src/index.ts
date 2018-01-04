@@ -6,7 +6,7 @@ import * as Koa from 'koa';
 import bodyparser = require('koa-bodyparser');
 import morgan = require('koa-morgan');
 import mount = require('koa-mount');
-import { IRouterContext } from 'koa-router';
+// import { IRouterContext } from 'koa-router';
 import koaSession = require('koa-session');
 import koaStatic = require('koa-static');
 
@@ -38,13 +38,13 @@ import { autoLogin, errorHandler } from './lib/middlewares';
     .use(mount('/public', koaStatic(publicDir)))
     .use(koaSession(session, app));
 
-  if (isDev) {
-    // mock login state
-    app.use(async (ctx: IRouterContext, next: () => Promise<any>) => {
-      ctx.session.uid = 16;
-      await next();
-    });
-  }
+  // if (isDev) {
+  //   // mock login state
+  //   app.use(async (ctx: IRouterContext, next: () => Promise<any>) => {
+  //     ctx.session.uid = 16;
+  //     await next();
+  //   });
+  // }
 
   app
     .use(bodyparser())
