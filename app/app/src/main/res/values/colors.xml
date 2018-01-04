@@ -10,5 +10,5 @@
     <color name="colorFloatingLabel">#666</color>
 
     <color name="colorDrawer">#fff</color>
-    <color name="colorDrawerDivider">#ccc</color>
+    <color name="colorDrawerDivider">#f8f8f8</color>
 </resources>
