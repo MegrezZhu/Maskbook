@@ -2,8 +2,8 @@ import { join, resolve } from 'path';
 import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions';
 
 export const serverRoot = join(__dirname, '..');
-
-export const imageRootDir = resolve(__dirname, '../images');
+export const publicDir = resolve(serverRoot, './public');
+export const imageRootDir = resolve(publicDir, './images');
 export const postImageDir = resolve(imageRootDir, './post');
 export const avatarImageDir = resolve(imageRootDir, './avatar');
 

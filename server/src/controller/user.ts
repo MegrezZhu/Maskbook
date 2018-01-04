@@ -1,6 +1,8 @@
 import { validate } from 'class-validator';
 import { IRouterContext } from 'koa-router';
-import { pick } from 'lodash';
+import { omit, pick } from 'lodash';
+import { relative } from 'path';
+import { publicDir } from '../config';
 import { assert, assertError } from '../lib/assert';
 import ErrorCode from '../lib/ErrorCode';
 import { ILoggedInContext } from '../lib/middlewares';
@@ -10,6 +12,10 @@ import { userService } from '../service/index';
 
 export async function regist (ctx: IRouterContext) {
   const user = User.fromInterface((ctx.request.body || {}) as IUser);
+
+  if (ctx.request.files && ctx.request.files[0]) {
+    user.avatar = `/public/${relative(publicDir, ctx.request.files[0].path as string).replace(/\\/g, '/')}`;
+  }
 
   const [validateErr] = await validate(user);
   if (validateErr) {
@@ -30,7 +36,7 @@ export async function login (ctx: IRouterContext) {
     assertError('incorrect username or password', ErrorCode.Login_Failed);
   } else {
     ctx.session.uid = user.id;
-    ctx.status = 200;
+    ctx.body = omit(user, ['password']);
   }
 }
 
