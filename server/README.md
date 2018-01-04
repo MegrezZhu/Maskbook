@@ -104,7 +104,12 @@ body {
 200
 {
   id: number
-  author: string
+  author: {
+    id: number
+    username: string
+    nickname: string
+    avatar: string
+  }
   content: string
   image: string
   parameter: number
@@ -127,6 +132,7 @@ path {
 ```
 GET /api/posts
 query {
+  limit: number (default 30)
   filter: all, unlocked, mine (default all)
   before: date （default now)
 }
@@ -154,9 +160,11 @@ query {
 
 #### 获取某人的发布
 ```
-GET /api/:username/posts
+GET /api/users/:userid/posts
 path {
+  limit: number (default 30)
   username: string (required)
+  before: date (default now)
 }
 
 200

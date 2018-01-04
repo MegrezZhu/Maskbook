@@ -1,5 +1,5 @@
 import { IsDate, IsDefined, IsOptional } from 'class-validator';
-import { Column, Entity, Index, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { CreateDateColumn, Entity, Index, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Post } from './Post';
 import { User } from './User';
 
@@ -19,7 +19,7 @@ export class Purchase {
   @IsDefined()
   public post: Post;
 
-  @Column({ nullable: false, type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn()
   @IsOptional()
   @IsDate()
   public date: Date;

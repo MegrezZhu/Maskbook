@@ -1,20 +1,27 @@
 import 'reflect-metadata';
 import 'source-map-support/register';
 
+import * as fs from 'fs-extra';
 import * as Koa from 'koa';
 import bodyparser = require('koa-bodyparser');
 import morgan = require('koa-morgan');
+import { IRouterContext } from 'koa-router';
 import koaSession = require('koa-session');
 
-import { isDev, session } from './config';
+import { avatarImageDir, isDev, postImageDir, session } from './config';
 import logger from './lib/logger';
 import { repo } from './model/index';
 import router from './router';
 
 import './@types/TypePatch';
+import { autoLogin, errorHandler } from './lib/middlewares';
 
 (async () => {
-  await repo.init(); // init connection with database
+  await Promise.all([
+    repo.init(), // init connection with database
+    fs.ensureDir(postImageDir),
+    fs.ensureDir(avatarImageDir)
+  ]);
 
   logger.info('successfully connected to database.');
 
@@ -26,28 +33,20 @@ import './@types/TypePatch';
 
   app.keys = session.cookieKey;
   app
-    .use(koaSession(session, app))
+    .use(koaSession(session, app));
+
+  if (isDev) {
+    // mock login state
+    app.use(async (ctx: IRouterContext, next: () => Promise<any>) => {
+      ctx.session.uid = 16;
+      await next();
+    });
+  }
+
+  app
     .use(bodyparser())
-    .use(async (ctx, next) => {
-      // error handling
-      try {
-        await next();
-      } catch (err) {
-        if (err.expose) {
-          ctx.status = 400;
-          ctx.body = {
-            errno: err.errno,
-            message: err.message || 'Unknown Error'
-          };
-        } else {
-          ctx.status = 500;
-          if (isDev) {
-            ctx.body = err.stack;
-          }
-          logger.error(err);
-        }
-      }
-    })
+    .use(errorHandler)
+    .use(autoLogin)
     .use(router.routes());
 
   const port = process.env.PORT || 7001;
