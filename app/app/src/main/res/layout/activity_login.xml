@@ -11,7 +11,6 @@
         android:layout_height="match_parent"
         tools:context="com.zyuco.maskbook.MainActivity">
 
-
         <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/username"
             android:layout_width="0dp"
@@ -19,9 +18,9 @@
             android:layout_marginBottom="20dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
+            android:singleLine="true"
             android:layout_marginTop="20dp"
             android:hint="@string/floating_label_user"
-            android:maxLines="1"
             app:layout_constraintBottom_toTopOf="@id/password"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -41,7 +40,7 @@
             android:layout_marginRight="20dp"
             android:hint="@string/floating_label_password"
             android:inputType="textPassword"
-            android:maxLines="1"
+            android:singleLine="true"
             app:layout_constraintBottom_toTopOf="@id/login"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
