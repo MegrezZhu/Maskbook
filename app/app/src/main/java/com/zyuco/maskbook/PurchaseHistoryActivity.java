@@ -5,13 +5,13 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
 
 import com.zyuco.maskbook.lib.CommonAdapter;
 import com.zyuco.maskbook.lib.HideToolBarListener;
+
 import com.zyuco.maskbook.lib.ViewHolder;
 import com.zyuco.maskbook.model.Post;
 
