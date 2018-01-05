@@ -9,4 +9,13 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="AppTheme.Button" parent="Base.Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/colorSecondaryPrimary</item>
+        <item name="android:textColor">@color/colorTextWhite</item>
+    </style>
+
+    <style name="AppTheme.flatButton" parent="Base.Widget.AppCompat.Button.Borderless.Colored">
+        <item name="android:textColor">@color/colorSecondaryPrimary</item>
+    </style>
+
 </resources>

@@ -4,9 +4,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
 
 import com.zyuco.maskbook.lib.CommonAdapter;
+import com.zyuco.maskbook.lib.HideToolBarListener;
+
 import com.zyuco.maskbook.lib.ViewHolder;
 import com.zyuco.maskbook.model.Post;
 
@@ -16,6 +21,7 @@ import java.util.List;
 public class PurchaseHistoryActivity extends AppCompatActivity {
     CommonAdapter<Post> adapter;
     List<Post> list = new ArrayList<>();
+    Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +33,9 @@ public class PurchaseHistoryActivity extends AppCompatActivity {
     private void initList() {
         list.add(new Post());
         list.add(new Post());
+        list.add(new Post());
+        list.add(new Post());
+        toolbar = findViewById(R.id.toolbar);
         adapter = new CommonAdapter<Post>(this, R.layout.post_item, list) {
             @Override
             public void convert(ViewHolder holder, Post data) {
@@ -52,5 +61,35 @@ public class PurchaseHistoryActivity extends AppCompatActivity {
 
         list.setLayoutManager(new LinearLayoutManager(this));
         list.setAdapter(adapter);
+        RecyclerView.OnScrollListener onScrollListener = new HideToolBarListener(this) {
+            @Override
+            public void onHide() {
+                hideViews();
+            }
+
+            @Override
+            public void onShow() {
+                showViews();
+            }
+
+            @Override
+            public void onMoved(int distance) {
+                moveViews(distance);
+            }
+        };
+        list.addOnScrollListener(onScrollListener);
+    }
+
+
+    private void hideViews() {
+        toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator(1));
+    }
+
+    private void showViews() {
+        toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(1));
+    }
+
+    private void moveViews(int distance) {
+        toolbar.setTranslationY(-distance);
     }
 }

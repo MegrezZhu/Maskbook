@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 import com.google.gson.Gson;
 import com.zyuco.maskbook.model.ErrorResponse;
@@ -20,7 +21,7 @@ import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
     private Gson gson = new Gson();
-    com.gc.materialdesign.views.ButtonRectangle buttonSignup;
+    private Button buttonSignup;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
