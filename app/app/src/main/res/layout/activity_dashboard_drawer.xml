@@ -48,7 +48,7 @@
         app:layout_constraintTop_toBottomOf="@id/session1"/>
 
     <LinearLayout
-        android:id="@+id/profile"
+        android:id="@+id/homepage"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:paddingLeft="10dp"
@@ -75,7 +75,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/unlock"
+        android:id="@+id/purchase_history"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginTop="5dp"
@@ -85,7 +85,7 @@
         android:clickable="true"
         android:focusable="true"
         android:background="?attr/selectableItemBackground"
-        app:layout_constraintTop_toBottomOf="@id/profile"
+        app:layout_constraintTop_toBottomOf="@id/homepage"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
 
@@ -110,6 +110,32 @@
         android:layout_height="1dp"
         android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toTopOf="@id/logout" />
+
+    <LinearLayout
+        android:id="@+id/about"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginBottom="20dp"
+        android:paddingLeft="10dp"
+        android:gravity="center_vertical"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackground"
+        app:layout_constraintBottom_toTopOf="@id/logout">
+
+        <ImageView
+            android:src="@mipmap/ic_exit_to_app_black_24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_marginLeft="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/menuitem_about"
+            android:gravity="center"
+            android:textColor="#000"
+            android:textSize="18sp" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/logout"

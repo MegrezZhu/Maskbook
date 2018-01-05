@@ -8,7 +8,8 @@
     <string name="button_signup">Sign up</string>
     <string name="text_donot_have_a_account">Do not have a account? </string>
     <string name="text_already_have_a_account">Do not have a account? </string>
-    <string name="menuitem_profile">Profile</string>
-    <string name="menuitem_logout">Logout</string>
-    <string name="menuitem_unlock">Unlock</string>
+    <string name="menuitem_profile">我的主页</string>
+    <string name="menuitem_logout">注销</string>
+    <string name="menuitem_unlock">已购买</string>
+    <string name="menuitem_about">关于</string>
 </resources>
