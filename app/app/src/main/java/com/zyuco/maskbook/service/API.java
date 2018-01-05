@@ -6,6 +6,7 @@ import com.franmontiel.persistentcookiejar.ClearableCookieJar;
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
+import com.google.gson.JsonElement;
 import com.zyuco.maskbook.model.Post;
 import com.zyuco.maskbook.model.User;
 import com.zyuco.maskbook.tool.SimpleCallAdapterFactory;
@@ -15,12 +16,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class API {
@@ -58,6 +61,10 @@ public class API {
         return service.login(user);
     }
 
+    public static Completable logout() {
+        return service.logout();
+    }
+
     public static Observable<User> getUserInformation() {
         return service.getUserInformation();
     }
@@ -71,7 +78,7 @@ public class API {
                 RequestBody.create(MultipartBody.FORM, String.valueOf(price)));
     }
 
-    public static Observable deletePost(int id) {
+    public static Completable deletePost(int id) {
         return service.deletePost(id);
     }
 
@@ -99,15 +106,15 @@ public class API {
         return service.getPostDetail(postId);
     }
 
-    public static Observable likePost(int postId) {
+    public static Completable likePost(int postId) {
         return service.likePost(postId);
     }
 
-    public static Observable unlikePost(int postId) {
+    public static Completable unlikePost(int postId) {
         return service.unlikePost(postId);
     }
 
-    public static Observable unlockPost(int postId) {
+    public static Completable unlockPost(int postId) {
         return service.unlockPost(postId);
     }
 }

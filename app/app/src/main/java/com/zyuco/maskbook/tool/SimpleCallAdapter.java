@@ -11,8 +11,10 @@ import com.zyuco.maskbook.model.User;
 import java.io.IOException;
 import java.lang.reflect.Type;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -34,9 +36,17 @@ public class SimpleCallAdapter<R> implements CallAdapter<R, Object> {
 
     @Override
     public Object adapt(Call<R> call) {
-        Observable<R> observable = ((Observable<R>) this.adapter.adapt(call));
-        return observable
+        Object obj = this.adapter.adapt(call);
+        if (obj instanceof Observable) {
+            Observable<R> observable = (Observable<R>) obj;
+            return observable
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.newThread());
+                .subscribeOn(Schedulers.io());
+        } else {
+            Completable completable = (Completable) obj;
+            return completable
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io());
+        }
     }
 }
