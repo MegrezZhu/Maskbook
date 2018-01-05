@@ -6,4 +6,14 @@
     android:layout_height="match_parent"
     tools:context="com.zyuco.maskbook.PurchaseHistoryActivity">
 
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/post_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusableInTouchMode="true"
+        app:layout_constraintTop_toBottomOf="@id/homepage_bg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 </android.support.constraint.ConstraintLayout>
