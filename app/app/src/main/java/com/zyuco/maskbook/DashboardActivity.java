@@ -5,10 +5,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
 import com.melnykov.fab.FloatingActionButton;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
@@ -16,11 +20,19 @@ import com.zyuco.maskbook.lib.CommonAdapter;
 import com.zyuco.maskbook.lib.ViewHolder;
 import com.zyuco.maskbook.model.Post;
 import com.zyuco.maskbook.model.User;
+import com.zyuco.maskbook.service.APIService;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Retrofit;
+
 public class DashboardActivity extends AppCompatActivity {
+    private static final String TAG = "Maskbook.dashborad";
+
     CommonAdapter<Post> adapter;
     List<Post> list = new ArrayList<>();
     LinearLayout button_homepage;
@@ -28,6 +40,7 @@ public class DashboardActivity extends AppCompatActivity {
     LinearLayout button_about;
     LinearLayout button_logout;
     FloatingActionButton button_publish;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,9 +52,19 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void render() {
-        User user = ((MaskbookApplication)getApplication()).getUser();
-        ((TextView)findViewById(R.id.name)).setText(user.getNickname());
-        // TODO: set avatar url
+        User user = ((MaskbookApplication) getApplication()).getUser();
+        ((TextView) findViewById(R.id.name)).setText(user.getNickname());
+        try {
+            URL url = new URL(APIService.BASE_URL);
+            URL avatarUrl = new URL(url, user.getAvatar());
+            GlideApp
+                .with(this)
+                .load(avatarUrl)
+                .placeholder(R.mipmap.default_avatar)
+                .into((ImageView) findViewById(R.id.avatar));
+        } catch (MalformedURLException err) {
+            Log.e(TAG, "render: ", err);
+        }
     }
 
     private void initList() {
