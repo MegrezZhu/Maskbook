@@ -10,6 +10,7 @@
         android:padding="20dp"
         android:layout_width="160dp"
         android:layout_height="160dp"
+        app:stroke_color="#f6f6f6"
         app:round_as_circle="true"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toTopOf="@id/username"

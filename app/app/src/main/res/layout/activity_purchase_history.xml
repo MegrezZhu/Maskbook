@@ -6,13 +6,22 @@
     android:layout_height="match_parent"
     tools:context="com.zyuco.maskbook.PurchaseHistoryActivity">
 
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/post_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clipToPadding="false"
         android:focusableInTouchMode="true"
+        android:paddingTop="?attr/actionBarSize"
         app:layout_constraintTop_toBottomOf="@id/homepage_bg"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"/>
 </android.support.constraint.ConstraintLayout>
