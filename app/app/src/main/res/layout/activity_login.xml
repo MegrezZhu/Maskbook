@@ -1,84 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.zyuco.maskbook.MainActivity">
+    android:layout_height="match_parent">
 
-
-    <com.rengwuxian.materialedittext.MaterialEditText
-        android:id="@+id/username"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="@string/floating_label_user"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="20dp"
-        app:met_floatingLabel="normal"
-        app:met_floatingLabelTextSize="16sp"
-        app:met_floatingLabelText="@string/floating_label_user"
-        app:met_clearButton="true"
-
-        app:met_iconLeft="@mipmap/ic_perm_identity_black_24dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/password"
-        app:layout_constraintRight_toRightOf="parent"/>
-
-    <com.rengwuxian.materialedittext.MaterialEditText
-        android:id="@+id/password"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/floating_label_password"
-        android:inputType="textPassword"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
-        app:met_floatingLabel="normal"
-        app:met_clearButton="true"
-        app:met_floatingLabelTextSize="16sp"
-        app:met_iconLeft="@mipmap/ic_lock_black_24dp"
-        app:met_floatingLabelText="@string/floating_label_password"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/login" />
-
-    <Button
-        android:id="@+id/login"
-        android:layout_width="0dp"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:layout_marginBottom="20dp"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.Button"
-        android:text="@string/button_login"
-        app:layout_constraintBottom_toTopOf="@id/signup"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
-
-    <TextView
-        android:id="@+id/text_signup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        android:text="@string/text_donot_have_a_account"
-        android:layout_marginBottom="70dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/signup"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        android:layout_height="match_parent"
+        tools:context="com.zyuco.maskbook.MainActivity">
 
 
-    <Button
-        android:id="@+id/signup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.flatButton"
-        style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
-        android:layout_marginBottom="60dp"
-        android:text="@string/button_signup"
-        app:layout_constraintLeft_toRightOf="@id/text_signup"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-</android.support.constraint.ConstraintLayout>
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/username"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:hint="@string/floating_label_user"
+            android:maxLines="1"
+            app:layout_constraintBottom_toTopOf="@id/password"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:met_clearButton="true"
+
+            app:met_floatingLabel="normal"
+            app:met_floatingLabelText="@string/floating_label_user"
+            app:met_floatingLabelTextSize="16sp"
+            app:met_iconLeft="@mipmap/ic_perm_identity_black_24dp"/>
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:hint="@string/floating_label_password"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            app:layout_constraintBottom_toTopOf="@id/login"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:met_clearButton="true"
+            app:met_floatingLabel="normal"
+            app:met_floatingLabelText="@string/floating_label_password"
+            app:met_floatingLabelTextSize="16sp"
+            app:met_iconLeft="@mipmap/ic_lock_black_24dp"/>
+
+        <Button
+            android:id="@+id/login"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:text="@string/button_login"
+            android:theme="@style/AppTheme.Button"
+            app:layout_constraintBottom_toTopOf="@id/signup"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+        <TextView
+            android:id="@+id/text_signup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="70dp"
+            android:text="@string/text_donot_have_a_account"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/signup"/>
+
+
+        <Button
+            android:id="@+id/signup"
+            style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="60dp"
+            android:text="@string/button_signup"
+            android:theme="@style/AppTheme.flatButton"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/text_signup"
+            app:layout_constraintRight_toRightOf="parent"/>
+    </android.support.constraint.ConstraintLayout>
+
+    <include layout="@layout/loading_mask"/>
+</FrameLayout>
