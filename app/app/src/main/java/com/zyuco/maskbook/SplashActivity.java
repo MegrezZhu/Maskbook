@@ -52,7 +52,7 @@ public class SplashActivity extends AppCompatActivity {
             .subscribe(new CallBack<User>() {
                 @Override
                 public void onSuccess(User user) {
-                    // TODO: persistence user info
+                    ((MaskbookApplication)getApplication()).setUser(user);
                     Log.i(TAG, String.format("already logged in as %s.", user.getNickname()));
                     finishSplashAndGo(DashboardActivity.class);
                 }

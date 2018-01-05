@@ -76,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
             .subscribe(new CallBack<User>() {
                 @Override
                 public void onSuccess(User user) {
-                    // TODO: user info persistence
+                    ((MaskbookApplication)getApplication()).setUser(user);
                     Log.i(TAG, String.format("login succeeded as %s.", user.getNickname()));
                     Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
                     startActivity(intent);

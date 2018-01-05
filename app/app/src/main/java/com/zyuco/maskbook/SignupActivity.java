@@ -75,6 +75,7 @@ public class SignupActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(User user) {
                     // regist ok
+                    ((MaskbookApplication)getApplication()).setUser(user);
                     Intent intent = new Intent(SignupActivity.this, DashboardActivity.class);
                     startActivity(intent);
                     Toast.makeText(SignupActivity.this, R.string.toast_signup_success, Toast.LENGTH_SHORT).show();

@@ -15,6 +15,7 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.zyuco.maskbook.lib.CommonAdapter;
 import com.zyuco.maskbook.lib.ViewHolder;
 import com.zyuco.maskbook.model.Post;
+import com.zyuco.maskbook.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,13 @@ public class DashboardActivity extends AppCompatActivity {
 
         initListener();
         initList();
+        render();
+    }
+
+    private void render() {
+        User user = ((MaskbookApplication)getApplication()).getUser();
+        ((TextView)findViewById(R.id.name)).setText(user.getNickname());
+        // TODO: set avatar url
     }
 
     private void initList() {
