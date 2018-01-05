@@ -78,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
                 public void onSuccess(User user) {
                     // TODO: user info persistence
                     Log.i(TAG, String.format("login succeeded as %s.", user.getNickname()));
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
                     startActivity(intent);
                     finish();
                 }

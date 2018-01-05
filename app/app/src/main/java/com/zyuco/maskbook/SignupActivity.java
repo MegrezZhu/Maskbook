@@ -83,8 +83,17 @@ public class SignupActivity extends AppCompatActivity {
 
                 @Override
                 public void onFail(ErrorResponse e) {
-                    Log.w(TAG, String.format("regist failed, code: %s", e.getErrno().name()));
-                    Toast.makeText(SignupActivity.this, R.string.toast_unknown_error, Toast.LENGTH_SHORT).show();
+                    switch (e.getErrno()) {
+                        case Duplicate_Nickname:
+                            Toast.makeText(SignupActivity.this, R.string.toast_duplicate_nickname, Toast.LENGTH_SHORT).show();
+                            break;
+                        case Duplicate_Username:
+                            Toast.makeText(SignupActivity.this, R.string.toast_duplicate_username, Toast.LENGTH_SHORT).show();
+                            break;
+                        default:
+                            Log.w(TAG, String.format("regist failed, code: %s", e.getErrno().name()));
+                            Toast.makeText(SignupActivity.this, R.string.toast_unknown_error, Toast.LENGTH_SHORT).show();
+                    }
                 }
 
                 @Override

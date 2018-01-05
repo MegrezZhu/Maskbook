@@ -23,6 +23,8 @@
     <string name="toast_invalid_username">Length of username must be between 6 and 20 characters</string>
     <string name="toast_invalid_nickname">Length of nickname must be between 2 and 20 characters</string>
     <string name="toast_invalid_password">Length of password must be between 2 and 20 characters</string>
+    <string name="toast_duplicate_nickname">Duplicate nickname</string>
+    <string name="toast_duplicate_username">Duplicate username</string>
     <string name="toast_no_avatar">No avatar selected</string>
     <string name="toast_signup_success">Sign up succeeded</string>
 </resources>
