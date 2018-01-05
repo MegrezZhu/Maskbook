@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     android:elevation="5dp"
     android:background="#fbfbfb"
-    android:layout_marginBottom="10dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
