@@ -32,7 +32,7 @@
             app:layout_constraintTop_toTopOf="@id/homepage_bg">
             <ImageView
                 android:scaleType="centerCrop"
-                android:src="@mipmap/ic_launcher_round"
+                android:src="@mipmap/default_avatar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
         </com.gcssloop.widget.RCRelativeLayout>

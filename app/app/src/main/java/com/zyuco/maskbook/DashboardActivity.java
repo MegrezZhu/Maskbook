@@ -60,8 +60,6 @@ public class DashboardActivity extends AppCompatActivity {
                 name.setText("123");
                 TextView content = holder.getView(R.id.content);
                 content.setText("咔咔");
-
-
             }
         };
 
