@@ -17,7 +17,7 @@
 
         <ImageView
             android:scaleType="centerCrop"
-            android:src="@mipmap/ic_camera_enhance_black_24dp"
+            android:src="@mipmap/signup_avatar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
