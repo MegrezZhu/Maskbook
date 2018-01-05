@@ -16,7 +16,6 @@ public abstract class CommonAdapter<T> extends RecyclerView.Adapter<ViewHolder> 
     private int mLayoutId;
     private List<T> mData;
     private OnItemClickListener<T> mOnItemClickListener;
-    private View mHeaderView;
 
     public CommonAdapter(Context context, int layoutId, List<T> data) {
         mContext = context;

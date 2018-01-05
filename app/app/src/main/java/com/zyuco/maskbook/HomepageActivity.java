@@ -1,16 +1,11 @@
 package com.zyuco.maskbook;
 
-import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.melnykov.fab.FloatingActionButton;
 import com.zyuco.maskbook.lib.CommonAdapter;
 import com.zyuco.maskbook.lib.ViewHolder;
 import com.zyuco.maskbook.model.Post;
@@ -21,6 +16,7 @@ import java.util.List;
 public class HomepageActivity extends AppCompatActivity {
     CommonAdapter<Post> adapter;
     List<Post> list = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
