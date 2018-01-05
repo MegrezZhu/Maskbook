@@ -1,135 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.zyuco.maskbook.SignupActivity">
+    android:layout_height="match_parent">
 
-    <com.gcssloop.widget.RCRelativeLayout
-        android:padding="20dp"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
-        app:stroke_color="#f6f6f6"
-        app:round_as_circle="true"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/username"
-        app:layout_constraintRight_toRightOf="parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:scaleType="centerCrop"
-            android:src="@mipmap/signup_avatar"
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="wrap_content"
+            tools:context="com.zyuco.maskbook.SignupActivity">
 
-    </com.gcssloop.widget.RCRelativeLayout>
+            <com.gcssloop.widget.RCRelativeLayout
+                android:id="@+id/avatar_wrapper"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_marginTop="20dp"
+                android:padding="20dp"
+                app:layout_constraintBottom_toTopOf="@id/username"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"
+                app:round_as_circle="true"
+                app:stroke_color="#f6f6f6">
 
-    <com.rengwuxian.materialedittext.MaterialEditText
-        android:id="@+id/username"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="@string/floating_label_user"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="20dp"
-        app:met_floatingLabel="normal"
-        app:met_floatingLabelTextSize="16sp"
-        app:met_floatingLabelText="@string/floating_label_user"
-        app:met_clearButton="true"
+                <ImageView
+                    android:id="@+id/avatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/default_avatar"/>
 
-        app:met_iconLeft="@mipmap/ic_perm_identity_black_24dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/password"
-        app:layout_constraintRight_toRightOf="parent"/>
+            </com.gcssloop.widget.RCRelativeLayout>
 
-    <com.rengwuxian.materialedittext.MaterialEditText
-        android:id="@+id/password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/floating_label_password"
-        android:inputType="textPassword"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="10dp"
-        app:met_floatingLabel="normal"
-        app:met_clearButton="true"
-        app:met_floatingLabelTextSize="16sp"
-        app:met_iconLeft="@mipmap/ic_lock_black_24dp"
-        app:met_floatingLabelText="@string/floating_label_password"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/repassword" />
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/username"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:hint="@string/floating_label_user"
+                android:maxLines="1"
+                app:layout_constraintBottom_toTopOf="@id/password"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/avatar_wrapper"
+                app:met_clearButton="true"
 
-    <com.rengwuxian.materialedittext.MaterialEditText
-        android:id="@+id/repassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:hint="@string/floating_label_repassword"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="10dp"
-        app:met_floatingLabel="normal"
-        app:met_clearButton="true"
-        app:met_floatingLabelTextSize="16sp"
-        app:met_iconLeft="@mipmap/ic_lock_black_24dp"
-        app:met_floatingLabelText="@string/floating_label_repassword"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/nickname" />
+                app:met_floatingLabel="normal"
+                app:met_floatingLabelText="@string/floating_label_user"
+                app:met_floatingLabelTextSize="16sp"
+                app:met_iconLeft="@mipmap/ic_perm_identity_black_24dp"/>
 
-    <com.rengwuxian.materialedittext.MaterialEditText
-        android:id="@+id/nickname"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/floating_label_nickname"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="10dp"
-        app:met_floatingLabel="normal"
-        app:met_clearButton="true"
-        app:met_floatingLabelTextSize="16sp"
-        app:met_iconLeft="@mipmap/ic_lock_black_24dp"
-        app:met_floatingLabelText="@string/floating_label_nickname"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/signup" />
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:hint="@string/floating_label_password"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                app:layout_constraintBottom_toTopOf="@id/repassword"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/username"
+                app:met_clearButton="true"
+                app:met_floatingLabel="normal"
+                app:met_floatingLabelText="@string/floating_label_password"
+                app:met_floatingLabelTextSize="16sp"
+                app:met_iconLeft="@mipmap/ic_lock_black_24dp"/>
 
-    <Button
-        android:id="@+id/signup"
-        android:layout_width="0dp"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:layout_marginBottom="20dp"
-        android:layout_height="wrap_content"
-        android:text="@string/button_signup"
-        android:theme="@style/AppTheme.Button"
-        app:layout_constraintBottom_toTopOf="@id/text_signin"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/repassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:hint="@string/floating_label_repassword"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                app:layout_constraintBottom_toTopOf="@id/nickname"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/password"
+                app:met_clearButton="true"
+                app:met_floatingLabel="normal"
+                app:met_floatingLabelText="@string/floating_label_repassword"
+                app:met_floatingLabelTextSize="16sp"
+                app:met_iconLeft="@mipmap/ic_lock_black_24dp"/>
 
-    <TextView
-        android:id="@+id/text_signin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        android:text="@string/text_already_have_a_account"
-        android:layout_marginBottom="40dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/signin"
-        app:layout_constraintBottom_toBottomOf="parent" />
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/nickname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:hint="@string/floating_label_nickname"
+                android:maxLines="1"
+                app:layout_constraintBottom_toTopOf="@id/signup"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/repassword"
+                app:met_clearButton="true"
+                app:met_floatingLabel="normal"
+                app:met_floatingLabelText="@string/floating_label_nickname"
+                app:met_floatingLabelTextSize="16sp"
+                app:met_iconLeft="@mipmap/ic_lock_black_24dp"/>
+
+            <Button
+                android:id="@+id/signup"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:text="@string/button_signup"
+                android:theme="@style/AppTheme.Button"
+                app:layout_constraintBottom_toTopOf="@id/text_signin"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/nickname"/>
+
+            <TextView
+                android:id="@+id/text_signin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_already_have_a_account"
+                app:layout_constraintBottom_toBottomOf="@+id/signin"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/signin"
+                app:layout_constraintTop_toTopOf="@+id/signin"/>
 
 
-    <Button
-        android:id="@+id/signin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.flatButton"
-        style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
-        android:layout_marginBottom="30dp"
-        android:text="@string/button_login"
-        app:layout_constraintLeft_toRightOf="@id/text_signin"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-</android.support.constraint.ConstraintLayout>
+            <Button
+                android:id="@+id/signin"
+                style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:text="@string/button_login"
+                android:theme="@style/AppTheme.flatButton"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/text_signin"
+                app:layout_constraintRight_toRightOf="parent"/>
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
+
+    <include layout="@layout/loading_mask"/>
+</FrameLayout>

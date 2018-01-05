@@ -23,6 +23,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // TODO: add background image (just like tumblr)
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
