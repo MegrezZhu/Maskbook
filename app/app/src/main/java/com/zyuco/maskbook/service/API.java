@@ -1,12 +1,12 @@
 package com.zyuco.maskbook.service;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 
 import com.franmontiel.persistentcookiejar.ClearableCookieJar;
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
-import com.google.gson.JsonElement;
 import com.zyuco.maskbook.model.Post;
 import com.zyuco.maskbook.model.User;
 import com.zyuco.maskbook.tool.SimpleCallAdapterFactory;
@@ -23,7 +23,6 @@ import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class API {
@@ -34,24 +33,28 @@ public class API {
         ClearableCookieJar cookieJar = new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(context));
         OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
         httpClientBuilder
-                .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
-                .cookieJar(cookieJar);
+            .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
+            .cookieJar(cookieJar);
         Retrofit retrofit = new Retrofit.Builder()
-                .client(httpClientBuilder.build())
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(SimpleCallAdapterFactory.create())
-                .baseUrl(APIService.BASE_URL)
-                .build();
+            .client(httpClientBuilder.build())
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(SimpleCallAdapterFactory.create())
+            .baseUrl(APIService.BASE_URL)
+            .build();
         service = retrofit.create(APIService.class);
     }
 
-    public static Observable<User> regist(String username, String password, String nickname, File avatar) {
-        RequestBody body = RequestBody.create(MediaType.parse("multipart/form-data"), avatar);
-        MultipartBody.Part filePart = MultipartBody.Part.createFormData("avatar", avatar.getName(), body);
+    public static Observable<User> regist(String username, String password, String nickname, @Nullable File avatar) {
+        MultipartBody.Part filePart = null;
+        if (avatar != null) {
+            RequestBody body = RequestBody.create(MediaType.parse("multipart/form-data"), avatar);
+            filePart = MultipartBody.Part.createFormData("avatar", avatar.getName(), body);
+        }
+
         return service.regist(RequestBody.create(MultipartBody.FORM, username),
-                RequestBody.create(MultipartBody.FORM, password),
-                RequestBody.create(MultipartBody.FORM, nickname),
-                filePart);
+            RequestBody.create(MultipartBody.FORM, password),
+            RequestBody.create(MultipartBody.FORM, nickname),
+            filePart);
     }
 
     public static Observable<User> login(String username, String password) {
@@ -73,9 +76,9 @@ public class API {
         RequestBody body = RequestBody.create(MediaType.parse("multipart/form-data"), image);
         MultipartBody.Part filePart = MultipartBody.Part.createFormData("avatar", image.getName(), body);
         return service.newPost(filePart,
-                RequestBody.create(MultipartBody.FORM, String.valueOf(parameter)),
-                RequestBody.create(MultipartBody.FORM, content),
-                RequestBody.create(MultipartBody.FORM, String.valueOf(price)));
+            RequestBody.create(MultipartBody.FORM, String.valueOf(parameter)),
+            RequestBody.create(MultipartBody.FORM, content),
+            RequestBody.create(MultipartBody.FORM, String.valueOf(price)));
     }
 
     public static Completable deletePost(int id) {

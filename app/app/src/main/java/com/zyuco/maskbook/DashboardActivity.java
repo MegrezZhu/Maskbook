@@ -9,11 +9,13 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
 import com.melnykov.fab.FloatingActionButton;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.zyuco.maskbook.lib.CommonAdapter;
 import com.zyuco.maskbook.lib.ViewHolder;
 import com.zyuco.maskbook.model.Post;
+import com.zyuco.maskbook.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +35,13 @@ public class DashboardActivity extends AppCompatActivity {
 
         initListener();
         initList();
+        render();
+    }
+
+    private void render() {
+        User user = ((MaskbookApplication)getApplication()).getUser();
+        ((TextView)findViewById(R.id.name)).setText(user.getNickname());
+        // TODO: set avatar url
     }
 
     private void initList() {
@@ -78,8 +87,7 @@ public class DashboardActivity extends AppCompatActivity {
 
 
     private void initListener() {
-        button_homepage = findViewById(R.id.homepage);
-        button_homepage.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.homepage).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(DashboardActivity.this, HomepageActivity.class);
@@ -87,8 +95,7 @@ public class DashboardActivity extends AppCompatActivity {
             }
         });
 
-        button_purchase_history = findViewById(R.id.purchase_history);
-        button_purchase_history.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.purchase_history).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(DashboardActivity.this, PurchaseHistoryActivity.class);
@@ -96,16 +103,19 @@ public class DashboardActivity extends AppCompatActivity {
             }
         });
 
-        button_logout = findViewById(R.id.logout);
-        button_logout.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.logout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // 调用api注销
+                logout();
+
+                // back to login activity
+                Intent intent = new Intent(DashboardActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 
-        button_publish = findViewById(R.id.publish);
-        button_publish.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.publish).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(DashboardActivity.this, PublishActivity.class);
@@ -114,5 +124,9 @@ public class DashboardActivity extends AppCompatActivity {
         });
     }
 
-
+    private void logout() {
+        // just clearing local cookies
+        SharedPrefsCookiePersistor cookie = new SharedPrefsCookiePersistor(this);
+        cookie.clear();
+    }
 }
