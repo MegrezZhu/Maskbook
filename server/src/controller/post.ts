@@ -73,7 +73,7 @@ export async function getPosts (ctx: ILoggedInContext) {
       ctx.body = (await postService.getAllPost(ctx.user.id, limit, before)).map(formatPost);
       break;
     case 'unlocked':
-      ctx.body = (await postService.getAllUnlocked(ctx.user.id, limit, before)).map(formatPost);
+      ctx.body = (await postService.getAllUnlocked(ctx.user, limit, before)).map(formatPost);
       break;
     case 'mine':
       ctx.body = (await postService.getOnesPost(ctx.user.id, limit, before)).map(formatPost);
@@ -95,6 +95,30 @@ export async function getOnesPosts (ctx: ILoggedInContext) {
   }
 
   ctx.body = (await postService.getOnesPost(uid, limit, before)).map(formatPost);
+}
+
+export async function like (ctx: ILoggedInContext) {
+  const { pid }: { pid: number } = ctx.params;
+  assert(!isNaN(pid), 'invalid pid', ErrorCode.Invalid_Arguments);
+
+  await postService.newLike(ctx.user, pid);
+  ctx.status = 200;
+}
+
+export async function unlike (ctx: ILoggedInContext) {
+  const { pid }: { pid: number } = ctx.params;
+  assert(!isNaN(pid), 'invalid pid', ErrorCode.Invalid_Arguments);
+
+  await postService.removeLike(ctx.user, pid);
+  ctx.status = 200;
+}
+
+export async function unlock (ctx: ILoggedInContext) {
+  const { pid }: { pid: number } = ctx.params;
+  assert(!isNaN(pid), 'invalid pid', ErrorCode.Invalid_Arguments);
+
+  await postService.unlock(ctx.user, pid);
+  ctx.status = 200;
 }
 
 function formatPost (post: Post): any {

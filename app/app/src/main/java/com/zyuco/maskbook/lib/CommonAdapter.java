@@ -7,10 +7,6 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-/**
- * Created by 82091 on 2018/1/5.
- */
-
 public abstract class CommonAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
     private Context mContext;
     private int mLayoutId;
@@ -29,8 +25,13 @@ public abstract class CommonAdapter<T> extends RecyclerView.Adapter<ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
-        convert(holder, mData.get(position));
+    public void onBindViewHolder(final ViewHolder holder, int position, List<Object> payloads) {
+//        super.onBindViewHolder(holder, position, payloads);
+        if (payloads != null && !payloads.isEmpty()) {
+            updateWithPayload(holder, mData.get(position), payloads.get(0));
+        } else {
+            convert(holder, mData.get(position));
+        }
 
         if (mOnItemClickListener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -52,11 +53,21 @@ public abstract class CommonAdapter<T> extends RecyclerView.Adapter<ViewHolder> 
     }
 
     @Override
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        onBindViewHolder(holder, position, null);
+    }
+
+    @Override
     public int getItemCount() {
         return mData.size();
     }
 
     public abstract void convert(ViewHolder holder, T data);
+
+    public void updateWithPayload(ViewHolder holder, T data, Object payload) {
+        // Stub
+        convert(holder, data);
+    }
 
     public void setOnItemClickListemer(OnItemClickListener listener) {
         mOnItemClickListener = listener;

@@ -20,11 +20,13 @@ import com.fivehundredpx.android.blur.BlurringView;
 import com.ldoublem.thumbUplib.ThumbUpView;
 import com.zyuco.maskbook.DashboardActivity;
 import com.zyuco.maskbook.GlideApp;
+import com.zyuco.maskbook.MaskbookApplication;
 import com.zyuco.maskbook.R;
 import com.zyuco.maskbook.lib.CommonAdapter;
 import com.zyuco.maskbook.lib.ViewHolder;
 import com.zyuco.maskbook.model.ErrorResponse;
 import com.zyuco.maskbook.model.Post;
+import com.zyuco.maskbook.model.User;
 import com.zyuco.maskbook.service.API;
 import com.zyuco.maskbook.service.APIService;
 
@@ -73,17 +75,16 @@ public class PostList {
             public void convert(final ViewHolder holder, final Post post) {
                 PostList.this.convert(holder, post);
             }
+
+            @Override
+            public void updateWithPayload(ViewHolder holder, Post data, Object payload) {
+                if (payload.equals(true)) {
+                    PostList.this.update(holder, data);
+                } else {
+                    PostList.this.convert(holder, data);
+                }
+            }
         };
-
-        adapter.setOnItemClickListemer(new CommonAdapter.OnItemClickListener<Post>() {
-            @Override
-            public void onClick(int position, Post data) {
-            }
-
-            @Override
-            public void onLongClick(int position, Post data) {
-            }
-        });
 
         recyclerView = context.findViewById(R.id.post_list);
 
@@ -144,11 +145,19 @@ public class PostList {
             });
     }
 
+    private void update(final ViewHolder holder, final Post post) {
+        // just unlocking
+        holder.getView(R.id.blurring_view).setVisibility(View.INVISIBLE);
+        Log.i(TAG, String.format("update post id: %d", post.getId()));
+    }
+
     private void convert(final ViewHolder holder, final Post post) {
         TextView name = holder.getView(R.id.name);
         name.setText(post.getAuthor().getNickname());
         TextView content = holder.getView(R.id.content);
         content.setText(post.getContent());
+
+        Log.i(TAG, String.format("convert post id: %d", post.getId()));
 
         TextView time = holder.getView(R.id.time);
         Date localDate = new Date(post.getDate().getTime() + 1000 * 60 * 60 * 8);
@@ -159,10 +168,9 @@ public class PostList {
 
         final BlurringView blur = holder.getView(R.id.blurring_view);
         final ImageView image = holder.getView(R.id.image);
-        image.layout(0, 0, 0, 0);
+//        image.layout(0, 0, 0, 0);
 
         // image loading
-        Log.i(TAG, String.format("image url: %s", post.getImage()));
         URL imageURL, avatarURL;
         try {
             imageURL = new URL(new URL(APIService.BASE_URL), post.getImage());
@@ -182,11 +190,15 @@ public class PostList {
 
                 @Override
                 public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                    if (!post.getUnlock() && post.getParameter() != 0) {
+                    User self = ((MaskbookApplication) context.getApplication()).getUser();
+                    Log.i(TAG, String.format("convert id %d, unlock: %b, para: %f", post.getId(), post.getUnlock(), post.getParameter()));
+                    if (!post.getUnlock() && post.getParameter() != 0 && post.getAuthor().getId().intValue() != self.getId().intValue()) {
                         View image = holder.getView(R.id.image_wrapper);
                         blur.setVisibility(View.VISIBLE);
                         blur.setBlurRadius(post.getParameter().intValue());
                         blur.setBlurredView(image);
+                    } else {
+                        blur.setVisibility(View.INVISIBLE);
                     }
                     return false;
                 }

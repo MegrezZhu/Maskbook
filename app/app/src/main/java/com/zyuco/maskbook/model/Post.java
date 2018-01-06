@@ -74,7 +74,7 @@ public class Post {
     }
 
     public void setUnlock(Boolean unlock) {
-        this.unlocked = unlocked;
+        this.unlocked = unlock;
     }
 
     public Boolean getLike() {

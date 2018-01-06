@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:id="@+id/click_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textSize="32sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/unlock_hint_A"
+        android:textAlignment="center"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/unlock_hint_B"
+        android:textAlignment="center"
+        android:textSize="20sp"/>
+
+    <ImageButton
+        android:id="@+id/click"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/circle_button"
+        android:padding="15dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/touch"
+        android:text="@string/app_name"
+        android:textColor="@color/colorTextWhite"/>
+
+    <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+        android:id="@+id/unlock"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/button_shape_default_rounded"
+        android:text="@string/unlock"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        app:finalCornerAngle="50dp"
+        app:initialCornerAngle="50dp"
+        app:spinning_bar_color="@android:color/white"
+        app:spinning_bar_padding="8dp"
+        app:spinning_bar_width="4dp"/>
+</LinearLayout>

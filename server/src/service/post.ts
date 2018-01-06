@@ -1,6 +1,7 @@
 import { zipWith } from 'lodash';
-import { assert } from '../lib/assert';
+import { assert, assertError } from '../lib/assert';
 import ErrorCode from '../lib/ErrorCode';
+import { Like } from '../model/entity/Like';
 import { Post } from '../model/entity/Post';
 import { Purchase } from '../model/entity/Purchase';
 import { User } from '../model/entity/User';
@@ -64,6 +65,58 @@ export async function getOnesPost (uid: number, limit: number, before: Date): Pr
     .getRawAndEntities();
   const { raw, entities } = res;
   return zip(entities, raw);
+}
+
+export async function newLike (user: User, pid: number) {
+  try {
+    const post = await repo.post.findOneById(pid);
+    if (!post) {
+      assertError('post not exists.', ErrorCode.Not_Found);
+    } else {
+      const like = new Like();
+      like.post = post;
+      like.user = user;
+      await repo.like.save(like);
+    }
+  } catch (err) {
+    // ignore duplicate-like exception
+    if (err.errno !== 1062 || err.sqlState !== '23000') {
+      throw err;
+    }
+  }
+}
+
+export async function removeLike (user: User, pid: number) {
+  await repo.like.createQueryBuilder('like')
+    .delete()
+    .where('like.u_id = :uid and like.p_id = :pid', { uid: user.id, pid })
+    .execute();
+}
+
+export async function unlock (user: User, pid: number) {
+  await repo.transaction(async entityManager => {
+    // stupid, serial way
+    const post = await entityManager.findOneById(Post, pid, { relations: ['author'] });
+    assert(post, 'post not exists.', ErrorCode.Not_Found);
+
+    if (!await entityManager.findOne(Purchase, { user: user.id as any, post: post!.id as any })) { // walkaround
+      // not purchased yet, create one
+      const purchase = new Purchase();
+      purchase.post = post!;
+      purchase.user = user;
+      await entityManager.save(purchase);
+
+      const price = post!.price;
+      user.power = Math.max(0, user.power - price);
+      const oUser = post!.author;
+      oUser.power = oUser.power + price * 0.5;
+
+      await Promise.all([
+        entityManager.save(user),
+        entityManager.save(oUser)
+      ]);
+    }
+  });
 }
 
 // walkaround typeorm timezone error
