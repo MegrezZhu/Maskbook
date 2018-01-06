@@ -1,6 +1,7 @@
 package com.zyuco.maskbook.service;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 
 import com.franmontiel.persistentcookiejar.ClearableCookieJar;
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
@@ -15,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -31,24 +33,28 @@ public class API {
         ClearableCookieJar cookieJar = new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(context));
         OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
         httpClientBuilder
-                .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
-                .cookieJar(cookieJar);
+            .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
+            .cookieJar(cookieJar);
         Retrofit retrofit = new Retrofit.Builder()
-                .client(httpClientBuilder.build())
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(SimpleCallAdapterFactory.create())
-                .baseUrl(APIService.BASE_URL)
-                .build();
+            .client(httpClientBuilder.build())
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(SimpleCallAdapterFactory.create())
+            .baseUrl(APIService.BASE_URL)
+            .build();
         service = retrofit.create(APIService.class);
     }
 
-    public static Observable<User> regist(String username, String password, String nickname, File avatar) {
-        RequestBody body = RequestBody.create(MediaType.parse("multipart/form-data"), avatar);
-        MultipartBody.Part filePart = MultipartBody.Part.createFormData("avatar", avatar.getName(), body);
+    public static Observable<User> regist(String username, String password, String nickname, @Nullable File avatar) {
+        MultipartBody.Part filePart = null;
+        if (avatar != null) {
+            RequestBody body = RequestBody.create(MediaType.parse("multipart/form-data"), avatar);
+            filePart = MultipartBody.Part.createFormData("avatar", avatar.getName(), body);
+        }
+
         return service.regist(RequestBody.create(MultipartBody.FORM, username),
-                RequestBody.create(MultipartBody.FORM, password),
-                RequestBody.create(MultipartBody.FORM, nickname),
-                filePart);
+            RequestBody.create(MultipartBody.FORM, password),
+            RequestBody.create(MultipartBody.FORM, nickname),
+            filePart);
     }
 
     public static Observable<User> login(String username, String password) {
@@ -56,6 +62,10 @@ public class API {
         user.setUsername(username);
         user.setPassword(password);
         return service.login(user);
+    }
+
+    public static Completable logout() {
+        return service.logout();
     }
 
     public static Observable<User> getUserInformation() {
@@ -66,12 +76,12 @@ public class API {
         RequestBody body = RequestBody.create(MediaType.parse("multipart/form-data"), image);
         MultipartBody.Part filePart = MultipartBody.Part.createFormData("avatar", image.getName(), body);
         return service.newPost(filePart,
-                RequestBody.create(MultipartBody.FORM, String.valueOf(parameter)),
-                RequestBody.create(MultipartBody.FORM, content),
-                RequestBody.create(MultipartBody.FORM, String.valueOf(price)));
+            RequestBody.create(MultipartBody.FORM, String.valueOf(parameter)),
+            RequestBody.create(MultipartBody.FORM, content),
+            RequestBody.create(MultipartBody.FORM, String.valueOf(price)));
     }
 
-    public static Observable deletePost(int id) {
+    public static Completable deletePost(int id) {
         return service.deletePost(id);
     }
 
@@ -99,15 +109,15 @@ public class API {
         return service.getPostDetail(postId);
     }
 
-    public static Observable likePost(int postId) {
+    public static Completable likePost(int postId) {
         return service.likePost(postId);
     }
 
-    public static Observable unlikePost(int postId) {
+    public static Completable unlikePost(int postId) {
         return service.unlikePost(postId);
     }
 
-    public static Observable unlockPost(int postId) {
+    public static Completable unlockPost(int postId) {
         return service.unlockPost(postId);
     }
 }

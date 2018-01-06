@@ -23,6 +23,7 @@ export async function regist (ctx: IRouterContext) {
   }
 
   await userService.regist(user);
+  ctx.session.uid = user.id;
   ctx.body = pick(user, ['id', 'username', 'nickname', 'avatar', 'power']);
 }
 

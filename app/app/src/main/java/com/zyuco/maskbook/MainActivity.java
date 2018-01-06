@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        API.init(this);
+//        API.init(this);
         final File file = new File(Environment.getExternalStorageDirectory() + "/1.jpeg");
         findViewById(R.id.regist).setOnClickListener(new View.OnClickListener() {
             @Override

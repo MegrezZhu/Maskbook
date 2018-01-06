@@ -1,11 +1,11 @@
 package com.zyuco.maskbook.model;
 
 public class ErrorResponse {
-    private String errno;
+    private int errno;
     private String message;
 
-    public String getErrno() {
-        return errno;
+    public ErrorResponseCode getErrno() {
+        return ErrorResponseCode.fromInt(errno);
     }
 
     public String getMessage() {

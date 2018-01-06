@@ -1,11 +1,13 @@
 package com.zyuco.maskbook.service;
 
+import com.google.gson.JsonElement;
 import com.zyuco.maskbook.model.Post;
 import com.zyuco.maskbook.model.User;
 
 import java.util.Date;
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.annotations.NonNull;
 import okhttp3.MultipartBody;
@@ -24,8 +26,9 @@ import retrofit2.http.Query;
 
 public interface APIService {
 //    String BASE_URL = "http://www.zyuco.com:7001/api/";
-    String BASE_URL = "http://laptop.zyuco.com:7001/api/";
+//    String BASE_URL = "http://laptop.zyuco.com:7001/api/";
 //    String BASE_URL = "http://192.168.191.1:7001";
+    String BASE_URL = "http://10.0.2.2:7001/api/";
 
     @POST("join")
     @Multipart
@@ -36,6 +39,9 @@ public interface APIService {
 
     @POST("session")
     Observable<User> login(@Body User user);
+
+    @POST("logout")
+    Completable logout();
 
     @GET("user")
     Observable<User> getUserInformation();
@@ -48,7 +54,7 @@ public interface APIService {
                              @Part("price") RequestBody price);
 
     @DELETE("posts/:id")
-    Observable deletePost(@Path("id") int id);
+    Completable deletePost(@Path("id") int id);
 
 
 
@@ -66,11 +72,11 @@ public interface APIService {
     Observable<Post> getPostDetail(@Path("id") int id);
 
     @POST("posts/id/like")
-    Observable likePost(@Path("id") int id);
+    Completable likePost(@Path("id") int id);
 
     @DELETE("posts/id/like")
-    Observable unlikePost(@Path("id") int id);
+    Completable unlikePost(@Path("id") int id);
 
     @POST("posts/id/unlock")
-    Observable unlockPost(@Path("id") int id);
+    Completable unlockPost(@Path("id") int id);
 }
