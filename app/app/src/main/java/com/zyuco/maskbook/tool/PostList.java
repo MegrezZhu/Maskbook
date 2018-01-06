@@ -186,6 +186,12 @@ public class PostList {
         }
     }
 
+    private void update(final ViewHolder holder, final Post post) {
+        // just unlocking
+        holder.getView(R.id.blurring_view).setVisibility(View.INVISIBLE);
+        Log.i(TAG, String.format("update post id: %d", post.getId()));
+    }
+
     private void convert(final ViewHolder holder, final Post post) {
         TextView name = holder.getView(R.id.name);
         name.setText(post.getAuthor().getNickname());
