@@ -1,6 +1,7 @@
 package com.zyuco.maskbook;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.ldoublem.thumbUplib.ThumbUpView;
 import com.melnykov.fab.FloatingActionButton;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.zyuco.maskbook.lib.CommonAdapter;
@@ -51,9 +53,25 @@ public class DashboardActivity extends AppCompatActivity {
                 name.setText("123");
                 TextView content = holder.getView(R.id.content);
                 content.setText("咔咔");
+                final TextView like_num = holder.getView(R.id.like_num);
+                like_num.setText("10");//点赞数目
+                ThumbUpView tpv = holder.getView(R.id.tpv);//点赞
+                tpv.setUnLikeType(ThumbUpView.LikeType.broken);
+                tpv.setCracksColor(Color.WHITE);
+                tpv.setFillColor(Color.rgb(11, 200, 77));
+                tpv.setEdgeColor(Color.rgb(33, 3, 219));
+                tpv.setOnThumbUp(new ThumbUpView.OnThumbUp() {
+                    @Override
+                    public void like(boolean like) {
+                        if (like) {
+                            like_num.setText(String.valueOf(Integer.valueOf(like_num.getText().toString()) + 1));
+                        } else {
+                            like_num.setText(String.valueOf(Integer.valueOf(like_num.getText().toString()) - 1));
 
-
-            }
+                        }
+                    }
+                });
+        }
         };
 
         adapter.setOnItemClickListemer(new CommonAdapter.OnItemClickListener<Post>() {
