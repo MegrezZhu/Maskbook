@@ -29,6 +29,7 @@ public class PublishActivity extends AppCompatActivity {
     }
 
     private void initAddButton() {
+
         ImageView imageView = findViewById(R.id.imagepick);
         imageView.setImageResource(R.drawable.add);
     }
@@ -105,9 +106,7 @@ public class PublishActivity extends AppCompatActivity {
                         } else {
                             path = localMedia.getPath();
                         }
-                        Glide.with(PublishActivity.this)
-                                .load(new File(path))
-                                .into((ImageView) findViewById(R.id.imagepick));
+                        Glide.with(PublishActivity.this).load(new File(path)).into((ImageView) findViewById(R.id.imagepick));
                     }
                     break;
             }
