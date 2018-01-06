@@ -63,20 +63,20 @@ public interface APIService {
                                     @Query("limit") int limit,
                                     @Query("filter") String filter);
 
-    @GET("users/:id/posts")
+    @GET("users/{id}/posts")
     Observable<List<Post>> getPostsFromUser(@Path("id") int id,
                                             @Query("before")Date before,
                                             @Query("limit") int limit);
 
-    @GET("posts/:id")
+    @GET("posts/{id}")
     Observable<Post> getPostDetail(@Path("id") int id);
 
-    @POST("posts/id/like")
+    @POST("posts/{id}/like")
     Completable likePost(@Path("id") int id);
 
-    @DELETE("posts/id/like")
+    @DELETE("posts/{id}/like")
     Completable unlikePost(@Path("id") int id);
 
-    @POST("posts/id/unlock")
+    @POST("posts/{id}/unlock")
     Completable unlockPost(@Path("id") int id);
 }

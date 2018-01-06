@@ -20,6 +20,7 @@ import com.fivehundredpx.android.blur.BlurringView;
 import com.ldoublem.thumbUplib.ThumbUpView;
 import com.zyuco.maskbook.DashboardActivity;
 import com.zyuco.maskbook.GlideApp;
+import com.zyuco.maskbook.MaskbookApplication;
 import com.zyuco.maskbook.R;
 import com.zyuco.maskbook.lib.CommonAdapter;
 import com.zyuco.maskbook.lib.ViewHolder;
@@ -47,6 +48,8 @@ public class PostList {
     private boolean loading = false;
     private boolean ended = false; // reach end
 
+    private String mode = "Dashboard";
+
     public CommonAdapter<Post> getAdapter() {
         return adapter;
     }
@@ -63,8 +66,9 @@ public class PostList {
         return recyclerView;
     }
 
-    public PostList(final Activity context) {
+    public PostList(final Activity context, String mode) {
         this.context = context;
+        this.mode = mode;
 
         adapter = new CommonAdapter<Post>(context, R.layout.post_item, list) {
             @Override
@@ -126,35 +130,68 @@ public class PostList {
         for (Post post : list) {
             if (post.getDate().before(earliest)) earliest = post.getDate();
         }
-        API
-            .getPosts(earliest, 30, API.PostFilter.all)
-            .doOnTerminate(new Action() {
-                @Override
-                public void run() throws Exception {
-                    setLoading(false);
-                }
-            })
-            .subscribe(new CallBack<List<Post>>() {
-                @Override
-                public void onSuccess(List<Post> posts) {
-                    if (posts.size() == 0) {
-                        ended = true;
-                        return;
-                    }
-                    list.addAll(posts);
-                    adapter.notifyDataSetChanged();
-                }
 
-                @Override
-                public void onFail(ErrorResponse e) {
+        if (mode.equals("Dashboard") || mode.equals("PurchaseHistory")) {
+            API
+                    .getPosts(earliest, 30, mode.equals("Dashboard") ? API.PostFilter.all : API.PostFilter.unlocked)
+                    .doOnTerminate(new Action() {
+                        @Override
+                        public void run() throws Exception {
+                            setLoading(false);
+                        }
+                    })
+                    .subscribe(new CallBack<List<Post>>() {
+                        @Override
+                        public void onSuccess(List<Post> posts) {
+                            if (posts.size() == 0) {
+                                ended = true;
+                                return;
+                            }
+                            list.addAll(posts);
+                            adapter.notifyDataSetChanged();
+                        }
 
-                }
+                        @Override
+                        public void onFail(ErrorResponse e) {
 
-                @Override
-                public void onException(Throwable e) {
+                        }
 
-                }
-            });
+                        @Override
+                        public void onException(Throwable e) {
+
+                        }
+                    });
+        } else if (mode.equals("Homepage")) {
+            int id = ((MaskbookApplication) context.getApplication()).getUser().getId();
+            API.getPostsFromUser(id, earliest, 30)
+                    .doOnTerminate(new Action() {
+                        @Override
+                        public void run() throws Exception {
+                            setLoading(false);
+                        }
+                    })
+                    .subscribe(new CallBack<List<Post>>() {
+                        @Override
+                        public void onSuccess(List<Post> posts) {
+                            if (posts.size() == 0) {
+                                ended = true;
+                                return;
+                            }
+                            list.addAll(posts);
+                            adapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onFail(ErrorResponse e) {
+
+                        }
+
+                        @Override
+                        public void onException(Throwable e) {
+
+                        }
+                    });
+        }
     }
 
     private void convert(final ViewHolder holder, final Post post) {

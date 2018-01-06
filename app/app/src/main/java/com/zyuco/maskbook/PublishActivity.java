@@ -257,4 +257,8 @@ public class PublishActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void getInfo() {
+
+    }
 }
