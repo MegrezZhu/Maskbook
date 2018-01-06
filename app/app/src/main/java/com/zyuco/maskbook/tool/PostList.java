@@ -2,12 +2,15 @@ package com.zyuco.maskbook.tool;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
+import android.support.v4.app.INotificationSideChannel;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,6 +23,7 @@ import com.fivehundredpx.android.blur.BlurringView;
 import com.ldoublem.thumbUplib.ThumbUpView;
 import com.zyuco.maskbook.DashboardActivity;
 import com.zyuco.maskbook.GlideApp;
+import com.zyuco.maskbook.HomepageActivity;
 import com.zyuco.maskbook.MaskbookApplication;
 import com.zyuco.maskbook.R;
 import com.zyuco.maskbook.lib.CommonAdapter;
@@ -197,7 +201,7 @@ public class PostList {
     private void convert(final ViewHolder holder, final Post post) {
         TextView name = holder.getView(R.id.name);
         name.setText(post.getAuthor().getNickname());
-        TextView content = holder.getView(R.id.content);
+        final TextView content = holder.getView(R.id.content);
         content.setText(post.getContent());
         final BlurringView blur = holder.getView(R.id.blurring_view);
         final ImageView image = holder.getView(R.id.image);
@@ -259,6 +263,16 @@ public class PostList {
                     like_num.setText(String.valueOf(Integer.valueOf(like_num.getText().toString()) - 1));
 
                 }
+            }
+        });
+
+       holder.getView(R.id.avatar_wrapper).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setClass(context, HomepageActivity.class);
+                intent.putExtra("user", post.getAuthor());
+                context.startActivity(intent);
             }
         });
     }

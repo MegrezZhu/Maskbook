@@ -46,6 +46,7 @@ public class HomepageActivity extends AppCompatActivity {
         initList();
         getSomeonePosts();
         initToolbar();
+        render();
     }
 
     private void initListener() {
@@ -110,16 +111,24 @@ public class HomepageActivity extends AppCompatActivity {
         toolbar.setTranslationY(-distance);
     }
 
-    private void render() {
-        if (postList.getDataList().isEmpty()) return;
-        User user = postList.getDataList().get(0).getAuthor();
-        TextView name_textView = findViewById(R.id.name);
-        name_textView.setText(user.getNickname());
+    private boolean isMine() {
+        User user = (User) HomepageActivity.this.getIntent().getSerializableExtra("user");
+        if (user == null) return true;
+        return user.getId().equals(((MaskbookApplication) getApplication()).getUser().getId());
+    }
 
-        if (user.getId() != ((MaskbookApplication) getApplication()).getUser().getId()) {
+
+    private void render() {
+        boolean ismine = isMine();
+        User user = ismine ? ((MaskbookApplication) getApplication()).getUser() : (User)getIntent().getSerializableExtra("user");
+
+        if (!ismine) {
             TextView toolbar_textView = findViewById(R.id.toolbar_title);
             toolbar_textView.setText(user.getNickname() + "的主页");
         }
+
+        TextView name_textView = findViewById(R.id.name);
+        name_textView.setText(user.getNickname());
 
         try {
             URL url = new URL(APIService.BASE_URL);
@@ -135,7 +144,7 @@ public class HomepageActivity extends AppCompatActivity {
     }
 
     private void getSomeonePosts() {
-        User user = ((MaskbookApplication) getApplication()).getUser();
+        User user = isMine() ? ((MaskbookApplication) getApplication()).getUser() : (User)getIntent().getSerializableExtra("user");
         API.getPostsFromUser(user.getId())
                 .doOnTerminate(new Action() {
                     @Override
@@ -151,8 +160,6 @@ public class HomepageActivity extends AppCompatActivity {
                             list.clear();
                             list.addAll(posts);
                             postList.getAdapter().notifyDataSetChanged();
-
-                            render();
                         }
 
                         @Override
