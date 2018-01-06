@@ -9,6 +9,9 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        renderscriptTargetApi 23
+        renderscriptSupportModeEnabled true
     }
     buildTypes {
         release {
@@ -50,4 +53,6 @@ dependencies {
 
     implementation 'com.github.bumptech.glide:glide:4.3.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.3.1'
+
+    compile 'com.fivehundredpx:blurringview:1.0.0'
 }

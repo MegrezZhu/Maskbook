@@ -24,6 +24,7 @@ allprojects {
         maven { url "https://jitpack.io" }
         mavenCentral()
         maven { url "http://lib.gcssloop.com/repository/gcssloop-central/" }
+        maven { url 'https://github.com/500px/500px-android-blur/raw/master/releases/' }
     }
 }
 
