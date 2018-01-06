@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -27,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
-                android:src="@drawable/placeholder"/>
+                android:src="@drawable/placeholder" />
         </LinearLayout>
 
         <com.fivehundredpx.android.blur.BlurringView
@@ -37,7 +36,7 @@
             android:visibility="invisible"
             app:blurRadius="1"
             app:downsampleFactor="4"
-            app:overlayColor="#00FFFFFF"/>
+            app:overlayColor="#00FFFFFF" />
     </FrameLayout>
 
     <android.support.constraint.ConstraintLayout
@@ -58,7 +57,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:src="@drawable/bg"/>
+                android:src="@drawable/bg" />
         </com.gcssloop.widget.RCRelativeLayout>
 
         <TextView
@@ -69,7 +68,7 @@
             android:text="xxxxx"
             android:textColor="#000"
             android:textSize="20sp"
-            app:layout_constraintLeft_toRightOf="@id/avatar_wrapper"/>
+            app:layout_constraintLeft_toRightOf="@id/avatar_wrapper" />
 
         <TextView
             android:id="@+id/time"
@@ -80,7 +79,7 @@
             android:textColor="@color/colorTextHint"
             android:textSize="16sp"
             app:layout_constraintLeft_toRightOf="@id/avatar_wrapper"
-            app:layout_constraintTop_toBottomOf="@id/name"/>
+            app:layout_constraintTop_toBottomOf="@id/name" />
 
         <TextView
             android:id="@+id/content"
@@ -91,9 +90,28 @@
             android:text="asdasdasjdsahjdksjahdas"
             android:textColor="#333"
             android:textSize="16sp"
-            app:layout_constraintTop_toBottomOf="@id/avatar_wrapper"/>
+            app:layout_constraintTop_toBottomOf="@id/avatar_wrapper" />
 
-        <!-- like button here -->
+        <com.sackcentury.shinebuttonlib.ShineButton
+            android:id="@+id/shine_button"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerInParent="true"
+            android:src="@android:color/darker_gray"
+            app:allow_random_color="true"
+            app:big_shine_color="#FF6666"
+            app:btn_color="@color/color_shine_button"
+            app:btn_fill_color="@color/color_shine_button_fill"
+            app:click_animation_duration="200"
+            app:enable_flashing="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shine_animation_duration="1500"
+            app:shine_turn_angle="10"
+            app:siShape="@raw/like"
+            app:small_shine_color="#CC9999"
+            app:small_shine_offset_angle="20" />
     </android.support.constraint.ConstraintLayout>
 
 

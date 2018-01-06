@@ -21,6 +21,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.fivehundredpx.android.blur.BlurringView;
 import com.ldoublem.thumbUplib.ThumbUpView;
+import com.sackcentury.shinebuttonlib.ShineButton;
 import com.zyuco.maskbook.DashboardActivity;
 import com.zyuco.maskbook.GlideApp;
 import com.zyuco.maskbook.HomepageActivity;
@@ -286,14 +287,35 @@ public class PostList {
             }
         });
 
-       holder.getView(R.id.avatar_wrapper).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.setClass(context, HomepageActivity.class);
-                intent.putExtra("user", post.getAuthor());
-                context.startActivity(intent);
-            }
-        });
+        final ShineButton shine_button = (ShineButton) holder.getView(R.id.shine_button);
+        shine_button.setShineDistanceMultiple(1.5f);
+//        shine_button.setBtnColor(post.getLike().equals(true) ? R.color.color_shine_button_fill : R.color.color_shine_button);
+//        shine_button.setBtnFillColor(post.getLike().equals(false) ? R.color.color_shine_button_fill : R.color.color_shine_button);
+        shine_button.init(context);
+
+//        shine_button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (post.getLike()) {
+//                    API.deletePost(post.getId())
+//                            .subscribe(new Action() {
+//                                @Override
+//                                public void run() throws Exception {
+//                                    post.setLike(false);
+//                                    adapter.notifyDataSetChanged();
+//                                }
+//                            });
+//                } else {
+//                    API.likePost(post.getId())
+//                            .subscribe(new Action() {
+//                                @Override
+//                                public void run() throws Exception {
+//                                    post.setLike(true);
+//                                    adapter.notifyDataSetChanged();
+//                                }
+//                            });
+//                }
+//            }
+//        });
     }
 }
