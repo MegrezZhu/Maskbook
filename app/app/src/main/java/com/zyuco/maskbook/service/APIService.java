@@ -53,7 +53,7 @@ public interface APIService {
                              @Part("content") RequestBody content,
                              @Part("price") RequestBody price);
 
-    @DELETE("posts/:id")
+    @DELETE("posts/{id}")
     Completable deletePost(@Path("id") int id);
 
 
