@@ -49,7 +49,7 @@ export async function getPost (ctx: ILoggedInContext) {
   pid = Number(pid);
   assert(!isNaN(pid), 'invalid post id.', ErrorCode.Invalid_Arguments);
 
-  const post = await postService.getOne(pid);
+  const post = await postService.getOne(ctx.session.uid, pid);
   if (!post) {
     assertError('post not exists.', ErrorCode.Not_Found);
   } else {
@@ -73,7 +73,7 @@ export async function getPosts (ctx: ILoggedInContext) {
       ctx.body = (await postService.getAllPost(ctx.user.id, limit, before)).map(formatPost);
       break;
     case 'unlocked':
-      ctx.body = (await postService.getAllUnlocked(ctx.user, limit, before)).map(formatPost);
+      ctx.body = (await postService.getAllUnlocked(ctx.user.id, limit, before)).map(formatPost);
       break;
     case 'mine':
       ctx.body = (await postService.getOnesPost(ctx.user.id, limit, before)).map(formatPost);
