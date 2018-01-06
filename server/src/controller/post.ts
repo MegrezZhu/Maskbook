@@ -70,7 +70,7 @@ export async function getPosts (ctx: ILoggedInContext) {
 
   switch (filter) {
     case 'all':
-      ctx.body = (await postService.getAllPost(limit, before)).map(formatPost);
+      ctx.body = (await postService.getAllPost(ctx.user.id, limit, before)).map(formatPost);
       break;
     case 'unlocked':
       ctx.body = (await postService.getAllUnlocked(ctx.user.id, limit, before)).map(formatPost);

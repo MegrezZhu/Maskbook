@@ -87,20 +87,6 @@ public class PostList {
 
         final LinearLayoutManager layoutManager = new LinearLayoutManager(context);
 
-//        RecyclerView.OnScrollListener scrollListener = new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                if (loading || ended) return;
-//                int visibleItemCount = layoutManager.getChildCount();
-//                int totalItemCount = layoutManager.getItemCount();
-//                int pastVisibleItems = layoutManager.findFirstVisibleItemPosition();
-//                if (pastVisibleItems + visibleItemCount >= totalItemCount) {
-//                    Log.i(TAG, "end of list");
-//                    loadMore();
-//                }
-//            }
-//        };
-
         recyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
             public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
@@ -115,7 +101,6 @@ public class PostList {
             }
         });
 
-//        recyclerView.setOnScrollListener(scrollListener);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
     }
@@ -187,13 +172,12 @@ public class PostList {
 
                 @Override
                 public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-//                            blur.invalidate();
-//                            if (post.getParameter() != 0) {
-//                                View image = holder.getView(R.id.image_wrapper);
-//                                blur.setVisibility(View.VISIBLE);
-//                                blur.setBlurRadius(post.getParameter().intValue());
-//                                blur.setBlurredView(image);
-//                            }
+                    if (!post.getUnlock() && post.getParameter() != 0) {
+                        View image = holder.getView(R.id.image_wrapper);
+                        blur.setVisibility(View.VISIBLE);
+                        blur.setBlurRadius(post.getParameter().intValue());
+                        blur.setBlurredView(image);
+                    }
                     return false;
                 }
             })
