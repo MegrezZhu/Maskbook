@@ -30,9 +30,11 @@ import com.zyuco.maskbook.service.APIService;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import io.reactivex.functions.Action;
 
@@ -147,6 +149,14 @@ public class PostList {
         name.setText(post.getAuthor().getNickname());
         TextView content = holder.getView(R.id.content);
         content.setText(post.getContent());
+
+        TextView time = holder.getView(R.id.time);
+        Date localDate = new Date(post.getDate().getTime() + 1000 * 60 * 60 * 8);
+        time.setText(String.format(
+            context.getResources().getString(R.string.post_date),
+            new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(localDate)
+        ));
+
         final BlurringView blur = holder.getView(R.id.blurring_view);
         final ImageView image = holder.getView(R.id.image);
         image.layout(0, 0, 0, 0);

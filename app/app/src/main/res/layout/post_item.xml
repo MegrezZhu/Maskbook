@@ -60,7 +60,6 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/avatar_wrapper">
 
-            <!--android:layout_height="300dp"-->
         <ImageView
             android:id="@+id/image"
             android:layout_width="match_parent"

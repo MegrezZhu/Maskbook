@@ -33,4 +33,5 @@
     <string name="toast_invalid_price">Price must be between 0 and 100 "click"</string>
     <string name="toast_missing_image">Please select an image to post</string>
     <string name="toast_post_success">Post succeeded</string>
+    <string name="post_date">Posted at: %s</string>
 </resources>
