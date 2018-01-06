@@ -11,17 +11,18 @@ import com.zyuco.maskbook.R;
  */
 
 public abstract class HideToolBarListener extends RecyclerView.OnScrollListener {
-    private static final int HIDE_THRESHOLD = 20;
+    private static final float HIDE_THRESHOLD = 10;
+    private static final float SHOW_THRESHOLD = 70;
     private Context context;
-    private int scrolledDistance = 0;
-    private boolean controlsVisible = true;
-    private int toolBarHeight;
-    private int toolbarOffset = 0;
+    private int mToolbarOffset = 0;
+    private boolean mControlsVisible = true;
+    private int mToolbarHeight;
+    private int mTotalScrolledDistance;
     public HideToolBarListener(Context context) {
         this.context = context;
         final TypedArray styledAttributes = this.context.getTheme().obtainStyledAttributes(
                 new int[]{R.attr.actionBarSize});
-        toolBarHeight = (int)styledAttributes.getDimension(0, 0);
+        mToolbarHeight = (int)styledAttributes.getDimension(0, 0);
         styledAttributes.recycle();
     }
 
@@ -30,18 +31,17 @@ public abstract class HideToolBarListener extends RecyclerView.OnScrollListener 
         super.onScrollStateChanged(recyclerView, newState);
 
         if(newState == RecyclerView.SCROLL_STATE_IDLE) {
-            if (scrolledDistance < toolBarHeight) {
-                onShow();
-                controlsVisible = true;
+            if(mTotalScrolledDistance < mToolbarHeight) {
+                setVisible();
             } else {
-                if (controlsVisible) {
-                    if (toolbarOffset > HIDE_THRESHOLD) {
+                if (mControlsVisible) {
+                    if (mToolbarOffset > HIDE_THRESHOLD) {
                         setInvisible();
                     } else {
                         setVisible();
                     }
                 } else {
-                    if (toolbarOffset < -HIDE_THRESHOLD) {
+                    if ((mToolbarHeight - mToolbarOffset) > SHOW_THRESHOLD) {
                         setVisible();
                     } else {
                         setInvisible();
@@ -52,44 +52,45 @@ public abstract class HideToolBarListener extends RecyclerView.OnScrollListener 
 
     }
 
-    private void setVisible() {
-        if(toolbarOffset > 0) {
-            onShow();
-            toolbarOffset = 0;
-        }
-        controlsVisible = true;
-    }
-
-    private void setInvisible() {
-        if(toolbarOffset < toolBarHeight) {
-            onHide();
-            toolbarOffset = toolBarHeight;
-        }
-        controlsVisible = false;
-    }
-
     @Override
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
 
         clipToolbarOffset();
-        onMoved(toolbarOffset);
-        if((toolbarOffset <toolBarHeight && dy > 0) || (toolbarOffset > 0 && dy < 0)) {
-            toolbarOffset += dy;
+        onMoved(mToolbarOffset);
+
+        if((mToolbarOffset <mToolbarHeight && dy>0) || (mToolbarOffset >0 && dy<0)) {
+            mToolbarOffset += dy;
         }
-        if (scrolledDistance < 0) {
-            scrolledDistance = 0;
+        if (mTotalScrolledDistance < 0) {
+            mTotalScrolledDistance = 0;
         } else {
-            scrolledDistance += dy;
+            mTotalScrolledDistance += dy;
         }
     }
 
     private void clipToolbarOffset() {
-        if(toolbarOffset > toolBarHeight) {
-            toolbarOffset = toolBarHeight;
-        } else if(toolbarOffset < 0) {
-            toolbarOffset = 0;
+        if(mToolbarOffset > mToolbarHeight) {
+            mToolbarOffset = mToolbarHeight;
+        } else if(mToolbarOffset < 0) {
+            mToolbarOffset = 0;
         }
+    }
+
+    private void setVisible() {
+        if(mToolbarOffset > 0) {
+            onShow();
+            mToolbarOffset = 0;
+        }
+        mControlsVisible = true;
+    }
+
+    private void setInvisible() {
+        if(mToolbarOffset < mToolbarHeight) {
+            onHide();
+            mToolbarOffset = mToolbarHeight;
+        }
+        mControlsVisible = false;
     }
 
     public abstract void onHide();

@@ -31,15 +31,7 @@ public class PublishActivity extends AppCompatActivity {
     private void initAddButton() {
 
         ImageView imageView = findViewById(R.id.imagepick);
-
-        ViewGroup.LayoutParams layoutParams = imageView.getLayoutParams();
-
         imageView.setImageResource(R.drawable.add);
-
-        layoutParams.width = 250;
-        layoutParams.height = 250;
-        imageView.setLayoutParams(layoutParams);
-
     }
 
     private void initListener() {
