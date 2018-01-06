@@ -94,7 +94,8 @@ public class API {
     }
 
     public static Observable<List<Post>> getPosts() {
-        return getPosts(new Date(), 30, PostFilter.all);
+//        return getPosts(new Date(), 30, PostFilter.all);
+        return getPosts(new Date(), 3, PostFilter.all);
     }
 
     public static Observable<List<Post>> getPostsFromUser(int userId, Date before, int limit) {
