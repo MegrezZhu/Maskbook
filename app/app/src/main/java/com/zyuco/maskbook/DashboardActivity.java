@@ -190,9 +190,9 @@ public class DashboardActivity extends AppCompatActivity {
             public void onClick(View view) {
                 int num = Integer.parseInt(textView.getText().toString()) + 1;
                 textView.setText(String.valueOf(num));
-                YoYo.with(Techniques.Bounce)
+                YoYo.with(Techniques.BounceIn)
                         .duration(500)
-                        .repeat(2)
+                        .repeat(1)
                         .playOn(textView);
             }
         });
