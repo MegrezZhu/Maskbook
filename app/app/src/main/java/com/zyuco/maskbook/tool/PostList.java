@@ -53,6 +53,7 @@ public class PostList {
     private boolean ended = false; // reach end
 
     private String mode = "Dashboard";
+    private int user_id;
 
     public CommonAdapter<Post> getAdapter() {
         return adapter;
@@ -70,9 +71,10 @@ public class PostList {
         return recyclerView;
     }
 
-    public PostList(final Activity context, String mode) {
+    public PostList(final Activity context, String mode, int user_id) {
         this.context = context;
         this.mode = mode;
+        this.user_id = user_id == -1 ? ((MaskbookApplication) context.getApplication()).getUser().getId() : user_id;
 
         adapter = new CommonAdapter<Post>(context, R.layout.post_item, list) {
             @Override
@@ -166,8 +168,7 @@ public class PostList {
                         }
                     });
         } else if (mode.equals("Homepage")) {
-            int id = ((MaskbookApplication) context.getApplication()).getUser().getId();
-            API.getPostsFromUser(id, earliest, 30)
+            API.getPostsFromUser(user_id, earliest, 30)
                     .doOnTerminate(new Action() {
                         @Override
                         public void run() throws Exception {
