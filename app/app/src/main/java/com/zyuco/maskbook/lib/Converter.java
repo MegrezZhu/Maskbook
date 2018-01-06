@@ -78,15 +78,15 @@ public class Converter {
 
                 @Override
                 public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-//                    User self = ((MaskbookApplication) context.getApplication()).getUser();
-//                    if (!post.getUnlock() && post.getParameter() != 0 && post.getAuthor().getId().intValue() != self.getId().intValue()) {
-//                        View image = holder.getView(R.id.image_wrapper);
-//                        blur.setVisibility(View.VISIBLE);
-//                        blur.setBlurRadius(post.getParameter().intValue());
-//                        blur.setBlurredView(image);
-//                    } else {
-//                        blur.setVisibility(View.INVISIBLE);
-//                    }
+                    User self = ((MaskbookApplication) context.getApplication()).getUser();
+                    if (!post.getUnlock() && post.getParameter() != 0 && post.getAuthor().getId().intValue() != self.getId().intValue()) {
+                        View image = holder.getView(R.id.image_wrapper);
+                        blur.setVisibility(View.VISIBLE);
+                        blur.setBlurRadius(post.getParameter().intValue());
+                        blur.setBlurredView(image);
+                    } else {
+                        blur.setVisibility(View.INVISIBLE);
+                    }
                     return false;
                 }
             })
