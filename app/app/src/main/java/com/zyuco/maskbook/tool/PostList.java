@@ -155,7 +155,12 @@ public class PostList {
         TextView name = holder.getView(R.id.name);
         name.setText(post.getAuthor().getNickname());
         TextView content = holder.getView(R.id.content);
-        content.setText(post.getContent());
+        if (post.getContent().equals("")) {
+            content.setVisibility(View.GONE);
+        } else {
+            content.setVisibility(View.VISIBLE);
+            content.setText(post.getContent());
+        }
 
         Log.i(TAG, String.format("convert post id: %d", post.getId()));
 
@@ -168,7 +173,6 @@ public class PostList {
 
         final BlurringView blur = holder.getView(R.id.blurring_view);
         final ImageView image = holder.getView(R.id.image);
-//        image.layout(0, 0, 0, 0);
 
         // image loading
         URL imageURL, avatarURL;
@@ -191,7 +195,6 @@ public class PostList {
                 @Override
                 public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                     User self = ((MaskbookApplication) context.getApplication()).getUser();
-                    Log.i(TAG, String.format("convert id %d, unlock: %b, para: %f", post.getId(), post.getUnlock(), post.getParameter()));
                     if (!post.getUnlock() && post.getParameter() != 0 && post.getAuthor().getId().intValue() != self.getId().intValue()) {
                         View image = holder.getView(R.id.image_wrapper);
                         blur.setVisibility(View.VISIBLE);
@@ -204,6 +207,7 @@ public class PostList {
                 }
             })
             .fitCenter()
+            .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
             .placeholder(R.drawable.placeholder)
             .into(image);
         GlideApp
@@ -212,23 +216,23 @@ public class PostList {
             .placeholder(R.mipmap.default_avatar)
             .into((ImageView) holder.getView(R.id.avatar));
 
-        final TextView like_num = holder.getView(R.id.like_num);
-        like_num.setText("10");//点赞数目
-        ThumbUpView tpv = holder.getView(R.id.tpv);//点赞
-        tpv.setUnLikeType(ThumbUpView.LikeType.broken);
-        tpv.setCracksColor(Color.WHITE);
-        tpv.setFillColor(Color.rgb(11, 200, 77));
-        tpv.setEdgeColor(Color.rgb(33, 3, 219));
-        tpv.setOnThumbUp(new ThumbUpView.OnThumbUp() {
-            @Override
-            public void like(boolean like) {
-                if (like) {
-                    like_num.setText(String.valueOf(Integer.valueOf(like_num.getText().toString()) + 1));
-                } else {
-                    like_num.setText(String.valueOf(Integer.valueOf(like_num.getText().toString()) - 1));
-
-                }
-            }
-        });
+//        final TextView like_num = holder.getView(R.id.like_num);
+//        like_num.setText("10");//点赞数目
+//        ThumbUpView tpv = holder.getView(R.id.tpv);//点赞
+//        tpv.setUnLikeType(ThumbUpView.LikeType.broken);
+//        tpv.setCracksColor(Color.WHITE);
+//        tpv.setFillColor(Color.rgb(11, 200, 77));
+//        tpv.setEdgeColor(Color.rgb(33, 3, 219));
+//        tpv.setOnThumbUp(new ThumbUpView.OnThumbUp() {
+//            @Override
+//            public void like(boolean like) {
+//                if (like) {
+//                    like_num.setText(String.valueOf(Integer.valueOf(like_num.getText().toString()) + 1));
+//                } else {
+//                    like_num.setText(String.valueOf(Integer.valueOf(like_num.getText().toString()) - 1));
+//
+//                }
+//            }
+//        });
     }
 }
