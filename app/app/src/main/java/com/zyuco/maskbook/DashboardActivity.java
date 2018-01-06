@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,6 +21,7 @@ import com.bumptech.glide.request.RequestOptions;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.fivehundredpx.android.blur.BlurringView;
 import com.ldoublem.thumbUplib.ThumbUpView;
 
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
@@ -81,12 +83,6 @@ public class DashboardActivity extends AppCompatActivity {
         adapter = new CommonAdapter<Post>(this, R.layout.post_item, list) {
             @Override
             public void convert(ViewHolder holder, Post data) {
-//                TextView name = holder.getView(R.id.name);
-//                name.setText(data.name);
-//                TextView belong = holder.getView(R.id.belong);
-//                belong.setText(data.belong);
-//                TextView description = holder.getView(R.id.abstract_description);
-//                description.setText("\t\t\t\t" + data.abstractDescription);
                 TextView name = holder.getView(R.id.name);
                 name.setText("123");
                 TextView content = holder.getView(R.id.content);
@@ -110,6 +106,10 @@ public class DashboardActivity extends AppCompatActivity {
                         }
                     }
                 });
+
+                View image = holder.getView(R.id.image_wrapper);
+                BlurringView blur = holder.getView(R.id.blurring_view);
+                blur.setBlurredView(image);
             }
         };
 
@@ -190,9 +190,10 @@ public class DashboardActivity extends AppCompatActivity {
             public void onClick(View view) {
                 int num = Integer.parseInt(textView.getText().toString()) + 1;
                 textView.setText(String.valueOf(num));
-                YoYo.with(Techniques.Bounce)
+
+                YoYo.with(Techniques.BounceIn)
                         .duration(500)
-                        .repeat(2)
+                        .repeat(1)
                         .playOn(textView);
             }
         });
