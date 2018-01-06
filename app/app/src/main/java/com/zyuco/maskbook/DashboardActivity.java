@@ -101,7 +101,7 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void initList() {
-        postList = new PostList(this, "Dashboard");
+        postList = new PostList(this, "Dashboard", -1);
         button_publish = findViewById(R.id.publish);
         button_publish.attachToRecyclerView(postList.getRecyclerView());
 

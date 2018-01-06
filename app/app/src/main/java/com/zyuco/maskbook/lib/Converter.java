@@ -15,6 +15,7 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.fivehundredpx.android.blur.BlurringView;
+import com.sackcentury.shinebuttonlib.ShineButton;
 import com.zyuco.maskbook.GlideApp;
 import com.zyuco.maskbook.HomepageActivity;
 import com.zyuco.maskbook.MaskbookApplication;
@@ -97,25 +98,6 @@ public class Converter {
             .placeholder(R.mipmap.default_avatar)
             .into((ImageView) holder.getView(R.id.avatar));
 
-        // final TextView like_num = holder.getView(R.id.like_num);
-        // like_num.setText("10");//点赞数目
-        // ThumbUpView tpv = holder.getView(R.id.tpv);//点赞
-        // tpv.setUnLikeType(ThumbUpView.LikeType.broken);
-        // tpv.setCracksColor(Color.WHITE);
-        // tpv.setFillColor(Color.rgb(11, 200, 77));
-        // tpv.setEdgeColor(Color.rgb(33, 3, 219));
-        // tpv.setOnThumbUp(new ThumbUpView.OnThumbUp() {
-        //     @Override
-        //     public void like(boolean like) {
-        //         if (like) {
-        //             like_num.setText(String.valueOf(Integer.valueOf(like_num.getText().toString()) + 1));
-        //         } else {
-        //             like_num.setText(String.valueOf(Integer.valueOf(like_num.getText().toString()) - 1));
-
-        //         }
-        //     }
-        // });
-
         holder.getView(R.id.avatar_wrapper).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -125,6 +107,37 @@ public class Converter {
                 context.startActivity(intent);
             }
         });
+
+        final ShineButton shine_button = (ShineButton) holder.getView(R.id.shine_button);
+        shine_button.setShineDistanceMultiple(1.5f);
+//        shine_button.setBtnColor(post.getLike().equals(true) ? R.color.color_shine_button_fill : R.color.color_shine_button);
+//        shine_button.setBtnFillColor(post.getLike().equals(false) ? R.color.color_shine_button_fill : R.color.color_shine_button);
+        shine_button.init(context);
+
+//        shine_button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (post.getLike()) {
+//                    API.deletePost(post.getId())
+//                            .subscribe(new Action() {
+//                                @Override
+//                                public void run() throws Exception {
+//                                    post.setLike(false);
+//                                    adapter.notifyDataSetChanged();
+//                                }
+//                            });
+//                } else {
+//                    API.likePost(post.getId())
+//                            .subscribe(new Action() {
+//                                @Override
+//                                public void run() throws Exception {
+//                                    post.setLike(true);
+//                                    adapter.notifyDataSetChanged();
+//                                }
+//                            });
+//                }
+//            }
+//        });
     }
 
     public static void convertHeader(final Activity context, final ViewHolder holder, User user) {

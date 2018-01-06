@@ -95,7 +95,8 @@ public class HomepageActivity extends AppCompatActivity {
             }
         };
 
-        postList = new PostList(this, "Homepage");
+        User user = (User) HomepageActivity.this.getIntent().getSerializableExtra("user");
+        postList = new PostList(this, "Homepage", isMine() ? -1 : user.getId());
         postList.getRecyclerView().addOnScrollListener(onScrollListener);
         postList.getRecyclerView().setNestedScrollingEnabled(true);
     }

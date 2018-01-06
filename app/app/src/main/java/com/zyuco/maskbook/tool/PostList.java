@@ -21,6 +21,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.fivehundredpx.android.blur.BlurringView;
 import com.ldoublem.thumbUplib.ThumbUpView;
+import com.sackcentury.shinebuttonlib.ShineButton;
 import com.zyuco.maskbook.DashboardActivity;
 import com.zyuco.maskbook.GlideApp;
 import com.zyuco.maskbook.HomepageActivity;
@@ -57,6 +58,7 @@ public class PostList {
     private boolean ended = false; // reach end
 
     private String mode = "Dashboard";
+    private int user_id;
 
     public CommonAdapter<Post> getAdapter() {
         return adapter;
@@ -74,9 +76,10 @@ public class PostList {
         return recyclerView;
     }
 
-    public PostList(final Activity context, String mode) {
+    public PostList(final Activity context, String mode, int user_id) {
         this.context = context;
         this.mode = mode;
+        this.user_id = user_id == -1 ? ((MaskbookApplication) context.getApplication()).getUser().getId() : user_id;
 
         adapter = new CommonAdapter<Post>(context, R.layout.post_item, list) {
             @Override
@@ -125,64 +128,63 @@ public class PostList {
 
         if (mode.equals("Dashboard") || mode.equals("PurchaseHistory")) {
             API
-                .getPosts(earliest, 30, mode.equals("Dashboard") ? API.PostFilter.all : API.PostFilter.unlocked)
-                .doOnTerminate(new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        setLoading(false);
-                    }
-                })
-                .subscribe(new CallBack<List<Post>>() {
-                    @Override
-                    public void onSuccess(List<Post> posts) {
-                        if (posts.size() == 0) {
-                            ended = true;
-                            return;
+                    .getPosts(earliest, 30, mode.equals("Dashboard") ? API.PostFilter.all : API.PostFilter.unlocked)
+                    .doOnTerminate(new Action() {
+                        @Override
+                        public void run() throws Exception {
+                            setLoading(false);
                         }
-                        list.addAll(posts);
-                        adapter.notifyDataSetChanged();
-                    }
+                    })
+                    .subscribe(new CallBack<List<Post>>() {
+                        @Override
+                        public void onSuccess(List<Post> posts) {
+                            if (posts.size() == 0) {
+                                ended = true;
+                                return;
+                            }
+                            list.addAll(posts);
+                            adapter.notifyDataSetChanged();
+                        }
 
-                    @Override
-                    public void onFail(ErrorResponse e) {
+                        @Override
+                        public void onFail(ErrorResponse e) {
 
-                    }
+                        }
 
-                    @Override
-                    public void onException(Throwable e) {
+                        @Override
+                        public void onException(Throwable e) {
 
-                    }
-                });
+                        }
+                    });
         } else if (mode.equals("Homepage")) {
-            int id = ((MaskbookApplication) context.getApplication()).getUser().getId();
-            API.getPostsFromUser(id, earliest, 30)
-                .doOnTerminate(new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        setLoading(false);
-                    }
-                })
-                .subscribe(new CallBack<List<Post>>() {
-                    @Override
-                    public void onSuccess(List<Post> posts) {
-                        if (posts.size() == 0) {
-                            ended = true;
-                            return;
+            API.getPostsFromUser(user_id, earliest, 30)
+                    .doOnTerminate(new Action() {
+                        @Override
+                        public void run() throws Exception {
+                            setLoading(false);
                         }
-                        list.addAll(posts);
-                        adapter.notifyDataSetChanged();
-                    }
+                    })
+                    .subscribe(new CallBack<List<Post>>() {
+                        @Override
+                        public void onSuccess(List<Post> posts) {
+                            if (posts.size() == 0) {
+                                ended = true;
+                                return;
+                            }
+                            list.addAll(posts);
+                            adapter.notifyDataSetChanged();
+                        }
 
-                    @Override
-                    public void onFail(ErrorResponse e) {
+                        @Override
+                        public void onFail(ErrorResponse e) {
 
-                    }
+                        }
 
-                    @Override
-                    public void onException(Throwable e) {
+                        @Override
+                        public void onException(Throwable e) {
 
-                    }
-                });
+                        }
+                    });
         }
     }
 

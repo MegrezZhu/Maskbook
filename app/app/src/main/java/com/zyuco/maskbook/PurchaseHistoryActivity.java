@@ -98,7 +98,7 @@ public class PurchaseHistoryActivity extends AppCompatActivity {
             }
         };
 
-        postList = new PostList(this, "PurchaseHistory");
+        postList = new PostList(this, "PurchaseHistory", -1);
         postList.getRecyclerView().addOnScrollListener(onScrollListener);
     }
 
