@@ -11,4 +11,7 @@
 
     <color name="colorDrawer">#fff</color>
     <color name="colorDrawerDivider">#f8f8f8</color>
+
+    <color name="color_shine_button_fill">#FF6666</color>
+    <color name="color_shine_button">#b4b4b4</color>
 </resources>
