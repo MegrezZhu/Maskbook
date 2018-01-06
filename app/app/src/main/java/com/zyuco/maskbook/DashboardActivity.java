@@ -30,6 +30,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
+import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import io.reactivex.functions.Action;
 
 public class DashboardActivity extends AppCompatActivity {
@@ -106,14 +107,17 @@ public class DashboardActivity extends AppCompatActivity {
 
         postList
             .getAdapter()
-            .setOnItemClickListemer(new CommonAdapter.OnItemClickListener() {
+            .setOnItemClickListemer(new CommonAdapter.OnItemClickListener<Post>() {
                 @Override
-                public void onClick(int position, Object data) {
-                    initDialog();
+                public void onClick(int position, Post data) {
+                    User self = ((MaskbookApplication) getApplication()).getUser();
+                    if (!data.getUnlock() && data.getParameter() != 0 && self.getId().intValue() != data.getAuthor().getId().intValue()) {
+                        initDialog(data, position);
+                    }
                 }
 
                 @Override
-                public void onLongClick(int position, Object data) {
+                public void onLongClick(int position, Post data) {
 
                 }
             });
@@ -171,33 +175,63 @@ public class DashboardActivity extends AppCompatActivity {
         cookie.clear();
     }
 
-    private void initDialog() {
+    private void initDialog(final Post post, final int posInList) {
         AlertDialog.Builder builder = new AlertDialog.Builder(DashboardActivity.this);
-        LayoutInflater inflater  = DashboardActivity.this.getLayoutInflater();
-        final View view = inflater.inflate(R.layout.dialog_conetnt, null);
+        LayoutInflater inflater = DashboardActivity.this.getLayoutInflater();
+        final View view = inflater.inflate(R.layout.dialog_content, null);
+        final AlertDialog dialog = builder.setView(view).create();
 
-        final TextView textView = view.findViewById(R.id.click_time);
+        final CircularProgressButton unlockButton = view.findViewById(R.id.unlock);
+        final TextView times = view.findViewById(R.id.click_time);
+
+        times.setText(post.getPrice().toString());
+        unlockButton.setEnabled(false);
+        unlockButton.setAlpha(0.5f);
         view.findViewById(R.id.click).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int num = Integer.parseInt(textView.getText().toString()) + 1;
-                textView.setText(String.valueOf(num));
+                int num = Math.max(0, Integer.parseInt(times.getText().toString()) - 1);
+                times.setText(String.valueOf(num));
 
                 YoYo.with(Techniques.BounceIn)
-                        .duration(500)
-                        .repeat(1)
-                        .playOn(textView);
+                    .duration(500)
+                    .repeat(1)
+                    .playOn(times);
+
+                if (num == 0) {
+                    unlockButton.setEnabled(true);
+                    unlockButton.setAlpha(1.0f);
+                }
             }
         });
 
-        builder.setView(view)
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+        unlockButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                unlockButton.startAnimation();
 
-                    }
-                })
-                .create().show();
+                API
+                    .unlockPost(post.getId())
+                    .doOnTerminate(new Action() {
+                        @Override
+                        public void run() throws Exception {
+                            unlockButton.revertAnimation();
+                        }
+                    })
+                    .subscribe(new Action() {
+                        @Override
+                        public void run() throws Exception {
+                            unlockButton.revertAnimation();
+                            dialog.dismiss();
+
+                            post.setUnlock(true);
+                            postList.getAdapter().notifyItemChanged(posInList, true);
+                        }
+                    });
+            }
+        });
+
+        dialog.show();
     }
 
 }
