@@ -1,12 +1,15 @@
 package com.zyuco.maskbook;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -15,6 +18,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.ldoublem.thumbUplib.ThumbUpView;
 
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
@@ -26,12 +31,15 @@ import com.zyuco.maskbook.model.Post;
 import com.zyuco.maskbook.model.User;
 import com.zyuco.maskbook.service.APIService;
 
+import org.w3c.dom.Text;
+
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.internal.Util;
 import retrofit2.Retrofit;
 
 public class DashboardActivity extends AppCompatActivity {
@@ -39,10 +47,6 @@ public class DashboardActivity extends AppCompatActivity {
 
     CommonAdapter<Post> adapter;
     List<Post> list = new ArrayList<>();
-    LinearLayout button_homepage;
-    LinearLayout button_purchase_history;
-    LinearLayout button_about;
-    LinearLayout button_logout;
     FloatingActionButton button_publish;
 
     @Override
@@ -112,6 +116,7 @@ public class DashboardActivity extends AppCompatActivity {
         adapter.setOnItemClickListemer(new CommonAdapter.OnItemClickListener<Post>() {
             @Override
             public void onClick(int position, Post data) {
+                initDialog();
             }
 
             @Override
@@ -173,4 +178,33 @@ public class DashboardActivity extends AppCompatActivity {
         SharedPrefsCookiePersistor cookie = new SharedPrefsCookiePersistor(this);
         cookie.clear();
     }
+
+    private void initDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(DashboardActivity.this);
+        LayoutInflater inflater  = DashboardActivity.this.getLayoutInflater();
+        final View view = inflater.inflate(R.layout.dialog_conetnt, null);
+
+        final TextView textView = view.findViewById(R.id.click_time);
+        view.findViewById(R.id.click).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int num = Integer.parseInt(textView.getText().toString()) + 1;
+                textView.setText(String.valueOf(num));
+                YoYo.with(Techniques.Bounce)
+                        .duration(500)
+                        .repeat(2)
+                        .playOn(textView);
+            }
+        });
+
+        builder.setView(view)
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
+                .create().show();
+    }
+
 }

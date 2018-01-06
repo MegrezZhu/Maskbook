@@ -21,4 +21,10 @@
     <style name="AppTheme.splash" parent="AppTheme">
         <item name="android:windowFullscreen">true</item>
     </style>
+
+    <style name="AppTheme.Button_Circle" parent="Base.Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/colorSecondaryPrimary</item>
+        <item name="android:textColor">@color/colorTextWhite</item>
+        <item name="android:radius">40dp</item>
+    </style>
 </resources>
