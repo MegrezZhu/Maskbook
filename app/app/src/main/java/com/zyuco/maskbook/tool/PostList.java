@@ -2,12 +2,15 @@ package com.zyuco.maskbook.tool;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
+import android.support.v4.app.INotificationSideChannel;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,6 +23,8 @@ import com.fivehundredpx.android.blur.BlurringView;
 import com.ldoublem.thumbUplib.ThumbUpView;
 import com.zyuco.maskbook.DashboardActivity;
 import com.zyuco.maskbook.GlideApp;
+import com.zyuco.maskbook.HomepageActivity;
+import com.zyuco.maskbook.MaskbookApplication;
 import com.zyuco.maskbook.R;
 import com.zyuco.maskbook.lib.CommonAdapter;
 import com.zyuco.maskbook.lib.ViewHolder;
@@ -47,6 +52,8 @@ public class PostList {
     private boolean loading = false;
     private boolean ended = false; // reach end
 
+    private String mode = "Dashboard";
+
     public CommonAdapter<Post> getAdapter() {
         return adapter;
     }
@@ -63,8 +70,9 @@ public class PostList {
         return recyclerView;
     }
 
-    public PostList(final Activity context) {
+    public PostList(final Activity context, String mode) {
         this.context = context;
+        this.mode = mode;
 
         adapter = new CommonAdapter<Post>(context, R.layout.post_item, list) {
             @Override
@@ -126,41 +134,74 @@ public class PostList {
         for (Post post : list) {
             if (post.getDate().before(earliest)) earliest = post.getDate();
         }
-        API
-            .getPosts(earliest, 30, API.PostFilter.all)
-            .doOnTerminate(new Action() {
-                @Override
-                public void run() throws Exception {
-                    setLoading(false);
-                }
-            })
-            .subscribe(new CallBack<List<Post>>() {
-                @Override
-                public void onSuccess(List<Post> posts) {
-                    if (posts.size() == 0) {
-                        ended = true;
-                        return;
-                    }
-                    list.addAll(posts);
-                    adapter.notifyDataSetChanged();
-                }
 
-                @Override
-                public void onFail(ErrorResponse e) {
+        if (mode.equals("Dashboard") || mode.equals("PurchaseHistory")) {
+            API
+                    .getPosts(earliest, 30, mode.equals("Dashboard") ? API.PostFilter.all : API.PostFilter.unlocked)
+                    .doOnTerminate(new Action() {
+                        @Override
+                        public void run() throws Exception {
+                            setLoading(false);
+                        }
+                    })
+                    .subscribe(new CallBack<List<Post>>() {
+                        @Override
+                        public void onSuccess(List<Post> posts) {
+                            if (posts.size() == 0) {
+                                ended = true;
+                                return;
+                            }
+                            list.addAll(posts);
+                            adapter.notifyDataSetChanged();
+                        }
 
-                }
+                        @Override
+                        public void onFail(ErrorResponse e) {
 
-                @Override
-                public void onException(Throwable e) {
+                        }
 
-                }
-            });
+                        @Override
+                        public void onException(Throwable e) {
+
+                        }
+                    });
+        } else if (mode.equals("Homepage")) {
+            int id = ((MaskbookApplication) context.getApplication()).getUser().getId();
+            API.getPostsFromUser(id, earliest, 30)
+                    .doOnTerminate(new Action() {
+                        @Override
+                        public void run() throws Exception {
+                            setLoading(false);
+                        }
+                    })
+                    .subscribe(new CallBack<List<Post>>() {
+                        @Override
+                        public void onSuccess(List<Post> posts) {
+                            if (posts.size() == 0) {
+                                ended = true;
+                                return;
+                            }
+                            list.addAll(posts);
+                            adapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onFail(ErrorResponse e) {
+
+                        }
+
+                        @Override
+                        public void onException(Throwable e) {
+
+                        }
+                    });
+        }
     }
 
     private void convert(final ViewHolder holder, final Post post) {
         TextView name = holder.getView(R.id.name);
         name.setText(post.getAuthor().getNickname());
-        TextView content = holder.getView(R.id.content);
+        final TextView content = holder.getView(R.id.content);
         content.setText(post.getContent());
         final BlurringView blur = holder.getView(R.id.blurring_view);
         final ImageView image = holder.getView(R.id.image);
@@ -222,6 +263,16 @@ public class PostList {
                     like_num.setText(String.valueOf(Integer.valueOf(like_num.getText().toString()) - 1));
 
                 }
+            }
+        });
+
+       holder.getView(R.id.avatar_wrapper).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setClass(context, HomepageActivity.class);
+                intent.putExtra("user", post.getAuthor());
+                context.startActivity(intent);
             }
         });
     }
