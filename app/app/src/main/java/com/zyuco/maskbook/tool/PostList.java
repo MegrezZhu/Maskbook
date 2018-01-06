@@ -27,6 +27,7 @@ import com.zyuco.maskbook.HomepageActivity;
 import com.zyuco.maskbook.MaskbookApplication;
 import com.zyuco.maskbook.R;
 import com.zyuco.maskbook.lib.CommonAdapter;
+import com.zyuco.maskbook.lib.Converter;
 import com.zyuco.maskbook.lib.ViewHolder;
 import com.zyuco.maskbook.model.ErrorResponse;
 import com.zyuco.maskbook.model.Post;
@@ -80,7 +81,7 @@ public class PostList {
         adapter = new CommonAdapter<Post>(context, R.layout.post_item, list) {
             @Override
             public void convert(final ViewHolder holder, final Post post) {
-                PostList.this.convert(holder, post);
+                Converter.convert(context, holder, post);
             }
 
             @Override
@@ -88,7 +89,7 @@ public class PostList {
                 if (payload.equals(true)) {
                     PostList.this.update(holder, data);
                 } else {
-                    PostList.this.convert(holder, data);
+                    Converter.convert(context, holder, data);
                 }
             }
         };
@@ -119,7 +120,7 @@ public class PostList {
         setLoading(true);
         Date earliest = new Date();
         for (Post post : list) {
-            if (post.getDate().before(earliest)) earliest = post.getDate();
+            if (post.getDate() != null && post.getDate().before(earliest)) earliest = post.getDate();
         }
 
         if (mode.equals("Dashboard") || mode.equals("PurchaseHistory")) {
@@ -189,100 +190,5 @@ public class PostList {
         // just unlocking
         holder.getView(R.id.blurring_view).setVisibility(View.INVISIBLE);
         Log.i(TAG, String.format("update post id: %d", post.getId()));
-    }
-
-    private void convert(final ViewHolder holder, final Post post) {
-        TextView name = holder.getView(R.id.name);
-        name.setText(post.getAuthor().getNickname());
-        TextView content = holder.getView(R.id.content);
-        if (post.getContent().equals("")) {
-            content.setVisibility(View.GONE);
-        } else {
-            content.setVisibility(View.VISIBLE);
-            content.setText(post.getContent());
-        }
-
-        Log.i(TAG, String.format("convert post id: %d", post.getId()));
-
-        TextView time = holder.getView(R.id.time);
-        Date localDate = new Date(post.getDate().getTime() + 1000 * 60 * 60 * 8);
-        time.setText(String.format(
-            context.getResources().getString(R.string.post_date),
-            new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(localDate)
-        ));
-
-        final BlurringView blur = holder.getView(R.id.blurring_view);
-        final ImageView image = holder.getView(R.id.image);
-
-        // image loading
-        URL imageURL, avatarURL;
-        try {
-            imageURL = new URL(new URL(APIService.BASE_URL), post.getImage());
-            avatarURL = new URL(new URL(APIService.BASE_URL), post.getAuthor().getAvatar());
-        } catch (MalformedURLException e) {
-            Log.e(TAG, "convert: ", e);
-            return;
-        }
-        GlideApp
-            .with(context)
-            .load(imageURL)
-            .listener(new RequestListener<Drawable>() {
-                @Override
-                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                    return false;
-                }
-
-                @Override
-                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                    User self = ((MaskbookApplication) context.getApplication()).getUser();
-                    if (!post.getUnlock() && post.getParameter() != 0 && post.getAuthor().getId().intValue() != self.getId().intValue()) {
-                        View image = holder.getView(R.id.image_wrapper);
-                        blur.setVisibility(View.VISIBLE);
-                        blur.setBlurRadius(post.getParameter().intValue());
-                        blur.setBlurredView(image);
-                    } else {
-                        blur.setVisibility(View.INVISIBLE);
-                    }
-                    return false;
-                }
-            })
-            .fitCenter()
-            .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-            .placeholder(R.drawable.placeholder)
-            .into(image);
-        GlideApp
-            .with(context)
-            .load(avatarURL)
-            .placeholder(R.mipmap.default_avatar)
-            .into((ImageView) holder.getView(R.id.avatar));
-
-        // final TextView like_num = holder.getView(R.id.like_num);
-        // like_num.setText("10");//点赞数目
-        // ThumbUpView tpv = holder.getView(R.id.tpv);//点赞
-        // tpv.setUnLikeType(ThumbUpView.LikeType.broken);
-        // tpv.setCracksColor(Color.WHITE);
-        // tpv.setFillColor(Color.rgb(11, 200, 77));
-        // tpv.setEdgeColor(Color.rgb(33, 3, 219));
-        // tpv.setOnThumbUp(new ThumbUpView.OnThumbUp() {
-        //     @Override
-        //     public void like(boolean like) {
-        //         if (like) {
-        //             like_num.setText(String.valueOf(Integer.valueOf(like_num.getText().toString()) + 1));
-        //         } else {
-        //             like_num.setText(String.valueOf(Integer.valueOf(like_num.getText().toString()) - 1));
-
-        //         }
-        //     }
-        // });
-
-        holder.getView(R.id.avatar_wrapper).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.setClass(context, HomepageActivity.class);
-                intent.putExtra("user", post.getAuthor());
-                context.startActivity(intent);
-            }
-        });
     }
 }

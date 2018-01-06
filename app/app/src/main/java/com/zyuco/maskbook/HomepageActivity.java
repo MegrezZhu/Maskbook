@@ -60,7 +60,7 @@ public class HomepageActivity extends AppCompatActivity {
     }
 
     private void initToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         TextView textView = findViewById(R.id.toolbar_title);
         textView.setText(R.string.menuitem_profile);
         setSupportActionBar(toolbar);
@@ -97,6 +97,7 @@ public class HomepageActivity extends AppCompatActivity {
 
         postList = new PostList(this, "Homepage");
         postList.getRecyclerView().addOnScrollListener(onScrollListener);
+        postList.getRecyclerView().setNestedScrollingEnabled(true);
     }
 
     private void hideViews() {
@@ -124,27 +125,12 @@ public class HomepageActivity extends AppCompatActivity {
 
         if (!ismine) {
             TextView toolbar_textView = findViewById(R.id.toolbar_title);
-            toolbar_textView.setText(user.getNickname() + "的主页");
-        }
-
-        TextView name_textView = findViewById(R.id.name);
-        name_textView.setText(user.getNickname());
-
-        try {
-            URL url = new URL(APIService.BASE_URL);
-            URL avatarUrl = new URL(url, user.getAvatar());
-            GlideApp
-                    .with(this)
-                    .load(avatarUrl)
-                    .placeholder(R.mipmap.default_avatar)
-                    .into((ImageView) findViewById(R.id.avatar));
-        } catch (MalformedURLException err) {
-            Log.e(TAG, "render: ", err);
+            toolbar_textView.setText(user.getNickname() + "'s Page");
         }
     }
 
     private void getSomeonePosts() {
-        User user = isMine() ? ((MaskbookApplication) getApplication()).getUser() : (User)getIntent().getSerializableExtra("user");
+        final User user = isMine() ? ((MaskbookApplication) getApplication()).getUser() : (User)getIntent().getSerializableExtra("user");
         API.getPostsFromUser(user.getId())
                 .doOnTerminate(new Action() {
                     @Override
@@ -158,6 +144,10 @@ public class HomepageActivity extends AppCompatActivity {
                         public void onSuccess(List<Post> posts) {
                             List<Post> list = postList.getDataList();
                             list.clear();
+                            Post fake = new Post();
+                            fake.setId(-1);
+                            fake.setAuthor(user);
+                            list.add(fake);
                             list.addAll(posts);
                             postList.getAdapter().notifyDataSetChanged();
                         }
