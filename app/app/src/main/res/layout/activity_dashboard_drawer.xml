@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,8 +13,7 @@
         android:background="@drawable/bg"
         android:gravity="center"
         android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="parent"
-        >
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.gcssloop.widget.RCRelativeLayout
             android:id="@+id/avatar_wrapper"
@@ -29,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:src="@mipmap/signup_avatar"/>
+                android:src="@mipmap/signup_avatar" />
         </com.gcssloop.widget.RCRelativeLayout>
 
         <TextView
@@ -39,7 +37,7 @@
             android:layout_marginTop="10dp"
             android:text="xxxxx"
             android:textColor="@color/colorTextWhite"
-            android:textSize="24sp"/>
+            android:textSize="24sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -59,7 +57,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_perm_identity_black_24dp"/>
+            android:src="@mipmap/ic_perm_identity_black_24dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -68,7 +66,7 @@
             android:gravity="center"
             android:text="@string/menuitem_profile"
             android:textColor="#000"
-            android:textSize="20sp"/>
+            android:textSize="20sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -88,7 +86,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_visibility_black_24dp"/>
+            android:src="@mipmap/ic_visibility_black_24dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -97,7 +95,7 @@
             android:gravity="center"
             android:text="@string/menuitem_unlock"
             android:textColor="#000"
-            android:textSize="20sp"/>
+            android:textSize="20sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -115,7 +113,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_exit_to_app_black_24dp"/>
+            android:src="@mipmap/ic_exit_to_app_black_24dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -124,7 +122,7 @@
             android:gravity="center"
             android:text="@string/menuitem_about"
             android:textColor="#000"
-            android:textSize="20sp"/>
+            android:textSize="20sp" />
     </LinearLayout>
 
     <TextView
@@ -133,7 +131,7 @@
         android:layout_height="2dp"
         android:layout_marginBottom="15dp"
         android:background="@color/colorDrawerDivider"
-        app:layout_constraintBottom_toTopOf="@id/logout"/>
+        app:layout_constraintBottom_toTopOf="@id/logout" />
 
     <LinearLayout
         android:id="@+id/logout"
@@ -150,7 +148,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_exit_to_app_black_24dp"/>
+            android:src="@mipmap/ic_exit_to_app_black_24dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -159,7 +157,7 @@
             android:gravity="center"
             android:text="@string/menuitem_logout"
             android:textColor="#000"
-            android:textSize="20sp"/>
+            android:textSize="20sp" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
