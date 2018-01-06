@@ -18,13 +18,14 @@
         >
 
         <com.gcssloop.widget.RCRelativeLayout
-            android:id="@+id/avatar"
+            android:id="@+id/avatar_wrapper"
             android:layout_width="80dp"
             android:layout_height="80dp"
             app:round_as_circle="true"
             app:stroke_color="#f8f8f8">
 
             <ImageView
+                android:id="@+id/avatar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"

@@ -16,6 +16,7 @@ import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
+import com.luck.picture.lib.tools.PictureFileUtils;
 import com.zyuco.maskbook.model.ErrorResponse;
 import com.zyuco.maskbook.model.User;
 import com.zyuco.maskbook.service.API;
@@ -30,6 +31,8 @@ import io.reactivex.functions.Action;
 
 public class SignupActivity extends AppCompatActivity {
     private static final String TAG = "Maskbook.signup";
+
+    private String avatarPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +65,7 @@ public class SignupActivity extends AppCompatActivity {
         findViewById(R.id.avatar_wrapper).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.i(TAG, "onClick: clicked");
                 chooseImage();
             }
         });
@@ -72,14 +76,15 @@ public class SignupActivity extends AppCompatActivity {
         String password = ((EditText) findViewById(R.id.password)).getText().toString();
         String repassword = ((EditText) findViewById(R.id.repassword)).getText().toString();
         String nickname = ((EditText) findViewById(R.id.nickname)).getText().toString();
-        // TODO: get selected avatar file
 
         if (!checkInputFormat(username, password, repassword, nickname)) return;
+
+        File avatar = avatarPath != null ? new File(avatarPath) : null;
 
         final View loadingMask = findViewById(R.id.loading_mask);
         loadingMask.setVisibility(View.VISIBLE);
         API
-            .regist(username, password, nickname, null)
+            .regist(username, password, nickname, avatar)
             .doOnTerminate(new Action() {
                 @Override
                 public void run() throws Exception {
@@ -183,23 +188,27 @@ public class SignupActivity extends AppCompatActivity {
                     // 如果裁剪并压缩了，以取压缩路径为准，因为是先裁剪后压缩的
 
                     // 选取头像的路径
-                    String path;
                     if (!selectList.isEmpty()) {
                         LocalMedia localMedia = selectList.get(0);
                         if (localMedia.isCut()) {
                             if (localMedia.isCompressed()) {
-                                path = localMedia.getCompressPath();
+                                avatarPath = localMedia.getCompressPath();
                             } else {
-                                path = localMedia.getCutPath();
+                                avatarPath = localMedia.getCutPath();
                             }
                         } else {
-                            path = localMedia.getPath();
+                            avatarPath = localMedia.getPath();
                         }
-                        Glide.with(SignupActivity.this).load(new File(path)).into((ImageView) findViewById(R.id.avatar));
+                        Glide.with(SignupActivity.this).load(new File(avatarPath)).into((ImageView) findViewById(R.id.avatar));
                     }
                     break;
             }
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        PictureFileUtils.deleteCacheDirFile(this);
+    }
 }

@@ -37,7 +37,7 @@ public class SplashActivity extends AppCompatActivity {
 //                    }
 //                }
 //            );
-//        tryAutoLogin();
+        tryAutoLogin();
     }
 
     private void finishSplashAndGo(Class<? extends Activity> cls) {
