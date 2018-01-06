@@ -1,62 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:layout_height="match_parent"
-    tools:context="com.zyuco.maskbook.PublishActivity">
+    android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/imagepick"
+    <android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:src="@drawable/add"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/seekbar"
-        app:layout_constraintRight_toRightOf="parent"/>
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        tools:context="com.zyuco.maskbook.PublishActivity">
 
-    <android.support.v7.widget.AppCompatSeekBar
-        android:id="@+id/seekbar"
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toTopOf="@id/content"
-        />
+        <FrameLayout
+            android:id="@+id/blurred_view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#fbfbfb"
+            android:paddingVertical="10dp"
+            app:layout_constraintBottom_toTopOf="@id/seekbar"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
+            <ImageView
+                android:id="@+id/image_preview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:scaleX="1.1"
+                android:scaleY="1.1"/>
+        </FrameLayout>
 
-    <com.rengwuxian.materialedittext.MaterialEditText
-        android:id="@+id/content"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="@string/floating_label_content"
-        android:layout_margin="20dp"
-        android:lines="5"
-        android:gravity="start"
-        app:met_floatingLabel="normal"
-        app:met_floatingLabelTextSize="16sp"
-        app:met_floatingLabelText="@string/floating_label_content"
-        app:met_clearButton="true"
+        <ImageView
+            android:id="@+id/imagepick"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/add"
+            app:layout_constraintBottom_toBottomOf="@id/blurred_view"
+            app:layout_constraintLeft_toLeftOf="@id/blurred_view"
+            app:layout_constraintRight_toRightOf="@id/blurred_view"
+            app:layout_constraintTop_toTopOf="@id/blurred_view"/>
 
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/publish"
-        app:layout_constraintRight_toRightOf="parent"/>
+        <com.fivehundredpx.android.blur.BlurringView
+            android:id="@+id/blurring_view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="0dp"
+            android:visibility="gone"
+            app:blurRadius="1"
+            app:downsampleFactor="4"
+            app:layout_constraintBottom_toBottomOf="@id/blurred_view"
+            app:layout_constraintLeft_toLeftOf="@id/blurred_view"
+            app:layout_constraintRight_toRightOf="@id/blurred_view"
+            app:layout_constraintTop_toTopOf="@id/blurred_view"
+            app:overlayColor="#00FFFFFF"/>
 
-    <ImageButton
-        android:id="@+id/publish"
-        android:layout_width="0dp"
-        android:layout_height="56dp"
-        android:theme="@style/AppTheme.Button"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:src="@mipmap/fly"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
-</android.support.constraint.ConstraintLayout>
+        <TextView
+            android:id="@+id/seekbar_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/seekbar_hint"
+            app:layout_constraintBottom_toBottomOf="@+id/seekbar"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/seekbar"
+            app:layout_constraintTop_toTopOf="@+id/seekbar"/>
+
+        <android.support.v7.widget.AppCompatSeekBar
+            android:id="@+id/seekbar"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="40dp"
+            app:layout_constraintBottom_toTopOf="@id/content"
+            app:layout_constraintLeft_toRightOf="@id/seekbar_hint"
+            app:layout_constraintRight_toLeftOf="@id/price_hint"
+            app:layout_constraintTop_toBottomOf="@id/blurred_view"/>
+
+        <TextView
+            android:id="@+id/price_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:text="@string/price_hint"
+            app:layout_constraintBottom_toBottomOf="@+id/price"
+            app:layout_constraintLeft_toRightOf="@id/seekbar"
+            app:layout_constraintRight_toLeftOf="@+id/price"
+            app:layout_constraintTop_toTopOf="@+id/price"/>
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/price"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:maxLength="3"
+            app:layout_constraintBottom_toBottomOf="@id/seekbar"
+            app:layout_constraintLeft_toRightOf="@id/price_hint"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/seekbar"/>
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="20dp"
+            android:gravity="start"
+            android:hint="@string/floating_label_content"
+            android:lines="2"
+            app:layout_constraintBottom_toTopOf="@+id/publish"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/seekbar"
+            app:met_clearButton="true"
+            app:met_floatingLabel="normal"
+            app:met_floatingLabelText="@string/floating_label_content"
+            app:met_floatingLabelTextSize="16sp"/>
+
+        <ImageButton
+            android:id="@+id/publish"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:src="@mipmap/fly"
+            android:theme="@style/AppTheme.Button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/content"/>
+    </android.support.constraint.ConstraintLayout>
+
+    <include layout="@layout/loading_mask"/>
+</FrameLayout>
