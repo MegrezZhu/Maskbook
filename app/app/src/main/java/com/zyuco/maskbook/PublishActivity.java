@@ -60,7 +60,9 @@ public class PublishActivity extends AppCompatActivity {
         bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                updateBlur((int) Math.floor((double) progress / seekBar.getMax() * 25.f));
+                if (selectedFile != null) {
+                    updateBlur((int) Math.floor((double) progress / seekBar.getMax() * 25.f));
+                }
             }
 
             @Override
@@ -114,6 +116,7 @@ public class PublishActivity extends AppCompatActivity {
             @Override
             public boolean onLongClick(View v) {
                 // 还原原来的加号
+                selectedFile = null;
                 findViewById(R.id.imagepick).setVisibility(View.VISIBLE);
                 blur.setVisibility(View.GONE);
                 // 顺便清除包括裁剪和压缩后的缓存，要在上传成功后调用，注意：需要系统sd卡权限
@@ -145,7 +148,7 @@ public class PublishActivity extends AppCompatActivity {
 
     private void post() {
         String content = ((EditText) findViewById(R.id.content)).getText().toString();
-        String price = ((EditText)findViewById(R.id.price)).getText().toString();
+        String price = ((EditText) findViewById(R.id.price)).getText().toString();
         int iPrice;
         if (selectedFile == null) {
             Toast.makeText(this, R.string.toast_missing_image, Toast.LENGTH_SHORT).show();
