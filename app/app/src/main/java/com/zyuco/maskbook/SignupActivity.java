@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.util.AtomicFile;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -42,6 +44,7 @@ public class SignupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
 
         initListener();
+        hideStatusbar();
     }
 
     private void initListener() {
@@ -205,5 +208,11 @@ public class SignupActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         PictureFileUtils.deleteCacheDirFile(this);
+    }
+
+    private void hideStatusbar() {
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
     }
 }

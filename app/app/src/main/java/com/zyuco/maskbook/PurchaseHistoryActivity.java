@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
@@ -39,6 +41,7 @@ public class PurchaseHistoryActivity extends AppCompatActivity {
         initList();
         initToolbar();
         getUnlock();
+        hideStatusbar();
     }
 
     private void initListener() {
@@ -135,5 +138,11 @@ public class PurchaseHistoryActivity extends AppCompatActivity {
                     }
                 });
 
+    }
+
+    private void hideStatusbar() {
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
     }
 }

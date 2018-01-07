@@ -12,6 +12,8 @@ import android.test.mock.MockApplication;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -60,6 +62,8 @@ public class DashboardActivity extends AppCompatActivity {
         initList();
         render();
         refreshPosts();
+
+        hideStatusbar();
     }
 
     private void refreshPosts() {
@@ -323,6 +327,12 @@ public class DashboardActivity extends AppCompatActivity {
 
                 }
             });
+    }
+
+    private void hideStatusbar() {
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
     }
 
 }
