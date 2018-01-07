@@ -37,4 +37,5 @@
     <string name="unlock">Unlock</string>
     <string name="unlock_hint_A">clicks left</string>
     <string name="unlock_hint_B">to unlock the wonderful picture!</string>
+    <string name="homepage_header">%s\'s Page</string>
 </resources>

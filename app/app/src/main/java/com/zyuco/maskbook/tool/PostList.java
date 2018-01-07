@@ -76,6 +76,10 @@ public class PostList {
         return recyclerView;
     }
 
+    public void resetEnded() {
+        ended = false;
+    }
+
     public PostList(final Activity context, String mode, int user_id) {
         this.context = context;
 
@@ -88,7 +92,7 @@ public class PostList {
             public void convert(final ViewHolder holder, final Post post) {
                 Converter.convert(context, holder, post);
             }
-  
+
             @Override
             public void updateWithPayload(ViewHolder holder, Post data, Object payload) {
                 if (payload.equals(true)) {
@@ -102,7 +106,7 @@ public class PostList {
 
         final LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(layoutManager);
-      
+
         recyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
             public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
@@ -122,68 +126,69 @@ public class PostList {
         setLoading(true);
         Date earliest = new Date();
         for (Post post : list) {
-            if (post.getDate() != null && post.getDate().before(earliest)) earliest = post.getDate();
+            if (post.getDate() != null && post.getDate().before(earliest))
+                earliest = post.getDate();
         }
 
         if (mode.equals("Dashboard") || mode.equals("PurchaseHistory")) {
             API
-                    .getPosts(earliest, 30, mode.equals("Dashboard") ? API.PostFilter.all : API.PostFilter.unlocked)
-                    .doOnTerminate(new Action() {
-                        @Override
-                        public void run() throws Exception {
-                            setLoading(false);
+                .getPosts(earliest, 30, mode.equals("Dashboard") ? API.PostFilter.all : API.PostFilter.unlocked)
+                .doOnTerminate(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        setLoading(false);
+                    }
+                })
+                .subscribe(new CallBack<List<Post>>() {
+                    @Override
+                    public void onSuccess(List<Post> posts) {
+                        if (posts.size() == 0) {
+                            ended = true;
+                            return;
                         }
-                    })
-                    .subscribe(new CallBack<List<Post>>() {
-                        @Override
-                        public void onSuccess(List<Post> posts) {
-                            if (posts.size() == 0) {
-                                ended = true;
-                                return;
-                            }
-                            list.addAll(posts);
-                            adapter.notifyDataSetChanged();
-                        }
+                        list.addAll(posts);
+                        adapter.notifyDataSetChanged();
+                    }
 
-                        @Override
-                        public void onFail(ErrorResponse e) {
+                    @Override
+                    public void onFail(ErrorResponse e) {
 
-                        }
+                    }
 
-                        @Override
-                        public void onException(Throwable e) {
+                    @Override
+                    public void onException(Throwable e) {
 
-                        }
-                    });
+                    }
+                });
         } else if (mode.equals("Homepage")) {
             API.getPostsFromUser(user_id, earliest, 30)
-                    .doOnTerminate(new Action() {
-                        @Override
-                        public void run() throws Exception {
-                            setLoading(false);
+                .doOnTerminate(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        setLoading(false);
+                    }
+                })
+                .subscribe(new CallBack<List<Post>>() {
+                    @Override
+                    public void onSuccess(List<Post> posts) {
+                        if (posts.size() == 0) {
+                            ended = true;
+                            return;
                         }
-                    })
-                    .subscribe(new CallBack<List<Post>>() {
-                        @Override
-                        public void onSuccess(List<Post> posts) {
-                            if (posts.size() == 0) {
-                                ended = true;
-                                return;
-                            }
-                            list.addAll(posts);
-                            adapter.notifyDataSetChanged();
-                        }
+                        list.addAll(posts);
+                        adapter.notifyDataSetChanged();
+                    }
 
-                        @Override
-                        public void onFail(ErrorResponse e) {
+                    @Override
+                    public void onFail(ErrorResponse e) {
 
-                        }
+                    }
 
-                        @Override
-                        public void onException(Throwable e) {
+                    @Override
+                    public void onException(Throwable e) {
 
-                        }
-                    });
+                    }
+                });
         }
     }
 
