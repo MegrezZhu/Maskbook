@@ -90,6 +90,7 @@ public class Converter {
                     return false;
                 }
             })
+            .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
             .placeholder(R.drawable.placeholder)
             .into(image);
         GlideApp
