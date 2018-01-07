@@ -74,10 +74,9 @@ public class SignupActivity extends AppCompatActivity {
     private void onRegistButtonClicked() {
         String username = ((EditText) findViewById(R.id.username)).getText().toString();
         String password = ((EditText) findViewById(R.id.password)).getText().toString();
-        String repassword = ((EditText) findViewById(R.id.repassword)).getText().toString();
         String nickname = ((EditText) findViewById(R.id.nickname)).getText().toString();
 
-        if (!checkInputFormat(username, password, repassword, nickname)) return;
+        if (!checkInputFormat(username, password, nickname)) return;
 
         File avatar = avatarPath != null ? new File(avatarPath) : null;
 
@@ -125,12 +124,8 @@ public class SignupActivity extends AppCompatActivity {
             });
     }
 
-    private boolean checkInputFormat(String username, String password, String repassword, String nickname) {
-        if (username.equals("") || password.equals("") || nickname.equals("") || repassword.equals("")) {
-            Toast.makeText(this, R.string.toast_no_empty_field, Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (!password.equals(repassword)) {
+    private boolean checkInputFormat(String username, String password, String nickname) {
+        if (username.equals("") || password.equals("") || nickname.equals("")) {
             Toast.makeText(this, R.string.toast_no_empty_field, Toast.LENGTH_SHORT).show();
             return false;
         }

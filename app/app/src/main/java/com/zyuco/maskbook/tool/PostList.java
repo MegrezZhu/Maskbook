@@ -65,6 +65,7 @@ public class PostList {
 
     public PostList(final Activity context) {
         this.context = context;
+        recyclerView = context.findViewById(R.id.post_list);
 
         adapter = new CommonAdapter<Post>(context, R.layout.post_item, list) {
             @Override
@@ -72,35 +73,10 @@ public class PostList {
                 PostList.this.convert(holder, post);
             }
         };
-
-        adapter.setOnItemClickListemer(new CommonAdapter.OnItemClickListener<Post>() {
-            @Override
-            public void onClick(int position, Post data) {
-            }
-
-            @Override
-            public void onLongClick(int position, Post data) {
-            }
-        });
-
-        recyclerView = context.findViewById(R.id.post_list);
+        recyclerView.setAdapter(adapter);
 
         final LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-
-//        RecyclerView.OnScrollListener scrollListener = new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                if (loading || ended) return;
-//                int visibleItemCount = layoutManager.getChildCount();
-//                int totalItemCount = layoutManager.getItemCount();
-//                int pastVisibleItems = layoutManager.findFirstVisibleItemPosition();
-//                if (pastVisibleItems + visibleItemCount >= totalItemCount) {
-//                    Log.i(TAG, "end of list");
-//                    loadMore();
-//                }
-//            }
-//        };
-
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
             public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
@@ -114,10 +90,6 @@ public class PostList {
                 }
             }
         });
-
-//        recyclerView.setOnScrollListener(scrollListener);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
     }
 
     private void loadMore() {
@@ -127,34 +99,34 @@ public class PostList {
             if (post.getDate().before(earliest)) earliest = post.getDate();
         }
         API
-            .getPosts(earliest, 30, API.PostFilter.all)
-            .doOnTerminate(new Action() {
-                @Override
-                public void run() throws Exception {
-                    setLoading(false);
-                }
-            })
-            .subscribe(new CallBack<List<Post>>() {
-                @Override
-                public void onSuccess(List<Post> posts) {
-                    if (posts.size() == 0) {
-                        ended = true;
-                        return;
+                .getPosts(earliest, 30, API.PostFilter.all)
+                .doOnTerminate(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        setLoading(false);
                     }
-                    list.addAll(posts);
-                    adapter.notifyDataSetChanged();
-                }
+                })
+                .subscribe(new CallBack<List<Post>>() {
+                    @Override
+                    public void onSuccess(List<Post> posts) {
+                        if (posts.size() == 0) {
+                            ended = true;
+                            return;
+                        }
+                        list.addAll(posts);
+                        adapter.notifyDataSetChanged();
+                    }
 
-                @Override
-                public void onFail(ErrorResponse e) {
+                    @Override
+                    public void onFail(ErrorResponse e) {
 
-                }
+                    }
 
-                @Override
-                public void onException(Throwable e) {
+                    @Override
+                    public void onException(Throwable e) {
 
-                }
-            });
+                    }
+                });
     }
 
     private void convert(final ViewHolder holder, final Post post) {
@@ -177,16 +149,16 @@ public class PostList {
             return;
         }
         GlideApp
-            .with(context)
-            .load(imageURL)
-            .listener(new RequestListener<Drawable>() {
-                @Override
-                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                    return false;
-                }
+                .with(context)
+                .load(imageURL)
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        return false;
+                    }
 
-                @Override
-                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
 //                            blur.invalidate();
 //                            if (post.getParameter() != 0) {
 //                                View image = holder.getView(R.id.image_wrapper);
@@ -194,17 +166,17 @@ public class PostList {
 //                                blur.setBlurRadius(post.getParameter().intValue());
 //                                blur.setBlurredView(image);
 //                            }
-                    return false;
-                }
-            })
-            .fitCenter()
-            .placeholder(R.drawable.placeholder)
-            .into(image);
+                        return false;
+                    }
+                })
+                .fitCenter()
+                .placeholder(R.drawable.placeholder)
+                .into(image);
         GlideApp
-            .with(context)
-            .load(avatarURL)
-            .placeholder(R.mipmap.default_avatar)
-            .into((ImageView) holder.getView(R.id.avatar));
+                .with(context)
+                .load(avatarURL)
+                .placeholder(R.mipmap.default_avatar)
+                .into((ImageView) holder.getView(R.id.avatar));
 
         final TextView like_num = holder.getView(R.id.like_num);
         like_num.setText("10");//点赞数目

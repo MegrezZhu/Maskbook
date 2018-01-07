@@ -54,33 +54,33 @@ public class DashboardActivity extends AppCompatActivity {
         swipeRefresher.setRefreshing(true);
         postList.setLoading(true);
         API
-            .getPosts()
-            .doOnTerminate(new Action() {
-                @Override
-                public void run() throws Exception {
-                    swipeRefresher.setRefreshing(false);
-                    postList.setLoading(false);
-                }
-            })
-            .subscribe(new CallBack<List<Post>>() {
-                @Override
-                public void onSuccess(List<Post> posts) {
-                    List<Post> list = postList.getDataList();
-                    list.clear();
-                    list.addAll(posts);
-                    postList.getAdapter().notifyDataSetChanged();
-                }
+                .getPosts()
+                .doOnTerminate(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        swipeRefresher.setRefreshing(false);
+                        postList.setLoading(false);
+                    }
+                })
+                .subscribe(new CallBack<List<Post>>() {
+                    @Override
+                    public void onSuccess(List<Post> posts) {
+                        List<Post> list = postList.getDataList();
+                        list.clear();
+                        list.addAll(posts);
+                        postList.getAdapter().notifyDataSetChanged();
+                    }
 
-                @Override
-                public void onFail(ErrorResponse e) {
+                    @Override
+                    public void onFail(ErrorResponse e) {
 
-                }
+                    }
 
-                @Override
-                public void onException(Throwable e) {
+                    @Override
+                    public void onException(Throwable e) {
 
-                }
-            });
+                    }
+                });
     }
 
     private void render() {
@@ -90,10 +90,10 @@ public class DashboardActivity extends AppCompatActivity {
             URL url = new URL(APIService.BASE_URL);
             URL avatarUrl = new URL(url, user.getAvatar());
             GlideApp
-                .with(this)
-                .load(avatarUrl)
-                .placeholder(R.mipmap.default_avatar)
-                .into((ImageView) findViewById(R.id.avatar));
+                    .with(this)
+                    .load(avatarUrl)
+                    .placeholder(R.mipmap.default_avatar)
+                    .into((ImageView) findViewById(R.id.avatar));
         } catch (MalformedURLException err) {
             Log.e(TAG, "render: ", err);
         }
@@ -105,18 +105,18 @@ public class DashboardActivity extends AppCompatActivity {
         button_publish.attachToRecyclerView(postList.getRecyclerView());
 
         postList
-            .getAdapter()
-            .setOnItemClickListemer(new CommonAdapter.OnItemClickListener() {
-                @Override
-                public void onClick(int position, Object data) {
-                    initDialog();
-                }
+                .getAdapter()
+                .setOnItemClickListemer(new CommonAdapter.OnItemClickListener() {
+                    @Override
+                    public void onClick(int position, Object data) {
+                        initDialog();
+                    }
 
-                @Override
-                public void onLongClick(int position, Object data) {
+                    @Override
+                    public void onLongClick(int position, Object data) {
 
-                }
-            });
+                    }
+                });
     }
 
     private void initListener() {
@@ -173,7 +173,7 @@ public class DashboardActivity extends AppCompatActivity {
 
     private void initDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(DashboardActivity.this);
-        LayoutInflater inflater  = DashboardActivity.this.getLayoutInflater();
+        LayoutInflater inflater = DashboardActivity.this.getLayoutInflater();
         final View view = inflater.inflate(R.layout.dialog_conetnt, null);
 
         final TextView textView = view.findViewById(R.id.click_time);
@@ -185,7 +185,6 @@ public class DashboardActivity extends AppCompatActivity {
 
                 YoYo.with(Techniques.BounceIn)
                         .duration(500)
-                        .repeat(1)
                         .playOn(textView);
             }
         });
