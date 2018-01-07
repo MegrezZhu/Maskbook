@@ -78,6 +78,8 @@ public class PostList {
 
     public PostList(final Activity context, String mode, int user_id) {
         this.context = context;
+
+        recyclerView = context.findViewById(R.id.post_list);
         this.mode = mode;
         this.user_id = user_id == -1 ? ((MaskbookApplication) context.getApplication()).getUser().getId() : user_id;
 
@@ -86,7 +88,7 @@ public class PostList {
             public void convert(final ViewHolder holder, final Post post) {
                 Converter.convert(context, holder, post);
             }
-
+  
             @Override
             public void updateWithPayload(ViewHolder holder, Post data, Object payload) {
                 if (payload.equals(true)) {
@@ -96,11 +98,11 @@ public class PostList {
                 }
             }
         };
-
-        recyclerView = context.findViewById(R.id.post_list);
+        recyclerView.setAdapter(adapter);
 
         final LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-
+        recyclerView.setLayoutManager(layoutManager);
+      
         recyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
             public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
@@ -114,9 +116,6 @@ public class PostList {
                 }
             }
         });
-
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
     }
 
     private void loadMore() {

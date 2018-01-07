@@ -49,30 +49,30 @@ public class SplashActivity extends AppCompatActivity {
 
     private void tryAutoLogin() {
         API.getUserInformation()
-            .subscribe(new CallBack<User>() {
-                @Override
-                public void onSuccess(User user) {
-                    ((MaskbookApplication)getApplication()).setUser(user);
-                    Log.i(TAG, String.format("already logged in as %s.", user.getNickname()));
-                    finishSplashAndGo(DashboardActivity.class);
-                }
-
-                @Override
-                public void onFail(ErrorResponse err) {
-                    Log.i(TAG, String.format("onFail: %s", err.getErrno().name()));
-                    if (err.getErrno() == ErrorResponseCode.Login_Required) {
-                        Log.i(TAG, "not logged in.");
-                        finishSplashAndGo(LoginActivity.class);
-                        return;
+                .subscribe(new CallBack<User>() {
+                    @Override
+                    public void onSuccess(User user) {
+                        ((MaskbookApplication) getApplication()).setUser(user);
+                        Log.i(TAG, String.format("already logged in as %s.", user.getNickname()));
+                        finishSplashAndGo(DashboardActivity.class);
                     }
-                    Toast.makeText(SplashActivity.this, R.string.toast_network_error, Toast.LENGTH_SHORT).show();
-                    Log.e(TAG, "onFail: network error");
-                }
 
-                @Override
-                public void onException(Throwable e) {
+                    @Override
+                    public void onFail(ErrorResponse err) {
+                        Log.i(TAG, String.format("onFail: %s", err.getErrno().name()));
+                        if (err.getErrno() == ErrorResponseCode.Login_Required) {
+                            Log.i(TAG, "not logged in.");
+                            finishSplashAndGo(LoginActivity.class);
+                            return;
+                        }
+                        Toast.makeText(SplashActivity.this, R.string.toast_network_error, Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, "onFail: network error");
+                    }
 
-                }
-            });
+                    @Override
+                    public void onException(Throwable e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                });
     }
 }
