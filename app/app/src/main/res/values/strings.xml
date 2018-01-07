@@ -38,4 +38,5 @@
     <string name="power_cost_hint">Powers cost:</string>
     <string name="click_time_hint">Clicks Left:</string>
     <string name="power">Power: %d</string>
+    <string name="homepage_header">%s\'s Page</string>
 </resources>

@@ -25,45 +25,46 @@ export async function getOne (uid: number, pid: number): Promise<UPost | null> {
     post.unlocked = 1 === await repo.purchase.createQueryBuilder('pur')
       .where('pur.u_id = :uid and pur.p_id = :pid', { uid, pid })
       .getCount();
+    post.like = 1 === await repo.like.createQueryBuilder('like')
+      .where('like.u_id = :uid and like.p_id = :pid', { uid, pid })
+      .getCount();
   }
   return post;
 }
 
 export async function getAllUnlocked (uid: number, limit: number, before: Date): Promise<UPost[]> {
-  const res = await repo.post.createQueryBuilder('post')
+  const { raw, entities } = await repo.post.createQueryBuilder('post')
     .innerJoinAndSelect(Purchase, 'purchase', 'purchase.u_id = :uid and purchase.p_id = post.p_id', { uid })
     .innerJoinAndSelect('post.author', 'user')
+    .leftJoinAndSelect(Like, 'like', 'like.u_id = :uid and like.p_id = post.p_id', { uid })
     .where('post.date < :before', { before: fixDate(before) })
     .orderBy('post.date', 'DESC')
     .limit(limit)
-    .getMany() as UPost[];
-  res.forEach(post => {
-    post.unlocked = true;
-  });
-  return res;
+    .getRawAndEntities();
+  return zip(entities, raw);
 }
 
 export async function getAllPost (uid: number, limit: number, before: Date): Promise<UPost[]> {
-  const res = await repo.post.createQueryBuilder('post')
+  const { raw, entities } = await repo.post.createQueryBuilder('post')
     .innerJoinAndSelect('post.author', 'user')
     .leftJoinAndSelect(Purchase, 'purchase', 'purchase.u_id = :uid and purchase.p_id = post.p_id', { uid })
+    .leftJoinAndSelect(Like, 'like', 'like.u_id = :uid and like.p_id = post.p_id', { uid })
     .where('post.date <= :before', { before: fixDate(before) })
     .orderBy('post.date', 'DESC')
     .limit(limit)
     .getRawAndEntities();
-  const { raw, entities } = res;
   return zip(entities, raw);
 }
 
 export async function getOnesPost (uid: number, limit: number, before: Date): Promise<Post[]> {
-  const res = await repo.post.createQueryBuilder('post')
+  const { raw, entities } = await repo.post.createQueryBuilder('post')
     .innerJoinAndSelect('post.author', 'user')
     .leftJoinAndSelect(Purchase, 'purchase', 'purchase.u_id = :uid and purchase.p_id = post.p_id', { uid })
+    .leftJoinAndSelect(Like, 'like', 'like.u_id = :uid and like.p_id = post.p_id', { uid })
     .where('post.u_id = :uid and post.date < :before', { uid, before: fixDate(before) })
     .orderBy('post.date', 'DESC')
     .limit(limit)
     .getRawAndEntities();
-  const { raw, entities } = res;
   return zip(entities, raw);
 }
 
@@ -126,12 +127,13 @@ function fixDate (date: Date): Date {
   return fixed;
 }
 
-type UPost = Post & { unlocked: boolean };
+type UPost = Post & { unlocked: boolean; like: boolean };
 
 function zip (posts: Post[], raws: any[]): UPost[] {
   return zipWith(posts, raws, (post, raw) => {
     const uPost = post as UPost;
     uPost.unlocked = raw.purchase_pr_id ? true : false;
+    uPost.like = raw.like_l_id ? true : false;
     return uPost;
   });
 }
