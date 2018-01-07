@@ -18,6 +18,7 @@ import com.fivehundredpx.android.blur.BlurringView;
 import com.sackcentury.shinebuttonlib.ShineButton;
 import com.zyuco.maskbook.GlideApp;
 import com.zyuco.maskbook.HomepageActivity;
+import com.zyuco.maskbook.LikesActivity;
 import com.zyuco.maskbook.MaskbookApplication;
 import com.zyuco.maskbook.R;
 import com.zyuco.maskbook.model.Post;
@@ -121,7 +122,7 @@ public class Converter {
             @Override
             public void onClick(View view) {
                 if (post.getLike()) {
-                    API.deletePost(post.getId())
+                    API.unlikePost(post.getId())
                         .subscribe(new Action() {
                             @Override
                             public void run() throws Exception {

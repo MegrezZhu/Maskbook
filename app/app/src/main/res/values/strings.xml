@@ -13,6 +13,7 @@
     <string name="menuitem_logout">Logout</string>
     <string name="menuitem_unlock">Purchased</string>
     <string name="menuitem_about">About</string>
+    <string name="menuitem_likes">Likes</string>
     <string name="toolbar_publish">Post</string>
     <string name="seekbar_hint">Blur Level</string>
     <string name="price_hint">Price</string>
