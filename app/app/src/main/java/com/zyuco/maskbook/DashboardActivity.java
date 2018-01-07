@@ -97,7 +97,78 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void render() {
-        updateUserInfo();
+        User user = ((MaskbookApplication) getApplication()).getUser();
+        nameTextView.setText(user.getNickname());
+        powerTextView.setText(String.format(getString(R.string.power), user.getPower()));
+        try {
+            URL url = new URL(APIService.BASE_URL);
+            URL avatarUrl = new URL(url, user.getAvatar());
+            GlideApp
+                    .with(DashboardActivity.this)
+                    .load(avatarUrl)
+                    .placeholder(R.mipmap.default_avatar)
+                    .into((ImageView) findViewById(R.id.avatar));
+        } catch (MalformedURLException err) {
+            Log.e(TAG, "render: ", err);
+        }
+        ((DrawerLayout) findViewById(R.id.main_drawer_layout)).addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                updateUserInfo();
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+            }
+        });
+
+        // update header image
+        User self = ((MaskbookApplication) getApplication()).getUser();
+        final BlurringView blur = findViewById(R.id.header_blurring_view);
+        blur.setBlurredView(findViewById(R.id.header_background_wrapper));
+        API
+                .getHeaderPostFromUser(self.getId())
+                .subscribe(new CallBack<Post>() {
+                    @Override
+                    public void onSuccess(Post post) {
+                        GlideApp
+                                .with(DashboardActivity.this)
+                                .load(URLFormatter.formatImageURL(post.getImage()))
+                                .placeholder(R.drawable.bg)
+                                .listener(new RequestListener<Drawable>() {
+                                    @Override
+                                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                        blur.setVisibility(View.VISIBLE);
+                                        blur.invalidate();
+                                        return false;
+                                    }
+                                })
+                                .into((ImageView) findViewById(R.id.header_background));
+                    }
+
+                    @Override
+                    public void onFail(ErrorResponse e) {
+
+                    }
+
+                    @Override
+                    public void onException(Throwable e) {
+
+                    }
+                });
     }
 
     private void initList() {
