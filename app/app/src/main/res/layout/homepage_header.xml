@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="56dp">
+
+    <ImageView
+        android:id="@+id/homepage_bg"
+        android:layout_width="0dp"
+        android:layout_height="180dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <com.gcssloop.widget.RCRelativeLayout
+        android:id="@+id/avatar_wrapper"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        app:layout_constraintBottom_toBottomOf="@id/homepage_bg"
+        app:layout_constraintLeft_toLeftOf="@id/homepage_bg"
+        app:layout_constraintRight_toRightOf="@id/homepage_bg"
+        app:layout_constraintTop_toTopOf="@id/homepage_bg"
+        app:round_as_circle="true">
+
+        <ImageView
+            android:id="@+id/header_avatar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/default_avatar"/>
+    </com.gcssloop.widget.RCRelativeLayout>
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/colorTextWhite"
+        app:layout_constraintBottom_toBottomOf="@id/homepage_bg"
+        app:layout_constraintLeft_toLeftOf="@id/homepage_bg"
+        app:layout_constraintRight_toRightOf="@id/homepage_bg"/>
+
+</android.support.constraint.ConstraintLayout>

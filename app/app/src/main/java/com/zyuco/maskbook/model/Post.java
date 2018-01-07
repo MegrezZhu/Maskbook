@@ -10,7 +10,7 @@ public class Post {
     private Double parameter;
     private Integer price;
     private Date date;
-    private Boolean unlock;
+    private Boolean unlocked;
     private Boolean like;
 
     public Integer getId() {
@@ -70,11 +70,11 @@ public class Post {
     }
 
     public Boolean getUnlock() {
-        return unlock;
+        return unlocked;
     }
 
     public void setUnlock(Boolean unlock) {
-        this.unlock = unlock;
+        this.unlocked = unlock;
     }
 
     public Boolean getLike() {

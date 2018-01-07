@@ -6,14 +6,18 @@
     android:layout_height="match_parent"
     tools:context="com.zyuco.maskbook.PurchaseHistoryActivity">
 
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/post_list"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:focusableInTouchMode="true"
-        android:paddingTop="45dp" />
+        android:layout_height="match_parent">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/post_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:focusableInTouchMode="true"
+            android:paddingTop="45dp" />
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <include
         layout="@layout/toolbar"

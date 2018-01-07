@@ -48,12 +48,12 @@ import { autoLogin, errorHandler } from './lib/middlewares';
     // });
 
     // mock latency
-    app.use(async (ctx: IRouterContext, next: () => Promise<any>) => {
-      await new Promise(resolve => {
-        setTimeout(resolve, Math.random() * 1000);
-      });
-      await next();
-    })
+    // app.use(async (ctx: IRouterContext, next: () => Promise<any>) => {
+    //   await new Promise(resolve => {
+    //     setTimeout(resolve, Math.random() * 1000);
+    //   });
+    //   await next();
+    // })
   }
 
   app

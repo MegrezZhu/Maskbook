@@ -57,4 +57,7 @@ dependencies {
     implementation 'com.daimajia.easing:library:2.0@aar'
     implementation 'com.daimajia.androidanimations:library:2.3@aar'
     implementation 'com.fivehundredpx:blurringview:1.0.0'
+
+    implementation 'com.sackcentury:shinebutton:0.2.0'
+    implementation 'br.com.simplepass:loading-button-android:1.11.1'
 }
