@@ -1,25 +1,31 @@
 package com.zyuco.maskbook;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.widget.DrawerLayout;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.test.mock.MockApplication;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 
+import com.fivehundredpx.android.blur.BlurringView;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
 import com.melnykov.fab.FloatingActionButton;
 import com.zyuco.maskbook.lib.CommonAdapter;
+import com.zyuco.maskbook.lib.URLFormatter;
 import com.zyuco.maskbook.model.ErrorResponse;
 import com.zyuco.maskbook.model.Post;
 import com.zyuco.maskbook.model.User;
@@ -36,7 +42,7 @@ import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import io.reactivex.functions.Action;
 
 public class DashboardActivity extends AppCompatActivity {
-    private static final String TAG = "Maskbook.dashborad";
+    private static final String TAG = "Maskbook.dashboard";
 
     SwipeRefreshLayout swipeRefresher;
     FloatingActionButton button_publish;
@@ -53,40 +59,42 @@ public class DashboardActivity extends AppCompatActivity {
         initList();
         render();
         refreshPosts();
+
+//        hideStatusbar();
     }
 
     private void refreshPosts() {
         swipeRefresher.setRefreshing(true);
         postList.setLoading(true);
         API
-                .getPosts()
-                .doOnTerminate(new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        swipeRefresher.setRefreshing(false);
-                        postList.setLoading(false);
-                    }
-                })
-                .subscribe(new CallBack<List<Post>>() {
-                    @Override
-                    public void onSuccess(List<Post> posts) {
-                        List<Post> list = postList.getDataList();
-                        list.clear();
-                        list.addAll(posts);
-                        postList.getAdapter().notifyDataSetChanged();
-                        postList.resetEnded();
-                    }
+            .getPosts()
+            .doOnTerminate(new Action() {
+                @Override
+                public void run() throws Exception {
+                    swipeRefresher.setRefreshing(false);
+                    postList.setLoading(false);
+                }
+            })
+            .subscribe(new CallBack<List<Post>>() {
+                @Override
+                public void onSuccess(List<Post> posts) {
+                    List<Post> list = postList.getDataList();
+                    list.clear();
+                    list.addAll(posts);
+                    postList.getAdapter().notifyDataSetChanged();
+                    postList.resetEnded();
+                }
 
-                    @Override
-                    public void onFail(ErrorResponse e) {
+                @Override
+                public void onFail(ErrorResponse e) {
 
-                    }
+                }
 
-                    @Override
-                    public void onException(Throwable e) {
+                @Override
+                public void onException(Throwable e) {
 
-                    }
-                });
+                }
+            });
     }
 
     private void render() {
@@ -167,6 +175,14 @@ public class DashboardActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.likes).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DashboardActivity.this, LikesActivity.class);
+                startActivity(intent);
+            }
+        });
+
         swipeRefresher = findViewById(R.id.swipe_refresh);
         swipeRefresher.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -188,6 +204,12 @@ public class DashboardActivity extends AppCompatActivity {
     private void updateUserInfo() {
         User user = ((MaskbookApplication) getApplication()).getUser();
         powerTextView.setText(String.format(getString(R.string.power), user.getPower()));
+    }
+
+    private void hideStatusbar() {
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
     }
 
 }

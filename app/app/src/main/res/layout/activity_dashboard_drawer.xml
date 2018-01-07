@@ -1,53 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorTextWhite">
 
-
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/session1"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:background="@drawable/bg"
-        android:gravity="center"
-        android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="240dp">
 
-        <com.gcssloop.widget.RCRelativeLayout
-            android:id="@+id/avatar_wrapper"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            app:round_as_circle="true"
-            app:stroke_color="#f8f8f8">
+        <LinearLayout
+            android:id="@+id/header_background_wrapper"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/avatar"
+                android:id="@+id/header_background"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
-                android:src="@mipmap/default_avatar" />
-        </com.gcssloop.widget.RCRelativeLayout>
+                android:src="@drawable/bg"/>
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="username"
-            android:textColor="@color/colorTextWhite"
-            android:textSize="24sp" />
+        <com.fivehundredpx.android.blur.BlurringView
+            android:id="@+id/header_blurring_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible"
+            app:blurRadius="12"
+            app:downsampleFactor="4"
+            app:overlayColor="#00FFFFFF"/>
 
-        <TextView
-            android:id="@+id/power"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Power: 0"
-            android:textColor="@color/colorTextWhite"
-            android:textSize="16sp"
-            />
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.gcssloop.widget.RCRelativeLayout
+                android:id="@+id/avatar_wrapper"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                app:round_as_circle="true"
+                app:stroke_color="#f8f8f8">
+
+                <ImageView
+                    android:id="@+id/avatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/default_avatar"/>
+            </com.gcssloop.widget.RCRelativeLayout>
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="username"
+                android:textColor="@color/colorTextWhite"
+                android:textSize="24sp"/>
+
+            <TextView
+                android:id="@+id/power"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Power: 0"
+                android:textColor="@color/colorTextWhite"
+                android:textSize="16sp"
+                />
+        </LinearLayout>
+    </FrameLayout>
 
     <LinearLayout
         android:id="@+id/homepage"
@@ -66,7 +93,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_perm_identity_black_24dp" />
+            android:src="@mipmap/ic_perm_identity_black_24dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -75,7 +102,7 @@
             android:gravity="center"
             android:text="@string/menuitem_profile"
             android:textColor="#000"
-            android:textSize="20sp" />
+            android:textSize="20sp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -95,7 +122,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_visibility_black_24dp" />
+            android:src="@mipmap/ic_visibility_black_24dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -104,11 +131,11 @@
             android:gravity="center"
             android:text="@string/menuitem_unlock"
             android:textColor="#000"
-            android:textSize="20sp" />
+            android:textSize="20sp"/>
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/about"
+        android:id="@+id/likes"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_marginBottom="20dp"
@@ -122,16 +149,16 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_info_outline_black_24dp" />
+            android:src="@mipmap/ic_favorite_border_black_24dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="35dp"
             android:gravity="center"
-            android:text="@string/menuitem_about"
+            android:text="@string/menuitem_likes"
             android:textColor="#000"
-            android:textSize="20sp" />
+            android:textSize="20sp"/>
     </LinearLayout>
 
     <TextView
@@ -140,7 +167,7 @@
         android:layout_height="2dp"
         android:layout_marginBottom="15dp"
         android:background="@color/colorDrawerDivider"
-        app:layout_constraintBottom_toTopOf="@id/logout" />
+        app:layout_constraintBottom_toTopOf="@id/logout"/>
 
     <LinearLayout
         android:id="@+id/logout"
@@ -157,7 +184,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_exit_to_app_black_24dp" />
+            android:src="@mipmap/ic_exit_to_app_black_24dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -166,7 +193,7 @@
             android:gravity="center"
             android:text="@string/menuitem_logout"
             android:textColor="#000"
-            android:textSize="20sp" />
+            android:textSize="20sp"/>
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

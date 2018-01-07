@@ -25,10 +25,11 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface APIService {
-    String BASE_URL = "http://maskbook.megrez-says-hi.cn/api/";
+//    String BASE_URL = "http://www.zyuco.com:7001/api/";
 //    String BASE_URL = "http://laptop.zyuco.com:7001/api/";
 //    String BASE_URL = "http://192.168.191.1:7001";
 //    String BASE_URL = "http://10.0.2.2:7001/api/";
+    String BASE_URL = "http://maskbook.megrez-says-hi.cn/api/";
 
     @POST("join")
     @Multipart
@@ -68,13 +69,20 @@ public interface APIService {
                                             @Query("before")Date before,
                                             @Query("limit") int limit);
 
+    @GET("user/like")
+    Observable<List<Post>> getLike(@Query("before")Date date,
+                                   @Query("limit") int limit);
+
+    @GET("users/{id}/header")
+    Observable<List<Post>> getHeaderPostFromUser(@Path("id") int id);
+
     @GET("posts/{id}")
     Observable<Post> getPostDetail(@Path("id") int id);
 
     @POST("posts/{id}/like")
     Completable likePost(@Path("id") int id);
 
-    @DELETE("posts/{id}/like")
+    @DELETE("posts/{id}/lick")
     Completable unlikePost(@Path("id") int id);
 
     @POST("posts/{id}/unlock")

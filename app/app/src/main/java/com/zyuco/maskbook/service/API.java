@@ -18,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.functions.Function;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -98,12 +99,31 @@ public class API {
         return getPosts(new Date(), 3, PostFilter.all);
     }
 
+    public static Observable<List<Post>> getLike(Date before, int limit) {
+        return service.getLike(before, limit);
+    }
+
+    public static Observable<List<Post>> getLike() {
+        return service.getLike(new Date(), 30);
+    }
+
     public static Observable<List<Post>> getPostsFromUser(int userId, Date before, int limit) {
         return service.getPostsFromUser(userId, before, limit);
     }
 
     public static Observable<List<Post>> getPostsFromUser(int userId) {
         return getPostsFromUser(userId, new Date(), 30);
+    }
+
+    public static Observable<Post> getHeaderPostFromUser(int userId) {
+        return service.getHeaderPostFromUser(userId)
+            .map(new Function<List<Post>, Post>() {
+                @Override
+                public Post apply(List<Post> posts) throws Exception {
+                    if (posts.size() != 0) return posts.get(0);
+                    else return null;
+                }
+            });
     }
 
     public static Observable<Post> getPostDetail(int postId) {

@@ -10,12 +10,12 @@
     </style>
 
     <style name="AppTheme.Button" parent="Base.Widget.AppCompat.Button.Colored">
-        <item name="colorButtonNormal">@color/colorSecondaryPrimary</item>
+        <item name="colorButtonNormal">@color/colorPrimary</item>
         <item name="android:textColor">@color/colorTextWhite</item>
     </style>
 
     <style name="AppTheme.flatButton" parent="Base.Widget.AppCompat.Button.Borderless.Colored">
-        <item name="android:textColor">@color/colorSecondaryPrimary</item>
+        <item name="android:textColor">@color/colorPrimary</item>
     </style>
 
     <style name="AppTheme.splash" parent="AppTheme">
@@ -23,7 +23,7 @@
     </style>
 
     <style name="AppTheme.Button_Circle" parent="Base.Widget.AppCompat.Button.Colored">
-        <item name="colorButtonNormal">@color/colorSecondaryPrimary</item>
+        <item name="colorButtonNormal">@color/colorPrimary</item>
         <item name="android:textColor">@color/colorTextWhite</item>
         <item name="android:radius">40dp</item>
     </style>

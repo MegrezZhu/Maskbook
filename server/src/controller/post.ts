@@ -1,5 +1,5 @@
 import { validate } from 'class-validator';
-import { pick } from 'lodash';
+import { pick, sample } from 'lodash';
 import { relative } from 'path';
 import { publicDir } from '../config';
 import { assert, assertError } from '../lib/assert';
@@ -76,7 +76,7 @@ export async function getPosts (ctx: ILoggedInContext) {
       ctx.body = (await postService.getAllUnlocked(ctx.user.id, limit, before)).map(formatPost);
       break;
     case 'mine':
-      ctx.body = (await postService.getOnesPost(ctx.user.id, limit, before)).map(formatPost);
+      ctx.body = (await postService.getOnesPost(ctx.user.id, ctx.user.id, limit, before)).map(formatPost);
       break;
     default:
       assertError(`invalid filter '${filter}'`, ErrorCode.Invalid_Arguments);
@@ -94,7 +94,28 @@ export async function getOnesPosts (ctx: ILoggedInContext) {
     before = new Date();
   }
 
-  ctx.body = (await postService.getOnesPost(uid, limit, before)).map(formatPost);
+  ctx.body = (await postService.getOnesPost(ctx.user.id, uid, limit, before)).map(formatPost);
+}
+
+export async function getOnesLikedPosts (ctx: ILoggedInContext) {
+  let { limit, before }: { limit: number; before: Date } = ctx.query;
+  limit = Number(limit) || 30;
+  before = new Date(before);
+  if (isNaN(before.getFullYear())) { // invalid date
+    before = new Date();
+  }
+
+  ctx.body = (await postService.getOnesLikedPosts(ctx.user.id, limit, before)).map(formatPost);
+}
+
+export async function getOnesHeaderPost (ctx: ILoggedInContext) {
+  const { uid }: { uid: number } = ctx.params;
+  assert(!isNaN(uid), 'invalid uid', ErrorCode.Invalid_Arguments);
+
+  const list = await postService.getOnesPost(ctx.user.id, uid, 10, new Date()); // sample from latest 10 post
+  const post = sample(list) || null;
+
+  ctx.body = post ? [formatPost(post)] : [];
 }
 
 export async function like (ctx: ILoggedInContext) {

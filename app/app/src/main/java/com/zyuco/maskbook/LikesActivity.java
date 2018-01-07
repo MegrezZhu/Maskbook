@@ -13,35 +13,34 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
 
 import com.zyuco.maskbook.lib.HideToolBarListener;
-
 import com.zyuco.maskbook.model.ErrorResponse;
 import com.zyuco.maskbook.model.Post;
 import com.zyuco.maskbook.service.API;
 import com.zyuco.maskbook.tool.CallBack;
 import com.zyuco.maskbook.tool.PostList;
 
-
 import java.util.Date;
 import java.util.List;
 
 import io.reactivex.functions.Action;
 
-public class PurchaseHistoryActivity extends AppCompatActivity {
-    Toolbar toolbar;
-    PostList postList;
+public class LikesActivity extends AppCompatActivity {
+    private Toolbar toolbar;
+    private PostList postList;
 
-    SwipeRefreshLayout swipeRefresher;
+    private SwipeRefreshLayout swipeRefresher;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_purchase_history);
+        setContentView(R.layout.activity_likes);
 
         initListener();
         initList();
         initToolbar();
-        getUnlock();
-        hideStatusbar();
+        getLikes();
+//        hideStatusbar();
     }
 
     private void initListener() {
@@ -49,7 +48,7 @@ public class PurchaseHistoryActivity extends AppCompatActivity {
         swipeRefresher.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getUnlock();
+                getLikes();
             }
         });
     }
@@ -57,7 +56,7 @@ public class PurchaseHistoryActivity extends AppCompatActivity {
     private void initToolbar() {
         toolbar = findViewById(R.id.toolbar);
         TextView textView = findViewById(R.id.toolbar_title);
-        textView.setText(R.string.menuitem_unlock);
+        textView.setText(R.string.menuitem_likes);
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -102,14 +101,14 @@ public class PurchaseHistoryActivity extends AppCompatActivity {
             }
         };
 
-        postList = new PostList(this, "PurchaseHistory", -1);
+        postList = new PostList(this, "Likes", -1);
         postList.getRecyclerView().addOnScrollListener(onScrollListener);
     }
 
-    private void getUnlock() {
+    private void getLikes() {
         swipeRefresher.setRefreshing(true);
         postList.setLoading(true);
-        API.getPosts(new Date(), 30, API.PostFilter.unlocked)
+        API.getLike()
                 .doOnTerminate(new Action() {
                     @Override
                     public void run() throws Exception {
