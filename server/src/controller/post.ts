@@ -1,5 +1,5 @@
 import { validate } from 'class-validator';
-import { pick } from 'lodash';
+import { pick, sample } from 'lodash';
 import { relative } from 'path';
 import { publicDir } from '../config';
 import { assert, assertError } from '../lib/assert';
@@ -108,11 +108,12 @@ export async function getOnesLikedPosts (ctx: ILoggedInContext) {
   ctx.body = (await postService.getOnesLikedPosts(ctx.user.id, limit, before)).map(formatPost);
 }
 
-export async function getOnesFirstPost (ctx: ILoggedInContext) {
+export async function getOnesHeaderPost (ctx: ILoggedInContext) {
   const { uid }: { uid: number } = ctx.params;
   assert(!isNaN(uid), 'invalid uid', ErrorCode.Invalid_Arguments);
 
-  const [post] = await postService.getOnesPost(ctx.user.id, uid, 1, new Date());
+  const list = await postService.getOnesPost(ctx.user.id, uid, 10, new Date()); // sample from latest 10 post
+  const post = sample(list) || null;
 
   ctx.body = post ? [formatPost(post)] : [];
 }

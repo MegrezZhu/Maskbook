@@ -115,8 +115,8 @@ public class API {
         return getPostsFromUser(userId, new Date(), 30);
     }
 
-    public static Observable<Post> getFirstPostFromUser(int userId) {
-        return service.getFirstPostFromUser(userId)
+    public static Observable<Post> getHeaderPostFromUser(int userId) {
+        return service.getHeaderPostFromUser(userId)
             .map(new Function<List<Post>, Post>() {
                 @Override
                 public Post apply(List<Post> posts) throws Exception {

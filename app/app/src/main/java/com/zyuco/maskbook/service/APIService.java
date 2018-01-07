@@ -73,8 +73,8 @@ public interface APIService {
     Observable<List<Post>> getLike(@Query("before")Date date,
                                    @Query("limit") int limit);
 
-    @GET("users/{id}/posts/first")
-    Observable<List<Post>> getFirstPostFromUser(@Path("id") int id);
+    @GET("users/{id}/header")
+    Observable<List<Post>> getHeaderPostFromUser(@Path("id") int id);
 
     @GET("posts/{id}")
     Observable<Post> getPostDetail(@Path("id") int id);

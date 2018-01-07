@@ -1,11 +1,9 @@
 package com.zyuco.maskbook.lib;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,7 +16,6 @@ import com.fivehundredpx.android.blur.BlurringView;
 import com.sackcentury.shinebuttonlib.ShineButton;
 import com.zyuco.maskbook.GlideApp;
 import com.zyuco.maskbook.HomepageActivity;
-import com.zyuco.maskbook.LikesActivity;
 import com.zyuco.maskbook.MaskbookApplication;
 import com.zyuco.maskbook.R;
 import com.zyuco.maskbook.model.ErrorResponse;
@@ -34,7 +31,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 
 public class Converter {
     public static void convert(final Activity context, final ViewHolder holder, final Post post) {
@@ -163,7 +159,7 @@ public class Converter {
         blur.setVisibility(View.INVISIBLE);
         blur.setBlurredView(holder.getView(R.id.homepage_background_wrapper));
         API
-            .getFirstPostFromUser(user.getId())
+            .getHeaderPostFromUser(user.getId())
             .subscribe(new CallBack<Post>() {
                 @Override
                 public void onSuccess(Post post) {

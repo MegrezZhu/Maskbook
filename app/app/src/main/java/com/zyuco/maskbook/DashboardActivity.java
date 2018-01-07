@@ -1,6 +1,5 @@
 package com.zyuco.maskbook;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
@@ -8,12 +7,9 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.test.mock.MockApplication;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -292,7 +288,7 @@ public class DashboardActivity extends AppCompatActivity {
         final BlurringView blur = findViewById(R.id.header_blurring_view);
         blur.setBlurredView(findViewById(R.id.header_background_wrapper));
         API
-            .getFirstPostFromUser(self.getId())
+            .getHeaderPostFromUser(self.getId())
             .subscribe(new CallBack<Post>() {
                 @Override
                 public void onSuccess(Post post) {
