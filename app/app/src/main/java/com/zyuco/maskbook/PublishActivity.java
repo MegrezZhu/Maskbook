@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -53,6 +55,7 @@ public class PublishActivity extends AppCompatActivity {
         initBlurringView();
         initSeekbar();
         initToolbar();
+        hideStatusbar();
     }
 
     private void initSeekbar() {
@@ -266,5 +269,11 @@ public class PublishActivity extends AppCompatActivity {
 
     private void getInfo() {
 
+    }
+
+    private void hideStatusbar() {
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
     }
 }

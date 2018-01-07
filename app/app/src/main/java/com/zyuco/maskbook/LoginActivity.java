@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -19,8 +21,6 @@ import io.reactivex.functions.Action;
 public class LoginActivity extends AppCompatActivity {
     private final static String TAG = "Maskbook.login";
 
-    Button buttonSignup;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO: add background image (just like tumblr)
@@ -28,6 +28,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         initListener();
+        hideStatusbar();
     }
 
     private void initListener() {
@@ -93,5 +94,11 @@ public class LoginActivity extends AppCompatActivity {
                     Log.e(TAG, "onException: ", e);
                 }
             });
+    }
+
+    private void hideStatusbar() {
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
     }
 }

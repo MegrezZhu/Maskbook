@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
@@ -54,6 +56,7 @@ public class HomepageActivity extends AppCompatActivity {
         getSomeonePosts();
         initToolbar();
         render();
+        hideStatusbar();
     }
 
     private void initListener() {
@@ -172,6 +175,12 @@ public class HomepageActivity extends AppCompatActivity {
                 }
             });
 
+    }
+
+    private void hideStatusbar() {
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
     }
 
 }
