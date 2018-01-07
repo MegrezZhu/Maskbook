@@ -73,6 +73,7 @@ public class DashboardActivity extends AppCompatActivity {
                         list.clear();
                         list.addAll(posts);
                         postList.getAdapter().notifyDataSetChanged();
+                        postList.resetEnded();
                     }
 
                     @Override

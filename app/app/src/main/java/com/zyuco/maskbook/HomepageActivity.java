@@ -155,6 +155,7 @@ public class HomepageActivity extends AppCompatActivity {
                             list.add(fake);
                             list.addAll(posts);
                             postList.getAdapter().notifyDataSetChanged();
+                            postList.resetEnded();
                         }
 
                         @Override
