@@ -32,6 +32,7 @@ import com.zyuco.maskbook.tool.CallBack;
 import java.io.File;
 import java.util.List;
 
+import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import io.reactivex.functions.Action;
 
 public class PublishActivity extends AppCompatActivity {
@@ -40,12 +41,14 @@ public class PublishActivity extends AppCompatActivity {
     private BlurringView blur;
     private int radius = 0;
     private File selectedFile;
+    private CircularProgressButton postBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publish);
 
+        postBtn = findViewById(R.id.publish);
         initListener();
         initBlurringView();
         initSeekbar();
@@ -94,7 +97,7 @@ public class PublishActivity extends AppCompatActivity {
         final ImageView imagePicker = findViewById(R.id.imagepick);
         final ImageView imagePreview = findViewById(R.id.image_preview);
 
-        findViewById(R.id.publish).setOnClickListener(new View.OnClickListener() {
+        postBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 post();
@@ -158,16 +161,16 @@ public class PublishActivity extends AppCompatActivity {
                 return;
             }
         }
-
-        final View loadingMask = findViewById(R.id.loading_mask);
-        loadingMask.setVisibility(View.VISIBLE);
+        postBtn.startAnimation();
+        postBtn.setEnabled(false);
 
         API
             .newPost(selectedFile, radius, content, iPrice)
             .doOnTerminate(new Action() {
                 @Override
                 public void run() throws Exception {
-                    loadingMask.setVisibility(View.INVISIBLE);
+                    postBtn.revertAnimation();
+                    postBtn.setEnabled(true);
                 }
             })
             .subscribe(new CallBack<Post>() {
