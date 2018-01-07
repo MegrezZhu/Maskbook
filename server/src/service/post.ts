@@ -68,6 +68,18 @@ export async function getOnesPost (selfId: number, uid: number, limit: number, b
   return zip(entities, raw);
 }
 
+export async function getOnesLikedPosts (selfId: number, limit: number, before: Date): Promise<Post[]> {
+  const { raw, entities } = await repo.post.createQueryBuilder('post')
+    .innerJoinAndSelect('post.author', 'user')
+    .leftJoinAndSelect(Purchase, 'purchase', 'purchase.u_id = :selfId and purchase.p_id = post.p_id', { selfId })
+    .innerJoinAndSelect(Like, 'like', 'like.u_id = :selfId and like.p_id = post.p_id', { selfId })
+    .where('post.date < :before', { before: fixDate(before) })
+    .orderBy('post.date', 'DESC')
+    .limit(limit)
+    .getRawAndEntities();
+  return zip(entities, raw);
+}
+
 export async function newLike (user: User, pid: number) {
   try {
     const post = await repo.post.findOneById(pid);

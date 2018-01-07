@@ -99,6 +99,14 @@ public class API {
         return getPosts(new Date(), 3, PostFilter.all);
     }
 
+    public static Observable<List<Post>> getLike(Date before, int limit) {
+        return service.getLike(before, limit);
+    }
+
+    public static Observable<List<Post>> getLike() {
+        return service.getLike(new Date(), 30);
+    }
+
     public static Observable<List<Post>> getPostsFromUser(int userId, Date before, int limit) {
         return service.getPostsFromUser(userId, before, limit);
     }

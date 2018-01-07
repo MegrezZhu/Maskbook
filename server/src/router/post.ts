@@ -13,6 +13,7 @@ router
   .post('/posts/:pid/like', loginGuard(postController.like))
   .delete('/posts/:pid/lick', loginGuard(postController.unlike))
   .post('/posts/:pid/unlock', loginGuard(postController.unlock))
-  .get('/users/:uid/posts/first', loginGuard(postController.getOnesFirstPost));
+  .get('/users/:uid/posts/first', loginGuard(postController.getOnesFirstPost))
+  .get('/user/like', loginGuard(postController.getOnesLikedPosts));
 
 export default router;

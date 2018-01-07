@@ -97,6 +97,17 @@ export async function getOnesPosts (ctx: ILoggedInContext) {
   ctx.body = (await postService.getOnesPost(ctx.user.id, uid, limit, before)).map(formatPost);
 }
 
+export async function getOnesLikedPosts (ctx: ILoggedInContext) {
+  let { limit, before }: { limit: number; before: Date } = ctx.query;
+  limit = Number(limit) || 30;
+  before = new Date(before);
+  if (isNaN(before.getFullYear())) { // invalid date
+    before = new Date();
+  }
+
+  ctx.body = (await postService.getOnesLikedPosts(ctx.user.id, limit, before)).map(formatPost);
+}
+
 export async function getOnesFirstPost (ctx: ILoggedInContext) {
   const { uid }: { uid: number } = ctx.params;
   assert(!isNaN(uid), 'invalid uid', ErrorCode.Invalid_Arguments);
