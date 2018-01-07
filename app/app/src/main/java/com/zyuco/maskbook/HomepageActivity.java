@@ -37,6 +37,7 @@ public class HomepageActivity extends AppCompatActivity {
     Toolbar toolbar;
     private static final String TAG = "Maskbook.homepage";
     SwipeRefreshLayout swipeRefresher;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,47 +123,53 @@ public class HomepageActivity extends AppCompatActivity {
 
     private void render() {
         boolean ismine = isMine();
-        User user = ismine ? ((MaskbookApplication) getApplication()).getUser() : (User)getIntent().getSerializableExtra("user");
+        User user = ismine ? ((MaskbookApplication) getApplication()).getUser() : (User) getIntent().getSerializableExtra("user");
 
         if (!ismine) {
             TextView toolbar_textView = findViewById(R.id.toolbar_title);
-            toolbar_textView.setText(user.getNickname() + "'s Page");
+            toolbar_textView.setText(String.format(getResources().getString(R.string.homepage_header), user.getNickname()));
         }
     }
 
     private void getSomeonePosts() {
-        final User user = isMine() ? ((MaskbookApplication) getApplication()).getUser() : (User)getIntent().getSerializableExtra("user");
-        API.getPostsFromUser(user.getId())
-                .doOnTerminate(new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        swipeRefresher.setRefreshing(false);
-                        postList.setLoading(false);
-                    }
-                })
-                .subscribe(new CallBack<List<Post>>() {
-                        @Override
-                        public void onSuccess(List<Post> posts) {
-                            List<Post> list = postList.getDataList();
-                            list.clear();
-                            Post fake = new Post();
-                            fake.setId(-1);
-                            fake.setAuthor(user);
-                            list.add(fake);
-                            list.addAll(posts);
-                            postList.getAdapter().notifyDataSetChanged();
-                        }
+        final User user = isMine() ? ((MaskbookApplication) getApplication()).getUser() : (User) getIntent().getSerializableExtra("user");
+        API
+            .getPostsFromUser(user.getId())
+            .doOnTerminate(new Action() {
+                @Override
+                public void run() throws Exception {
+                    swipeRefresher.setRefreshing(false);
+                    postList.setLoading(false);
+                }
+            })
+            .subscribe(new CallBack<List<Post>>() {
+                @Override
+                public void onSuccess(List<Post> posts) {
+                    List<Post> list = postList.getDataList();
+                    list.clear();
 
-                        @Override
-                        public void onFail(ErrorResponse e) {
+                    // fake post as header indicator
+                    Post fake = new Post();
+                    fake.setId(-1);
+                    fake.setAuthor(user);
+                    list.add(fake);
 
-                        }
+                    list.addAll(posts);
+                    postList.getAdapter().notifyDataSetChanged();
 
-                        @Override
-                        public void onException(Throwable e) {
+                    postList.resetEnded();
+                }
 
-                        }
-                    });
+                @Override
+                public void onFail(ErrorResponse e) {
+
+                }
+
+                @Override
+                public void onException(Throwable e) {
+
+                }
+            });
 
     }
 
