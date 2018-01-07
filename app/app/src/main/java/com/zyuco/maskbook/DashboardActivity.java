@@ -223,7 +223,6 @@ public class DashboardActivity extends AppCompatActivity {
                         .subscribe(new Action() {
                             @Override
                             public void run() throws Exception {
-                                unlockButton.revertAnimation();
                                 dialog.dismiss();
                                 updateUserInfo();
                                 post.setUnlock(true);

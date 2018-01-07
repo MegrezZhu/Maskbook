@@ -146,7 +146,7 @@ public class Converter {
         holder.getView(R.id.post).setVisibility(View.GONE);
         holder.getView(R.id.header).setVisibility(View.VISIBLE);
 
-        TextView name_textView = holder.getView(R.id.name);
+        TextView name_textView = holder.getView(R.id.header_name);
         name_textView.setText(user.getNickname());
 
         try {
