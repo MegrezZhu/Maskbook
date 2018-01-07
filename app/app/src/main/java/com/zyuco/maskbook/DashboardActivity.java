@@ -6,6 +6,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.test.mock.MockApplication;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -87,8 +88,7 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void render() {
-        User user = ((MaskbookApplication) getApplication()).getUser();
-        updateUserInfo(user);
+        updateUserInfo();
     }
 
     private void initList() {
@@ -102,7 +102,7 @@ public class DashboardActivity extends AppCompatActivity {
                     @Override
                     public void onClick(int position, Post data) {
                         User self = ((MaskbookApplication) getApplication()).getUser();
-                        if (!data.getUnlock() && data.getParameter() != 0 && self.getId().intValue() != data.getAuthor().getId().intValue()) {
+                        if (!data.getUnlock() && data.getParameter() != 0 && !self.getId().equals(data.getAuthor().getId())) {
                             initDialog(data, position);
                         }
                     }
@@ -217,7 +217,7 @@ public class DashboardActivity extends AppCompatActivity {
                             public void run() throws Exception {
                                 unlockButton.revertAnimation();
                                 dialog.dismiss();
-                                updateUserInfo(null);
+                                updateUserInfo();
                                 post.setUnlock(true);
                                 postList.getAdapter().notifyItemChanged(posInList, true);
                             }
@@ -228,40 +228,37 @@ public class DashboardActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void updateUserInfo(User user) {
-        if (user == null) {
-            API.getUserInformation()
-                    .subscribe(new CallBack<User>() {
-                        @Override
-                        public void onSuccess(User user) {
-                            updateUserInfo(user);
+    private void updateUserInfo() {
+        API.getUserInformation()
+                .subscribe(new CallBack<User>() {
+                    @Override
+                    public void onSuccess(User user) {
+                        ((MaskbookApplication) getApplication()).setUser(user);
+                        nameTextView.setText(user.getNickname());
+                        powerTextView.setText(String.format(getString(R.string.power), user.getPower()));
+                        try {
+                            URL url = new URL(APIService.BASE_URL);
+                            URL avatarUrl = new URL(url, user.getAvatar());
+                            GlideApp
+                                    .with(DashboardActivity.this)
+                                    .load(avatarUrl)
+                                    .placeholder(R.mipmap.default_avatar)
+                                    .into((ImageView) findViewById(R.id.avatar));
+                        } catch (MalformedURLException err) {
+                            Log.e(TAG, "render: ", err);
                         }
+                    }
 
-                        @Override
-                        public void onFail(ErrorResponse e) {
-                            Log.e(TAG, e.getMessage());
-                        }
+                    @Override
+                    public void onFail(ErrorResponse e) {
+                        Log.e(TAG, e.getMessage());
+                    }
 
-                        @Override
-                        public void onException(Throwable e) {
-                            Log.e(TAG, e.getMessage());
-                        }
-                    });
-        } else {
-            nameTextView.setText(user.getNickname());
-            powerTextView.setText(String.format(getString(R.string.power), user.getPower()));
-            try {
-                URL url = new URL(APIService.BASE_URL);
-                URL avatarUrl = new URL(url, user.getAvatar());
-                GlideApp
-                        .with(this)
-                        .load(avatarUrl)
-                        .placeholder(R.mipmap.default_avatar)
-                        .into((ImageView) findViewById(R.id.avatar));
-            } catch (MalformedURLException err) {
-                Log.e(TAG, "render: ", err);
-            }
-        }
+                    @Override
+                    public void onException(Throwable e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                });
     }
 
 }
