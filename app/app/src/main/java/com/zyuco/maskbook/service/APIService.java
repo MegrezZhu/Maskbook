@@ -25,8 +25,8 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface APIService {
-//    String BASE_URL = "http://www.zyuco.com:7001/api/";
-    String BASE_URL = "http://laptop.zyuco.com:7001/api/";
+    String BASE_URL = "http://maskbook.megrez-says-hi.cn/api/";
+//    String BASE_URL = "http://laptop.zyuco.com:7001/api/";
 //    String BASE_URL = "http://192.168.191.1:7001";
 //    String BASE_URL = "http://10.0.2.2:7001/api/";
 

@@ -2,6 +2,7 @@ package com.zyuco.maskbook;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -89,30 +90,44 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void render() {
-        updateUserInfo();
+        User user = ((MaskbookApplication) getApplication()).getUser();
+        nameTextView.setText(user.getNickname());
+        powerTextView.setText(String.format(getString(R.string.power), user.getPower()));
+        try {
+            URL url = new URL(APIService.BASE_URL);
+            URL avatarUrl = new URL(url, user.getAvatar());
+            GlideApp
+                    .with(DashboardActivity.this)
+                    .load(avatarUrl)
+                    .placeholder(R.mipmap.default_avatar)
+                    .into((ImageView) findViewById(R.id.avatar));
+        } catch (MalformedURLException err) {
+            Log.e(TAG, "render: ", err);
+        }
+        ((DrawerLayout) findViewById(R.id.main_drawer_layout)).addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                updateUserInfo();
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+            }
+        });
     }
 
     private void initList() {
         postList = new PostList(this, "Dashboard", -1);
         button_publish = findViewById(R.id.publish);
         button_publish.attachToRecyclerView(postList.getRecyclerView());
-
-        postList
-                .getAdapter()
-                .setOnItemClickListemer(new CommonAdapter.OnItemClickListener<Post>() {
-                    @Override
-                    public void onClick(int position, Post data) {
-                        User self = ((MaskbookApplication) getApplication()).getUser();
-                        if (!data.getUnlock() && data.getParameter() != 0 && !self.getId().equals(data.getAuthor().getId())) {
-                            initDialog(data, position);
-                        }
-                    }
-
-                    @Override
-                    public void onLongClick(int position, Post data) {
-
-                    }
-                });
     }
 
     private void initListener() {
@@ -170,102 +185,9 @@ public class DashboardActivity extends AppCompatActivity {
         cookie.clear();
     }
 
-    private void initDialog(final Post post, final int posInList) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(DashboardActivity.this);
-        LayoutInflater inflater = DashboardActivity.this.getLayoutInflater();
-        User self = ((MaskbookApplication) getApplication()).getUser();
-
-        final View view = inflater.inflate(R.layout.dialog_content, null);
-        final AlertDialog dialog = builder.setView(view).create();
-
-        final CircularProgressButton unlockButton = view.findViewById(R.id.unlock);
-        final TextView cost = view.findViewById(R.id.power_cost);
-        final TextView times = view.findViewById(R.id.click_time);
-
-        int clickTimes = 0, powerCost = 0;
-        powerCost = Math.min(self.getPower(), post.getPrice());
-        clickTimes = Math.max(0, post.getPrice() - self.getPower());
-        cost.setText(String.valueOf(powerCost));
-        times.setText(String.valueOf(clickTimes));
-        unlockButton.setEnabled(clickTimes == 0);
-        unlockButton.setAlpha(unlockButton.isEnabled() ? 1.0f : 0.2f);
-
-        view.findViewById(R.id.click).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int num = Math.max(0, Integer.valueOf(times.getText().toString()) - 1);
-                times.setText(String.valueOf(num));
-
-                YoYo.with(Techniques.BounceIn)
-                        .duration(500)
-                        .playOn(times);
-
-                if (num == 0) {
-                    unlockButton.setEnabled(true);
-                    unlockButton.setAlpha(1.0f);
-                }
-            }
-        });
-
-        unlockButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                unlockButton.startAnimation();
-
-                API
-                        .unlockPost(post.getId())
-                        .doOnTerminate(new Action() {
-                            @Override
-                            public void run() throws Exception {
-                                unlockButton.revertAnimation();
-                            }
-                        })
-                        .subscribe(new Action() {
-                            @Override
-                            public void run() throws Exception {
-                                dialog.dismiss();
-                                updateUserInfo();
-                                post.setUnlock(true);
-                                postList.getAdapter().notifyItemChanged(posInList, true);
-                            }
-                        });
-            }
-        });
-
-        dialog.show();
-    }
-
     private void updateUserInfo() {
-        API.getUserInformation()
-                .subscribe(new CallBack<User>() {
-                    @Override
-                    public void onSuccess(User user) {
-                        ((MaskbookApplication) getApplication()).setUser(user);
-                        nameTextView.setText(user.getNickname());
-                        powerTextView.setText(String.format(getString(R.string.power), user.getPower()));
-                        try {
-                            URL url = new URL(APIService.BASE_URL);
-                            URL avatarUrl = new URL(url, user.getAvatar());
-                            GlideApp
-                                    .with(DashboardActivity.this)
-                                    .load(avatarUrl)
-                                    .placeholder(R.mipmap.default_avatar)
-                                    .into((ImageView) findViewById(R.id.avatar));
-                        } catch (MalformedURLException err) {
-                            Log.e(TAG, "render: ", err);
-                        }
-                    }
-
-                    @Override
-                    public void onFail(ErrorResponse e) {
-                        Log.e(TAG, e.getMessage());
-                    }
-
-                    @Override
-                    public void onException(Throwable e) {
-                        Log.e(TAG, e.getMessage());
-                    }
-                });
+        User user = ((MaskbookApplication) getApplication()).getUser();
+        powerTextView.setText(String.format(getString(R.string.power), user.getPower()));
     }
 
 }
