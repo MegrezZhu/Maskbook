@@ -39,6 +39,8 @@ public class DashboardActivity extends AppCompatActivity {
     SwipeRefreshLayout swipeRefresher;
     FloatingActionButton button_publish;
     PostList postList;
+    TextView powerTextView;
+    TextView nameTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,18 +88,7 @@ public class DashboardActivity extends AppCompatActivity {
 
     private void render() {
         User user = ((MaskbookApplication) getApplication()).getUser();
-        ((TextView) findViewById(R.id.name)).setText(user.getNickname());
-        try {
-            URL url = new URL(APIService.BASE_URL);
-            URL avatarUrl = new URL(url, user.getAvatar());
-            GlideApp
-                    .with(this)
-                    .load(avatarUrl)
-                    .placeholder(R.mipmap.default_avatar)
-                    .into((ImageView) findViewById(R.id.avatar));
-        } catch (MalformedURLException err) {
-            Log.e(TAG, "render: ", err);
-        }
+        updateUserInfo(user);
     }
 
     private void initList() {
@@ -106,21 +97,21 @@ public class DashboardActivity extends AppCompatActivity {
         button_publish.attachToRecyclerView(postList.getRecyclerView());
 
         postList
-            .getAdapter()
-            .setOnItemClickListemer(new CommonAdapter.OnItemClickListener<Post>() {
-                @Override
-                public void onClick(int position, Post data) {
-                    User self = ((MaskbookApplication) getApplication()).getUser();
-                    if (!data.getUnlock() && data.getParameter() != 0 && self.getId().intValue() != data.getAuthor().getId().intValue()) {
-                        initDialog(data, position);
+                .getAdapter()
+                .setOnItemClickListemer(new CommonAdapter.OnItemClickListener<Post>() {
+                    @Override
+                    public void onClick(int position, Post data) {
+                        User self = ((MaskbookApplication) getApplication()).getUser();
+                        if (!data.getUnlock() && data.getParameter() != 0 && self.getId().intValue() != data.getAuthor().getId().intValue()) {
+                            initDialog(data, position);
+                        }
                     }
-                }
 
-                @Override
-                public void onLongClick(int position, Post data) {
+                    @Override
+                    public void onLongClick(int position, Post data) {
 
-                }
-            });
+                    }
+                });
     }
 
     private void initListener() {
@@ -167,6 +158,9 @@ public class DashboardActivity extends AppCompatActivity {
                 refreshPosts();
             }
         });
+
+        powerTextView = findViewById(R.id.power);
+        nameTextView = findViewById(R.id.name);
     }
 
     private void logout() {
@@ -178,14 +172,14 @@ public class DashboardActivity extends AppCompatActivity {
     private void initDialog(final Post post, final int posInList) {
         AlertDialog.Builder builder = new AlertDialog.Builder(DashboardActivity.this);
         LayoutInflater inflater = DashboardActivity.this.getLayoutInflater();
-      
+
         final View view = inflater.inflate(R.layout.dialog_content, null);
         final AlertDialog dialog = builder.setView(view).create();
 
         final CircularProgressButton unlockButton = view.findViewById(R.id.unlock);
         final TextView times = view.findViewById(R.id.click_time);
 
-        times.setText(post.getPrice().toString());
+        times.setText(String.valueOf(post.getPrice()));
         unlockButton.setEnabled(false);
         unlockButton.setAlpha(0.5f);
         view.findViewById(R.id.click).setOnClickListener(new View.OnClickListener() {
@@ -195,8 +189,8 @@ public class DashboardActivity extends AppCompatActivity {
                 times.setText(String.valueOf(num));
 
                 YoYo.with(Techniques.BounceIn)
-                    .duration(500)
-                    .playOn(times);
+                        .duration(500)
+                        .playOn(times);
 
                 if (num == 0) {
                     unlockButton.setEnabled(true);
@@ -211,27 +205,63 @@ public class DashboardActivity extends AppCompatActivity {
                 unlockButton.startAnimation();
 
                 API
-                    .unlockPost(post.getId())
-                    .doOnTerminate(new Action() {
-                        @Override
-                        public void run() throws Exception {
-                            unlockButton.revertAnimation();
-                        }
-                    })
-                    .subscribe(new Action() {
-                        @Override
-                        public void run() throws Exception {
-                            unlockButton.revertAnimation();
-                            dialog.dismiss();
-
-                            post.setUnlock(true);
-                            postList.getAdapter().notifyItemChanged(posInList, true);
-                        }
-                    });
+                        .unlockPost(post.getId())
+                        .doOnTerminate(new Action() {
+                            @Override
+                            public void run() throws Exception {
+                                unlockButton.revertAnimation();
+                            }
+                        })
+                        .subscribe(new Action() {
+                            @Override
+                            public void run() throws Exception {
+                                unlockButton.revertAnimation();
+                                dialog.dismiss();
+                                updateUserInfo(null);
+                                post.setUnlock(true);
+                                postList.getAdapter().notifyItemChanged(posInList, true);
+                            }
+                        });
             }
         });
 
         dialog.show();
+    }
+
+    private void updateUserInfo(User user) {
+        if (user == null) {
+            API.getUserInformation()
+                    .subscribe(new CallBack<User>() {
+                        @Override
+                        public void onSuccess(User user) {
+                            updateUserInfo(user);
+                        }
+
+                        @Override
+                        public void onFail(ErrorResponse e) {
+                            Log.e(TAG, e.getMessage());
+                        }
+
+                        @Override
+                        public void onException(Throwable e) {
+                            Log.e(TAG, e.getMessage());
+                        }
+                    });
+        } else {
+            nameTextView.setText(user.getNickname());
+            powerTextView.setText(String.format(getString(R.string.power), user.getPower()));
+            try {
+                URL url = new URL(APIService.BASE_URL);
+                URL avatarUrl = new URL(url, user.getAvatar());
+                GlideApp
+                        .with(this)
+                        .load(avatarUrl)
+                        .placeholder(R.mipmap.default_avatar)
+                        .into((ImageView) findViewById(R.id.avatar));
+            } catch (MalformedURLException err) {
+                Log.e(TAG, "render: ", err);
+            }
+        }
     }
 
 }
