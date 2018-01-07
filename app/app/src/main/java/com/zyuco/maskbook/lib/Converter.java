@@ -22,12 +22,15 @@ import com.zyuco.maskbook.MaskbookApplication;
 import com.zyuco.maskbook.R;
 import com.zyuco.maskbook.model.Post;
 import com.zyuco.maskbook.model.User;
+import com.zyuco.maskbook.service.API;
 import com.zyuco.maskbook.service.APIService;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import io.reactivex.functions.Action;
 
 public class Converter {
     public static void convert(final Activity context, final ViewHolder holder, final Post post) {
@@ -79,7 +82,7 @@ public class Converter {
                 @Override
                 public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                     User self = ((MaskbookApplication) context.getApplication()).getUser();
-                    if (!post.getUnlock() && post.getParameter() != 0 && post.getAuthor().getId().intValue() != self.getId().intValue()) {
+                    if (!post.getUnlock() && post.getParameter() != 0 && !post.getAuthor().getId().equals(self.getId())) {
                         View image = holder.getView(R.id.image_wrapper);
                         blur.setVisibility(View.VISIBLE);
                         blur.setBlurRadius(post.getParameter().intValue());
@@ -110,35 +113,33 @@ public class Converter {
         });
 
         final ShineButton shine_button = (ShineButton) holder.getView(R.id.shine_button);
-        shine_button.setShineDistanceMultiple(1.5f);
-//        shine_button.setBtnColor(post.getLike().equals(true) ? R.color.color_shine_button_fill : R.color.color_shine_button);
-//        shine_button.setBtnFillColor(post.getLike().equals(false) ? R.color.color_shine_button_fill : R.color.color_shine_button);
+        shine_button.setChecked(post.getLike());
         shine_button.init(context);
 
-//        shine_button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (post.getLike()) {
-//                    API.deletePost(post.getId())
-//                            .subscribe(new Action() {
-//                                @Override
-//                                public void run() throws Exception {
-//                                    post.setLike(false);
-//                                    adapter.notifyDataSetChanged();
-//                                }
-//                            });
-//                } else {
-//                    API.likePost(post.getId())
-//                            .subscribe(new Action() {
-//                                @Override
-//                                public void run() throws Exception {
-//                                    post.setLike(true);
-//                                    adapter.notifyDataSetChanged();
-//                                }
-//                            });
-//                }
-//            }
-//        });
+        shine_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (post.getLike()) {
+                    API.deletePost(post.getId())
+                            .subscribe(new Action() {
+                                @Override
+                                public void run() throws Exception {
+                                    post.setLike(false);
+                                    shine_button.setChecked(false);
+                                }
+                            });
+                } else {
+                    API.likePost(post.getId())
+                            .subscribe(new Action() {
+                                @Override
+                                public void run() throws Exception {
+                                    post.setLike(true);
+                                    shine_button.setChecked(true);
+                                }
+                            });
+                }
+            }
+        });
     }
 
     public static void convertHeader(final Activity context, final ViewHolder holder, User user) {

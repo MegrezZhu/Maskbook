@@ -27,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:src="@mipmap/signup_avatar" />
+                android:src="@mipmap/default_avatar" />
         </com.gcssloop.widget.RCRelativeLayout>
 
         <TextView
@@ -35,9 +35,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="xxxxx"
+            android:text="username"
             android:textColor="@color/colorTextWhite"
             android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/power"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Power: 0"
+            android:textColor="@color/colorTextWhite"
+            android:textSize="16sp"
+            />
     </LinearLayout>
 
     <LinearLayout
