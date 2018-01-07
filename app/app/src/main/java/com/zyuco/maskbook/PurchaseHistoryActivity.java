@@ -29,6 +29,7 @@ public class PurchaseHistoryActivity extends AppCompatActivity {
     PostList postList;
 
     SwipeRefreshLayout swipeRefresher;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +52,7 @@ public class PurchaseHistoryActivity extends AppCompatActivity {
     }
 
     private void initToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         TextView textView = findViewById(R.id.toolbar_title);
         textView.setText(R.string.menuitem_unlock);
         setSupportActionBar(toolbar);
