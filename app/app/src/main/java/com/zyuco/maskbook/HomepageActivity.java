@@ -37,11 +37,15 @@ public class HomepageActivity extends AppCompatActivity {
     Toolbar toolbar;
     private static final String TAG = "Maskbook.homepage";
     SwipeRefreshLayout swipeRefresher;
+    User user;
+    User self;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
 
+        user = (User) HomepageActivity.this.getIntent().getSerializableExtra("user");
+        self = ((MaskbookApplication) getApplication()).getUser();
         initListener();
         initList();
         getSomeonePosts();
@@ -95,7 +99,6 @@ public class HomepageActivity extends AppCompatActivity {
             }
         };
 
-        User user = (User) HomepageActivity.this.getIntent().getSerializableExtra("user");
         postList = new PostList(this, "Homepage", isMine() ? -1 : user.getId());
         postList.getRecyclerView().addOnScrollListener(onScrollListener);
         postList.getRecyclerView().setNestedScrollingEnabled(true);
@@ -114,25 +117,26 @@ public class HomepageActivity extends AppCompatActivity {
     }
 
     private boolean isMine() {
-        User user = (User) HomepageActivity.this.getIntent().getSerializableExtra("user");
         if (user == null) return true;
-        return user.getId().equals(((MaskbookApplication) getApplication()).getUser().getId());
+        return user.getId().equals(self.getId());
     }
 
 
     private void render() {
         boolean ismine = isMine();
-        User user = ismine ? ((MaskbookApplication) getApplication()).getUser() : (User)getIntent().getSerializableExtra("user");
+        User u = ismine ? self : user;
 
         if (!ismine) {
             TextView toolbar_textView = findViewById(R.id.toolbar_title);
-            toolbar_textView.setText(user.getNickname() + "'s Page");
+            toolbar_textView.setText(u.getNickname() + "'s Page");
         }
     }
 
     private void getSomeonePosts() {
-        final User user = isMine() ? ((MaskbookApplication) getApplication()).getUser() : (User)getIntent().getSerializableExtra("user");
-        API.getPostsFromUser(user.getId())
+        swipeRefresher.setRefreshing(true);
+        postList.setLoading(true);
+        final User u = isMine() ? self : user;
+        API.getPostsFromUser(u.getId())
                 .doOnTerminate(new Action() {
                     @Override
                     public void run() throws Exception {
@@ -147,7 +151,7 @@ public class HomepageActivity extends AppCompatActivity {
                             list.clear();
                             Post fake = new Post();
                             fake.setId(-1);
-                            fake.setAuthor(user);
+                            fake.setAuthor(u);
                             list.add(fake);
                             list.addAll(posts);
                             postList.getAdapter().notifyDataSetChanged();

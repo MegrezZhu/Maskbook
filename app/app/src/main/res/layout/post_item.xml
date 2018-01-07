@@ -9,8 +9,7 @@
         android:id="@+id/post"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginBottom="10dp"
         android:background="#fbfbfb"
         android:elevation="5dp"
         android:orientation="vertical">
@@ -120,41 +119,14 @@
             app:shine_distance_multiple="1.5"
             app:small_shine_offset_angle="20" />
         </android.support.constraint.ConstraintLayout>
-
-
-        <!--<TextView-->
-        <!--android:id="@+id/like_num"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginRight="25dp"-->
-        <!--android:layout_marginTop="5dp"-->
-        <!--android:text="100"-->
-        <!--android:textColor="#333"-->
-        <!--android:textSize="16sp"-->
-        <!--app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--app:layout_constraintRight_toRightOf="parent"-->
-        <!--app:layout_constraintTop_toBottomOf="@+id/image_wrapper"-->
-        <!--/>-->
-
-        <!--<com.ldoublem.thumbUplib.ThumbUpView-->
-        <!--android:id="@+id/tpv"-->
-        <!--android:layout_width="20dp"-->
-        <!--android:layout_height="20dp"-->
-        <!--android:layout_marginRight="30dp"-->
-        <!--android:layout_marginTop="5dp"-->
-        <!--app:cracksColor="#33475f"-->
-        <!--app:edgeColor="#9d55b8"-->
-        <!--app:fillColor="#ea8010"-->
-        <!--app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--app:layout_constraintRight_toRightOf="@+id/like_num"-->
-        <!--app:layout_constraintTop_toBottomOf="@+id/image_wrapper"-->
-        <!--app:unlikeType="1"/>-->
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="45dp"
         android:visibility="gone">
 
         <include layout="@layout/homepage_header"/>
