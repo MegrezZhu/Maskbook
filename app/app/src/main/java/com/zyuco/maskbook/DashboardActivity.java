@@ -152,6 +152,14 @@ public class DashboardActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.likes).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DashboardActivity.this, LikesActivity.class);
+                startActivity(intent);
+            }
+        });
+
         swipeRefresher = findViewById(R.id.swipe_refresh);
         swipeRefresher.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

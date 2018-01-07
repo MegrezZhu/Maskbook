@@ -108,7 +108,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/about"
+        android:id="@+id/likes"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_marginBottom="20dp"
@@ -122,14 +122,14 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_info_outline_black_24dp" />
+            android:src="@mipmap/ic_favorite_border_black_24dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="35dp"
             android:gravity="center"
-            android:text="@string/menuitem_about"
+            android:text="@string/menuitem_likes"
             android:textColor="#000"
             android:textSize="20sp" />
     </LinearLayout>
