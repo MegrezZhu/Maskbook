@@ -18,6 +18,7 @@ import com.fivehundredpx.android.blur.BlurringView;
 import com.sackcentury.shinebuttonlib.ShineButton;
 import com.zyuco.maskbook.GlideApp;
 import com.zyuco.maskbook.HomepageActivity;
+import com.zyuco.maskbook.LikesActivity;
 import com.zyuco.maskbook.MaskbookApplication;
 import com.zyuco.maskbook.R;
 import com.zyuco.maskbook.model.Post;
@@ -31,6 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 
 public class Converter {
     public static void convert(final Activity context, final ViewHolder holder, final Post post) {
@@ -112,7 +114,7 @@ public class Converter {
             }
         });
 
-        final ShineButton shine_button = (ShineButton) holder.getView(R.id.shine_button);
+        final ShineButton shine_button = holder.getView(R.id.shine_button);
         shine_button.setChecked(post.getLike());
         shine_button.init(context);
 
@@ -120,23 +122,23 @@ public class Converter {
             @Override
             public void onClick(View view) {
                 if (post.getLike()) {
-                    API.deletePost(post.getId())
-                            .subscribe(new Action() {
-                                @Override
-                                public void run() throws Exception {
-                                    post.setLike(false);
-                                    shine_button.setChecked(false);
-                                }
-                            });
+                    API.unlikePost(post.getId())
+                        .subscribe(new Action() {
+                            @Override
+                            public void run() throws Exception {
+                                post.setLike(false);
+                                shine_button.setChecked(false);
+                            }
+                        });
                 } else {
                     API.likePost(post.getId())
-                            .subscribe(new Action() {
-                                @Override
-                                public void run() throws Exception {
-                                    post.setLike(true);
-                                    shine_button.setChecked(true);
-                                }
-                            });
+                        .subscribe(new Action() {
+                            @Override
+                            public void run() throws Exception {
+                                post.setLike(true);
+                                shine_button.setChecked(true);
+                            }
+                        });
                 }
             }
         });
@@ -149,15 +151,41 @@ public class Converter {
         TextView name_textView = holder.getView(R.id.header_name);
         name_textView.setText(user.getNickname());
 
-        try {
-            URL url = new URL(APIService.BASE_URL);
-            URL avatarUrl = new URL(url, user.getAvatar());
-            GlideApp
-                .with(context)
-                .load(avatarUrl)
-                .placeholder(R.mipmap.default_avatar)
-                .into((ImageView) holder.getView(R.id.header_avatar));
-        } catch (MalformedURLException err) {
-        }
+        GlideApp
+            .with(context)
+            .load(URLFormatter.formatImageURL(user.getAvatar()))
+            .placeholder(R.mipmap.default_avatar)
+            .into((ImageView) holder.getView(R.id.header_avatar));
+
+        final BlurringView blur = holder.getView(R.id.header_blurring_view);
+        blur.setVisibility(View.INVISIBLE);
+        blur.setBlurredView(holder.getView(R.id.homepage_background_wrapper));
+        API
+            .getFirstPostFromUser(user.getId())
+            .subscribe(new Consumer<Post>() {
+                @Override
+                public void accept(final Post post) throws Exception {
+                    if (post == null) return;
+                    GlideApp
+                        .with(context)
+                        .load(URLFormatter.formatImageURL(post.getImage()))
+                        .placeholder(R.drawable.placeholder)
+                        .centerCrop()
+                        .listener(new RequestListener<Drawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                blur.setVisibility(View.VISIBLE);
+                                blur.invalidate();
+                                return false;
+                            }
+                        })
+                        .into((ImageView) holder.getView(R.id.homepage_bg));
+                }
+            });
     }
 }

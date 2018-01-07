@@ -98,14 +98,14 @@ public class LikesActivity extends AppCompatActivity {
             }
         };
 
-        postList = new PostList(this, "PurchaseHistory", -1);
+        postList = new PostList(this, "Likes", -1);
         postList.getRecyclerView().addOnScrollListener(onScrollListener);
     }
 
     private void getLikes() {
         swipeRefresher.setRefreshing(true);
         postList.setLoading(true);
-        API.getPosts(new Date(), 30, API.PostFilter.unlocked)
+        API.getLike()
                 .doOnTerminate(new Action() {
                     @Override
                     public void run() throws Exception {

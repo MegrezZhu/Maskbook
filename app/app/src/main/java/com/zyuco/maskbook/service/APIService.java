@@ -68,13 +68,20 @@ public interface APIService {
                                             @Query("before")Date before,
                                             @Query("limit") int limit);
 
+    @GET("user/like")
+    Observable<List<Post>> getLike(@Query("before")Date date,
+                                   @Query("limit") int limit);
+
+    @GET("users/{id}/posts/first")
+    Observable<List<Post>> getFirstPostFromUser(@Path("id") int id);
+
     @GET("posts/{id}")
     Observable<Post> getPostDetail(@Path("id") int id);
 
     @POST("posts/{id}/like")
     Completable likePost(@Path("id") int id);
 
-    @DELETE("posts/{id}/like")
+    @DELETE("posts/{id}/lick")
     Completable unlikePost(@Path("id") int id);
 
     @POST("posts/{id}/unlock")

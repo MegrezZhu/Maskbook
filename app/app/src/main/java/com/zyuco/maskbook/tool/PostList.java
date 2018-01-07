@@ -189,6 +189,35 @@ public class PostList {
 
                     }
                 });
+        } else if (mode.equals("Likes")) {
+            API.getLike(earliest, 30)
+                    .doOnTerminate(new Action() {
+                        @Override
+                        public void run() throws Exception {
+                            setLoading(false);
+                        }
+                    })
+                    .subscribe(new CallBack<List<Post>>() {
+                        @Override
+                        public void onSuccess(List<Post> posts) {
+                            if (posts.size() == 0) {
+                                ended = true;
+                                return;
+                            }
+                            list.addAll(posts);
+                            adapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onFail(ErrorResponse e) {
+
+                        }
+
+                        @Override
+                        public void onException(Throwable e) {
+
+                        }
+                    });
         }
     }
 
