@@ -172,20 +172,27 @@ public class DashboardActivity extends AppCompatActivity {
     private void initDialog(final Post post, final int posInList) {
         AlertDialog.Builder builder = new AlertDialog.Builder(DashboardActivity.this);
         LayoutInflater inflater = DashboardActivity.this.getLayoutInflater();
+        User self = ((MaskbookApplication) getApplication()).getUser();
 
         final View view = inflater.inflate(R.layout.dialog_content, null);
         final AlertDialog dialog = builder.setView(view).create();
 
         final CircularProgressButton unlockButton = view.findViewById(R.id.unlock);
+        final TextView cost = view.findViewById(R.id.power_cost);
         final TextView times = view.findViewById(R.id.click_time);
 
-        times.setText(String.valueOf(post.getPrice()));
-        unlockButton.setEnabled(false);
-        unlockButton.setAlpha(0.5f);
+        int clickTimes = 0, powerCost = 0;
+        powerCost = Math.min(self.getPower(), post.getPrice());
+        clickTimes = Math.max(0, post.getPrice() - self.getPower());
+        cost.setText(String.valueOf(powerCost));
+        times.setText(String.valueOf(clickTimes));
+        unlockButton.setEnabled(clickTimes == 0);
+        unlockButton.setAlpha(unlockButton.isEnabled() ? 1.0f : 0.2f);
+
         view.findViewById(R.id.click).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int num = Math.max(0, Integer.parseInt(times.getText().toString()) - 1);
+                int num = Math.max(0, Integer.valueOf(times.getText().toString()) - 1);
                 times.setText(String.valueOf(num));
 
                 YoYo.with(Techniques.BounceIn)

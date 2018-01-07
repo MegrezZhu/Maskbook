@@ -35,7 +35,7 @@
     <string name="toast_post_success">Post succeeded</string>
     <string name="post_date">Posted at: %s</string>
     <string name="unlock">Unlock</string>
-    <string name="unlock_hint_A">clicks left</string>
-    <string name="unlock_hint_B">to unlock the wonderful picture!</string>
+    <string name="power_cost_hint">Powers cost:</string>
+    <string name="click_time_hint">Clicks Left:</string>
     <string name="power">Power: %d</string>
 </resources>

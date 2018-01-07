@@ -8,26 +8,45 @@
     android:orientation="vertical"
     android:padding="20dp">
 
-    <TextView
-        android:id="@+id/click_time"
-        android:layout_width="wrap_content"
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="0"
-        android:textSize="32sp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/unlock_hint_A"
-        android:textAlignment="center"
-        android:textSize="20sp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/unlock_hint_B"
-        android:textAlignment="center"
-        android:textSize="20sp"/>
+        >
+        <TextView
+            android:id="@+id/power_cost_hint"
+            android:text="@string/power_cost_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@id/power_cost"
+            app:layout_constraintBottom_toBottomOf="@id/power_cost"
+            android:textSize="20sp"
+            />
+        <TextView
+            android:id="@+id/power_cost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:textSize="32sp"/>
+        <TextView
+            android:id="@+id/click_time_hint"
+            android:text="@string/click_time_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@id/click_time"
+            app:layout_constraintBottom_toBottomOf="@id/click_time"
+            android:textSize="20sp"
+            />
+        <TextView
+            android:id="@+id/click_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/power_cost"
+            app:layout_constraintRight_toRightOf="parent"
+            android:textSize="32sp"/>
+    </android.support.constraint.ConstraintLayout>
 
     <ImageButton
         android:id="@+id/click"
