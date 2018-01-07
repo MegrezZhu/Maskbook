@@ -171,7 +171,7 @@ public class Converter {
                     GlideApp
                         .with(context)
                         .load(URLFormatter.formatImageURL(post.getImage()))
-                        .placeholder(R.drawable.placeholder)
+                        .placeholder(R.drawable.bg)
                         .centerCrop()
                         .listener(new RequestListener<Drawable>() {
                             @Override

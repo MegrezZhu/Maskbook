@@ -40,7 +40,7 @@ public class LikesActivity extends AppCompatActivity {
         initList();
         initToolbar();
         getLikes();
-        hideStatusbar();
+//        hideStatusbar();
     }
 
     private void initListener() {

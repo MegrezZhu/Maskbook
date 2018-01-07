@@ -55,7 +55,7 @@ public class PublishActivity extends AppCompatActivity {
         initBlurringView();
         initSeekbar();
         initToolbar();
-        hideStatusbar();
+//        hideStatusbar();
     }
 
     private void initSeekbar() {

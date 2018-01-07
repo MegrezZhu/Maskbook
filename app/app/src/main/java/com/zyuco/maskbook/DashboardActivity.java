@@ -63,7 +63,7 @@ public class DashboardActivity extends AppCompatActivity {
         render();
         refreshPosts();
 
-        hideStatusbar();
+//        hideStatusbar();
     }
 
     private void refreshPosts() {
@@ -299,7 +299,7 @@ public class DashboardActivity extends AppCompatActivity {
                     GlideApp
                         .with(DashboardActivity.this)
                         .load(URLFormatter.formatImageURL(post.getImage()))
-                        .placeholder(R.drawable.placeholder)
+                        .placeholder(R.drawable.bg)
                         .listener(new RequestListener<Drawable>() {
                             @Override
                             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {

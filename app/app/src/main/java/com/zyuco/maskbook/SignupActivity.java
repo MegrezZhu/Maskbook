@@ -44,7 +44,7 @@ public class SignupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
 
         initListener();
-        hideStatusbar();
+//        hideStatusbar();
     }
 
     private void initListener() {

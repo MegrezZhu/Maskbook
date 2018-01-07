@@ -56,7 +56,7 @@ public class HomepageActivity extends AppCompatActivity {
         getSomeonePosts();
         initToolbar();
         render();
-        hideStatusbar();
+//        hideStatusbar();
     }
 
     private void initListener() {
