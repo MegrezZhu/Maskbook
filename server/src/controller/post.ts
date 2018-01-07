@@ -76,7 +76,7 @@ export async function getPosts (ctx: ILoggedInContext) {
       ctx.body = (await postService.getAllUnlocked(ctx.user.id, limit, before)).map(formatPost);
       break;
     case 'mine':
-      ctx.body = (await postService.getOnesPost(ctx.user.id, limit, before)).map(formatPost);
+      ctx.body = (await postService.getOnesPost(ctx.user.id, ctx.user.id, limit, before)).map(formatPost);
       break;
     default:
       assertError(`invalid filter '${filter}'`, ErrorCode.Invalid_Arguments);
@@ -94,7 +94,16 @@ export async function getOnesPosts (ctx: ILoggedInContext) {
     before = new Date();
   }
 
-  ctx.body = (await postService.getOnesPost(uid, limit, before)).map(formatPost);
+  ctx.body = (await postService.getOnesPost(ctx.user.id, uid, limit, before)).map(formatPost);
+}
+
+export async function getOnesFirstPost (ctx: ILoggedInContext) {
+  const { uid }: { uid: number } = ctx.params;
+  assert(!isNaN(uid), 'invalid uid', ErrorCode.Invalid_Arguments);
+
+  const [post] = await postService.getOnesPost(ctx.user.id, uid, 1, new Date());
+
+  ctx.body = post ? [formatPost(post)] : [];
 }
 
 export async function like (ctx: ILoggedInContext) {

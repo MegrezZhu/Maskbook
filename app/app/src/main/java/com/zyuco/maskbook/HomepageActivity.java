@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.zyuco.maskbook.lib.CommonAdapter;
 import com.zyuco.maskbook.lib.HideToolBarListener;
+import com.zyuco.maskbook.lib.URLFormatter;
 import com.zyuco.maskbook.lib.ViewHolder;
 import com.zyuco.maskbook.model.ErrorResponse;
 import com.zyuco.maskbook.model.Post;
@@ -31,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 
 public class HomepageActivity extends AppCompatActivity {
     PostList postList;
@@ -39,6 +41,7 @@ public class HomepageActivity extends AppCompatActivity {
     SwipeRefreshLayout swipeRefresher;
     User user;
     User self;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,37 +140,37 @@ public class HomepageActivity extends AppCompatActivity {
         postList.setLoading(true);
         final User u = isMine() ? self : user;
         API.getPostsFromUser(u.getId())
-                .doOnTerminate(new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        swipeRefresher.setRefreshing(false);
-                        postList.setLoading(false);
-                    }
-                })
-                .subscribe(new CallBack<List<Post>>() {
-                        @Override
-                        public void onSuccess(List<Post> posts) {
-                            List<Post> list = postList.getDataList();
-                            list.clear();
-                            Post fake = new Post();
-                            fake.setId(-1);
-                            fake.setAuthor(u);
-                            list.add(fake);
-                            list.addAll(posts);
-                            postList.getAdapter().notifyDataSetChanged();
-                            postList.resetEnded();
-                        }
+            .doOnTerminate(new Action() {
+                @Override
+                public void run() throws Exception {
+                    swipeRefresher.setRefreshing(false);
+                    postList.setLoading(false);
+                }
+            })
+            .subscribe(new CallBack<List<Post>>() {
+                @Override
+                public void onSuccess(List<Post> posts) {
+                    List<Post> list = postList.getDataList();
+                    list.clear();
+                    Post fake = new Post();
+                    fake.setId(-1);
+                    fake.setAuthor(u);
+                    list.add(fake);
+                    list.addAll(posts);
+                    postList.getAdapter().notifyDataSetChanged();
+                    postList.resetEnded();
+                }
 
-                        @Override
-                        public void onFail(ErrorResponse e) {
+                @Override
+                public void onFail(ErrorResponse e) {
 
-                        }
+                }
 
-                        @Override
-                        public void onException(Throwable e) {
+                @Override
+                public void onException(Throwable e) {
 
-                        }
-                    });
+                }
+            });
 
     }
 

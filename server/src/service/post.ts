@@ -11,32 +11,32 @@ export async function newPost (post: Post) {
   await repo.post.save(post);
 }
 
-export async function removePost (user: User, pid: number) {
+export async function removePost (self: User, pid: number) {
   const post = await repo.post.findOneById(pid, { relations: ['author'] });
   if (post) {
-    assert(post.author.id === user.id, 'this post is not yours', ErrorCode.No_Permission);
+    assert(post.author.id === self.id, 'this post is not yours', ErrorCode.No_Permission);
     await repo.post.removeById(pid);
   }
 }
 
-export async function getOne (uid: number, pid: number): Promise<UPost | null> {
+export async function getOne (selfId: number, pid: number): Promise<UPost | null> {
   const post = await repo.post.findOneById(pid, { relations: ['author'] }) as UPost || null;
   if (post) {
     post.unlocked = 1 === await repo.purchase.createQueryBuilder('pur')
-      .where('pur.u_id = :uid and pur.p_id = :pid', { uid, pid })
+      .where('pur.u_id = :selfId and pur.p_id = :pid', { selfId, pid })
       .getCount();
     post.like = 1 === await repo.like.createQueryBuilder('like')
-      .where('like.u_id = :uid and like.p_id = :pid', { uid, pid })
+      .where('like.u_id = :selfId and like.p_id = :pid', { selfId, pid })
       .getCount();
   }
   return post;
 }
 
-export async function getAllUnlocked (uid: number, limit: number, before: Date): Promise<UPost[]> {
+export async function getAllUnlocked (selfId: number, limit: number, before: Date): Promise<UPost[]> {
   const { raw, entities } = await repo.post.createQueryBuilder('post')
-    .innerJoinAndSelect(Purchase, 'purchase', 'purchase.u_id = :uid and purchase.p_id = post.p_id', { uid })
+    .innerJoinAndSelect(Purchase, 'purchase', 'purchase.u_id = :selfId and purchase.p_id = post.p_id', { selfId })
     .innerJoinAndSelect('post.author', 'user')
-    .leftJoinAndSelect(Like, 'like', 'like.u_id = :uid and like.p_id = post.p_id', { uid })
+    .leftJoinAndSelect(Like, 'like', 'like.u_id = :selfId and like.p_id = post.p_id', { selfId })
     .where('post.date < :before', { before: fixDate(before) })
     .orderBy('post.date', 'DESC')
     .limit(limit)
@@ -44,11 +44,11 @@ export async function getAllUnlocked (uid: number, limit: number, before: Date):
   return zip(entities, raw);
 }
 
-export async function getAllPost (uid: number, limit: number, before: Date): Promise<UPost[]> {
+export async function getAllPost (selfId: number, limit: number, before: Date): Promise<UPost[]> {
   const { raw, entities } = await repo.post.createQueryBuilder('post')
     .innerJoinAndSelect('post.author', 'user')
-    .leftJoinAndSelect(Purchase, 'purchase', 'purchase.u_id = :uid and purchase.p_id = post.p_id', { uid })
-    .leftJoinAndSelect(Like, 'like', 'like.u_id = :uid and like.p_id = post.p_id', { uid })
+    .leftJoinAndSelect(Purchase, 'purchase', 'purchase.u_id = :selfId and purchase.p_id = post.p_id', { selfId })
+    .leftJoinAndSelect(Like, 'like', 'like.u_id = :selfId and like.p_id = post.p_id', { selfId })
     .where('post.date <= :before', { before: fixDate(before) })
     .orderBy('post.date', 'DESC')
     .limit(limit)
@@ -56,11 +56,11 @@ export async function getAllPost (uid: number, limit: number, before: Date): Pro
   return zip(entities, raw);
 }
 
-export async function getOnesPost (uid: number, limit: number, before: Date): Promise<Post[]> {
+export async function getOnesPost (selfId: number, uid: number, limit: number, before: Date): Promise<Post[]> {
   const { raw, entities } = await repo.post.createQueryBuilder('post')
     .innerJoinAndSelect('post.author', 'user')
-    .leftJoinAndSelect(Purchase, 'purchase', 'purchase.u_id = :uid and purchase.p_id = post.p_id', { uid })
-    .leftJoinAndSelect(Like, 'like', 'like.u_id = :uid and like.p_id = post.p_id', { uid })
+    .leftJoinAndSelect(Purchase, 'purchase', 'purchase.u_id = :selfId and purchase.p_id = post.p_id', { selfId })
+    .leftJoinAndSelect(Like, 'like', 'like.u_id = :selfId and like.p_id = post.p_id', { selfId })
     .where('post.u_id = :uid and post.date < :before', { uid, before: fixDate(before) })
     .orderBy('post.date', 'DESC')
     .limit(limit)

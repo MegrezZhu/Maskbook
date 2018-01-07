@@ -68,6 +68,9 @@ public interface APIService {
                                             @Query("before")Date before,
                                             @Query("limit") int limit);
 
+    @GET("users/{id}/posts/first")
+    Observable<List<Post>> getFirstPostFromUser(@Path("id") int id);
+
     @GET("posts/{id}")
     Observable<Post> getPostDetail(@Path("id") int id);
 
