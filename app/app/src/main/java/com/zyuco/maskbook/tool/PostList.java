@@ -7,9 +7,12 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.INotificationSideChannel;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.test.mock.MockApplication;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,6 +22,8 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.fivehundredpx.android.blur.BlurringView;
 import com.ldoublem.thumbUplib.ThumbUpView;
 import com.sackcentury.shinebuttonlib.ShineButton;
@@ -44,6 +49,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import io.reactivex.functions.Action;
 
 public class PostList {
@@ -53,6 +59,7 @@ public class PostList {
     private CommonAdapter<Post> adapter;
     private List<Post> list = new ArrayList<>();
     private RecyclerView recyclerView;
+    private User self;
 
     private boolean loading = false;
     private boolean ended = false; // reach end
@@ -85,7 +92,8 @@ public class PostList {
 
         recyclerView = context.findViewById(R.id.post_list);
         this.mode = mode;
-        this.user_id = user_id == -1 ? ((MaskbookApplication) context.getApplication()).getUser().getId() : user_id;
+        this.self = ((MaskbookApplication) context.getApplication()).getUser();
+        this.user_id = user_id == -1 ? this.self.getId() : user_id;
 
         adapter = new CommonAdapter<Post>(context, R.layout.post_item, list) {
             @Override
@@ -120,6 +128,106 @@ public class PostList {
                 }
             }
         });
+
+        adapter
+                .setOnItemClickListemer(new CommonAdapter.OnItemClickListener<Post>() {
+                    @Override
+                    public void onClick(int position, Post data) {
+                        if (!data.getUnlock() && data.getParameter() != 0 && !self.getId().equals(data.getAuthor().getId())) {
+                            initDialog(data, position);
+                        }
+                    }
+
+                    @Override
+                    public void onLongClick(int position, Post data) {
+
+                    }
+                });
+    }
+
+    private void initDialog(final Post post, final int posInList) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this.context);
+        LayoutInflater inflater = this.context.getLayoutInflater();
+
+        final View view = inflater.inflate(R.layout.dialog_content, null);
+        final AlertDialog dialog = builder.setView(view).create();
+
+        final CircularProgressButton unlockButton = view.findViewById(R.id.unlock);
+        final TextView cost = view.findViewById(R.id.power_cost);
+        final TextView times = view.findViewById(R.id.click_time);
+
+        int clickTimes = 0, powerCost = 0;
+        powerCost = Math.min(self.getPower(), post.getPrice());
+        clickTimes = Math.max(0, post.getPrice() - self.getPower());
+        cost.setText(String.valueOf(powerCost));
+        times.setText(String.valueOf(clickTimes));
+        unlockButton.setEnabled(clickTimes == 0);
+        unlockButton.setAlpha(unlockButton.isEnabled() ? 1.0f : 0.2f);
+
+        view.findViewById(R.id.click).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int num = Math.max(0, Integer.valueOf(times.getText().toString()) - 1);
+                times.setText(String.valueOf(num));
+
+                YoYo.with(Techniques.BounceIn)
+                        .duration(500)
+                        .playOn(times);
+
+                if (num == 0) {
+                    unlockButton.setEnabled(true);
+                    unlockButton.setAlpha(1.0f);
+                }
+            }
+        });
+
+        unlockButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                unlockButton.startAnimation();
+
+                API
+                        .unlockPost(post.getId())
+                        .doOnTerminate(new Action() {
+                            @Override
+                            public void run() throws Exception {
+                                unlockButton.revertAnimation();
+                            }
+                        })
+                        .subscribe(new Action() {
+                            @Override
+                            public void run() throws Exception {
+                                dialog.dismiss();
+                                updateUserInfo();
+                                post.setUnlock(true);
+                                adapter.notifyItemChanged(posInList, true);
+                            }
+                        });
+            }
+        });
+
+        dialog.show();
+    }
+
+    private void updateUserInfo () {
+        API.getUserInformation()
+                .subscribe(new CallBack<User>() {
+                    @Override
+                    public void onSuccess(User user) {
+                        PostList.this.self = user;
+                        ((MaskbookApplication) context.getApplication()).setUser(user);
+                    }
+
+                    @Override
+                    public void onFail(ErrorResponse e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+
+                    @Override
+                    public void onException(Throwable e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                });
     }
 
     private void loadMore() {
