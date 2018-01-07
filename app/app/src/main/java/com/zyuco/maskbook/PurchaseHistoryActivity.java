@@ -104,6 +104,8 @@ public class PurchaseHistoryActivity extends AppCompatActivity {
     }
 
     private void getUnlock() {
+        swipeRefresher.setRefreshing(true);
+        postList.setLoading(true);
         API.getPosts(new Date(), 30, API.PostFilter.unlocked)
                 .doOnTerminate(new Action() {
                     @Override
@@ -119,6 +121,7 @@ public class PurchaseHistoryActivity extends AppCompatActivity {
                         list.clear();
                         list.addAll(posts);
                         postList.getAdapter().notifyDataSetChanged();
+                        postList.resetEnded();
                     }
 
                     @Override
