@@ -21,10 +21,12 @@ import com.zyuco.maskbook.HomepageActivity;
 import com.zyuco.maskbook.LikesActivity;
 import com.zyuco.maskbook.MaskbookApplication;
 import com.zyuco.maskbook.R;
+import com.zyuco.maskbook.model.ErrorResponse;
 import com.zyuco.maskbook.model.Post;
 import com.zyuco.maskbook.model.User;
 import com.zyuco.maskbook.service.API;
 import com.zyuco.maskbook.service.APIService;
+import com.zyuco.maskbook.tool.CallBack;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -162,9 +164,9 @@ public class Converter {
         blur.setBlurredView(holder.getView(R.id.homepage_background_wrapper));
         API
             .getFirstPostFromUser(user.getId())
-            .subscribe(new Consumer<Post>() {
+            .subscribe(new CallBack<Post>() {
                 @Override
-                public void accept(final Post post) throws Exception {
+                public void onSuccess(Post post) {
                     if (post == null) return;
                     GlideApp
                         .with(context)
@@ -185,6 +187,16 @@ public class Converter {
                             }
                         })
                         .into((ImageView) holder.getView(R.id.homepage_bg));
+                }
+
+                @Override
+                public void onFail(ErrorResponse e) {
+
+                }
+
+                @Override
+                public void onException(Throwable e) {
+
                 }
             });
     }

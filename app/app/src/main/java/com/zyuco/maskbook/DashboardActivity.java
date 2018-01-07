@@ -45,7 +45,7 @@ import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import io.reactivex.functions.Action;
 
 public class DashboardActivity extends AppCompatActivity {
-    private static final String TAG = "Maskbook.dashborad";
+    private static final String TAG = "Maskbook.dashboard";
 
     SwipeRefreshLayout swipeRefresher;
     FloatingActionButton button_publish;
@@ -296,7 +296,6 @@ public class DashboardActivity extends AppCompatActivity {
             .subscribe(new CallBack<Post>() {
                 @Override
                 public void onSuccess(Post post) {
-                    if (post == null) return;
                     GlideApp
                         .with(DashboardActivity.this)
                         .load(URLFormatter.formatImageURL(post.getImage()))
