@@ -140,7 +140,7 @@ public class SignupActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.toast_invalid_nickname, Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (password.length() < 6 || password.length() > 20) {
+        if (password.length() < 2 || password.length() > 20) {
             Toast.makeText(this, R.string.toast_invalid_password, Toast.LENGTH_SHORT).show();
             return false;
         }

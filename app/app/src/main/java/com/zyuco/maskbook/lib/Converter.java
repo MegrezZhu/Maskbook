@@ -33,7 +33,7 @@ import java.util.Date;
 import io.reactivex.functions.Action;
 
 public class Converter {
-    public static void convert(final Activity context, final ViewHolder holder, final Post post) {
+    public static void convert(final Activity context, final ViewHolder holder, final Post post, final boolean avatarClickable) {
         if (post.getId().equals(-1)) {
             convertHeader(context, holder, post.getAuthor());
             return;
@@ -102,9 +102,11 @@ public class Converter {
             .placeholder(R.mipmap.default_avatar)
             .into((ImageView) holder.getView(R.id.avatar));
 
+
         holder.getView(R.id.avatar_wrapper).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (!avatarClickable) return;
                 Intent intent = new Intent();
                 intent.setClass(context, HomepageActivity.class);
                 intent.putExtra("user", post.getAuthor());

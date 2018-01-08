@@ -87,7 +87,7 @@ public class PostList {
         ended = false;
     }
 
-    public PostList(final Activity context, String mode, int user_id) {
+    public PostList(final Activity context, final String mode, int user_id) {
         this.context = context;
 
         recyclerView = context.findViewById(R.id.post_list);
@@ -98,7 +98,7 @@ public class PostList {
         adapter = new CommonAdapter<Post>(context, R.layout.post_item, list) {
             @Override
             public void convert(final ViewHolder holder, final Post post) {
-                Converter.convert(context, holder, post);
+                Converter.convert(context, holder, post, !mode.equals("Homepage"));
             }
 
             @Override
@@ -106,7 +106,7 @@ public class PostList {
                 if (payload.equals(true)) {
                     PostList.this.update(holder, data);
                 } else {
-                    Converter.convert(context, holder, data);
+                    Converter.convert(context, holder, data, !mode.equals("Homepage"));
                 }
             }
         };

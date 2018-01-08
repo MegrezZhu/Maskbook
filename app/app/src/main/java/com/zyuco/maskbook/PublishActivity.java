@@ -182,7 +182,6 @@ public class PublishActivity extends AppCompatActivity {
             .subscribe(new CallBack<Post>() {
                 @Override
                 public void onSuccess(Post post) {
-                    // TODO: add post to dashboard list
                     Log.i(TAG, "post succeeded.");
 
                     Toast.makeText(PublishActivity.this, R.string.toast_post_success, Toast.LENGTH_SHORT).show();
