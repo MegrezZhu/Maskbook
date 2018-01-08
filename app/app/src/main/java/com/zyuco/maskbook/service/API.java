@@ -95,8 +95,8 @@ public class API {
     }
 
     public static Observable<List<Post>> getPosts() {
-//        return getPosts(new Date(), 30, PostFilter.all);
-        return getPosts(new Date(), 3, PostFilter.all);
+//        return getPosts(null, 30, PostFilter.all);
+        return getPosts(null, 3, PostFilter.all);
     }
 
     public static Observable<List<Post>> getLike(Date before, int limit) {
@@ -104,7 +104,7 @@ public class API {
     }
 
     public static Observable<List<Post>> getLike() {
-        return service.getLike(new Date(), 30);
+        return service.getLike(null, 30);
     }
 
     public static Observable<List<Post>> getPostsFromUser(int userId, Date before, int limit) {
@@ -112,7 +112,7 @@ public class API {
     }
 
     public static Observable<List<Post>> getPostsFromUser(int userId) {
-        return getPostsFromUser(userId, new Date(), 30);
+        return getPostsFromUser(userId, null, 30);
     }
 
     public static Observable<Post> getHeaderPostFromUser(int userId) {
